@@ -1,28 +1,108 @@
 <script>
-  import { RouterLink, RouterView } from 'vue-router'
+
+import { RouterLink } from 'vue-router';
+import Login  from './tools/Login.vue'
+
+let path = "default";
+
+
+//Exportar
+export default{
+  data(){
+    path
+  },
+  methods:{
+    fillPath(path, token){
+      this.path = path;
+    }  
+  },
+  components:{
+    Login
+  }
+}
 </script>
 
 <template>
-    <div class="container" id="home">
-      <div class="panel-body">
-        <h1>Hai OP Tracing</h1>
     
-        <br/>
-         
-        <RouterLink to="/prueba">
-          <div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Ingresar</button>
-          </div>
-        </RouterLink>
+  <div class="wrapper" id="home">
+    <div class="panel-body">
 
-        <br/>
-    
-        <RouterLink to="/admin/dashboard">
+      <!--Aqui comienza el nav bar-->
+      <nav class="navbar navbar-expand navbar navbar-dark bg-dark">
+        <ul class="navbar-nav">
+           <li class="nav-item d-none d-sm-inline-block">
+              <a class="nav-link font-weight-bold">SIGN UP</a>
+           </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+           <li class="nav-item dropdown">
+              <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                 <i class="fas fa-expand-arrows-alt"></i>
+              </a>
+           </li>
+        </ul>
+     </nav>
+      
+     <div class="home-background">
+      <div class="home-container">
+        <br />
+        <h1 class="font-weight-bold">Hai OP Tracing</h1>
+        <br />
+
+        <!--OPERADORES-->
+        <div>
+          <button type="submit" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#loginModal">
+            Operador {{fillPath("/prueba")}}
+          </button>
+        </div>
+
+        <br />
+
           <div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Administrar</button>
+            <button type="submit" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#loginModal">
+              Administrador {{fillPath("/admin/dashboard")}}
+            </button>
           </div>
-        </RouterLink>
-    
+
       </div>
-    </div>
+  </div>
+</div>
+     </div>
+      
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <Login :path="path"/>
+  </div>
+
 </template>
+
+<style>
+
+.home-container{
+  position:absolute;
+  top: 45%;
+  left: 50%;
+  transform:  translate(-50%, -50%);
+  width: 400px;
+  text-align: center;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
+.home-background{
+  margin: 0; 
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  min-height: 100vh;
+  background: #2980B9;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #FFFFFF, #6DD5FA, #2980B9);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #FFFFFF, #6DD5FA, #2980B9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+</style>
