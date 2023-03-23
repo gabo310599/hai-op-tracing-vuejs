@@ -9,9 +9,11 @@ let token = "";
 
 export default{
     data(){
-        token,
-        user_name,
-        password        
+        return{
+            token,
+            user_name,
+            password 
+        }       
     },
     methods:{
         async login(){
@@ -26,7 +28,6 @@ export default{
                 return
             }
 
-            console.log(this.user_name,this.password)
             await axios
             .post("http://localhost:3000/auth/login",{
                 user_name: this.user_name,
@@ -35,10 +36,10 @@ export default{
             .then((res) => {
                 this.token = res.data.data.accessToken;
 
-                this.$router.push(this.path)
+                this.$router.push({ path: this.path, query: {token: this.token} })
             })
             .catch((error) => {
-                console.log(error.response.data.message);
+                console.log(error);
                 alert(error.response.data.message);
             });
 
@@ -76,7 +77,7 @@ export default{
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" v-on:click="login()" data-dismiss="modal">Ingresar</button>
-            <button type="button" class="btn btn-success">Crear usuario</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">Crear usuario</button>
             <button type="button" class="btn btn-danger" data-dismiss="modal">Salir</button>
           </div>
         </div>

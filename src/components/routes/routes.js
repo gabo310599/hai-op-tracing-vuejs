@@ -25,94 +25,110 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: Home,
+      props: true
     },
 
     {
       path: "/prueba",
       name: "prueba",
       component: Prueba,
+      props: true
     },
 
     {
       path: "/admin",
       name: "admin",
       component: Admin,
+      props: true,
       children: [
         {
             path: "/admin/contact",
             name: "admin.contact",
             component: Contact,
+            props: true
         },
         {
           path: "/admin/dashboard",
           name: "admin.dashboard",
           component: Dashboard,
+          props: true
         },
 
         {
           path: "/admin/user",
           name: "admin.user",
           component: User,
+          props: true
         },
 
         {
           path: "/admin/graphic-design",
           name: "admin.graphic-design",
           component: Graphic_Design,
+          props: true
         },
 
         {
           path: "/admin/textile-design",
           name: "admin.textile-design",
           component: Textile_Design,
+          props: true
         },
 
         {
           path: "/admin/generate-op",
           name: "admin.generate-op",
           component: Generate_OP,
+          props: true
         },
 
         {
           path: "/admin/print-op",
           name: "admin.print-op",
           component: Print_OP,
+          props: true
         },
 
         {
           path: "/admin/weaving",
           name: "admin.weaving",
           component: Weaving,
+          props: true
         },
 
         {
           path: "/admin/rolled-up",
           name: "admin.rolled-up",
           component: Rolled_Up,
+          props: true
         },
 
         {
           path: "/admin/cuting",
           name: "admin.cuting",
           component: Cuting,
+          props: true
         },
 
         {
           path: "/admin/quality",
           name: "admin.quality",
           component: Quality,
+          props: true
         },
 
         {
           path: "/admin/receipt",
           name: "admin.receipt",
           component: Receipt,
+          props: true
         },
 
         {
           path: "/admin/dispatch",
           name: "admin.dispatch",
           component: Dispatch,
+          props: true
         },
       ],
     },

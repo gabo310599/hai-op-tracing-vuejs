@@ -9,7 +9,9 @@ let path = "default";
 //Exportar
 export default{
   data(){
-    path
+    return{
+      path
+    }
   },
   methods:{
     fillPath(path, token){
