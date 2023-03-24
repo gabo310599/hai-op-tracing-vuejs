@@ -1,7 +1,6 @@
 <script>
 
 import { RouterLink } from 'vue-router';
-import Login  from './tools/Login.vue'
 
 let path = "default";
 
@@ -17,9 +16,6 @@ export default{
     fillPath(path, token){
       this.path = path;
     }  
-  },
-  components:{
-    Login
   }
 }
 </script>
@@ -52,30 +48,29 @@ export default{
         <br />
 
         <!--OPERADORES-->
-        <div>
-          <button type="submit" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#loginModal">
-            Operador {{fillPath("/prueba")}}
-          </button>
-        </div>
+        <RouterLink to="/prueba">
+          <div>
+            <button type="submit" class="btn btn-success btn-lg btn-block">
+              Operador
+            </button>
+          </div>
+        </RouterLink>
 
         <br />
 
+        <!--ADMIN-->
+        <RouterLink to="/admin/dashboard">
           <div>
-            <button type="submit" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#loginModal">
-              Administrador {{fillPath("/admin/dashboard")}}
+            <button type="submit" class="btn btn-success btn-lg btn-block">
+              Administrador
             </button>
           </div>
+        </RouterLink>
 
       </div>
   </div>
 </div>
      </div>
-      
-
-  <!-- Login Modal -->
-  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <Login :path="path"/>
-  </div>
 
 </template>
 

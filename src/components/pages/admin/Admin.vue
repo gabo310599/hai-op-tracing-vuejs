@@ -1,7 +1,12 @@
 <script>
 
+import { ref } from 'vue';
 import { RouterView } from 'vue-router'
 import { userList, opList } from '../../../dataList';
+import Login  from '../tools/Login.vue'
+
+let user = [];
+let token = ref("");
 
 //Exports
 export default {
@@ -9,14 +14,45 @@ export default {
       return {
          RouterView,
          opList,
-         userList
+         userList,
+         user,
+         token,
+         isNotLogin: true
       }
+   },
+   methods:{
+      disableOptions(){
+         
+         if(this.isNotLogin)         
+            return false;
+         else
+            return true
+      },
+      checkLogin(data){
+
+         this.fillUserInfo(data)
+
+         this.isNotLogin = false;
+
+      },
+      checkToken(){
+         console.log(this.token, "HELLO")
+      },
+      fillUserInfo(data){
+         this.user = data.user;
+         this.token = data.accessToken;
+      }
+   },
+   components:{
+      Login
    }
 }
 
 </script>
 
 <template>
+
+   {{ checkToken() }}
    <div class="wrapper" id="admin">
 
       <!--Aqui comienza el nav bar-->
@@ -25,11 +61,11 @@ export default {
             <li class="nav-item">
                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
-            <li class="nav-item d-none d-sm-inline-block">
+            <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
                <a href="/admin/dashboard" class="nav-link">Home</a>
             </li>
-            <li class="nav-item d-none d-sm-inline-block">
-               <a href="/admin/contact" class="nav-link">Contact</a>
+            <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
+               <a href="/admin/contact" class="nav-link" >Contact</a>
             </li>
          </ul>
          <ul class="navbar-nav ml-auto">
@@ -38,7 +74,7 @@ export default {
                   <i class="fas fa-expand-arrows-alt"></i>
                </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="disableOptions()">
                <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
                   <i class="fas fa-th-large"></i>
                </a>
@@ -49,18 +85,18 @@ export default {
       <!--Aqui comienza la sidebar de la izquierda -->
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
          <a href="/admin/contact" class="brand-link">
-            <img src="https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
+            <img src="https://todainfo.com/wp-content/uploads/Textiles-Lenceria-Mercerias-Tapicerias-2.jpg" alt="AdminLTE Logo"
                class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">Hai OP Tracing</span>
          </a>
          <div class="sidebar">
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                <div class="image">
-                  <img src="https://adminlte.io/themes/v3/dist/img/user2-160x160.jpg" class="img-circle elevation-2"
+                  <img src="https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg" class="img-circle elevation-2"
                      alt="User Image">
                </div>
-               <div class="info">
-                  <a href="#" class="d-block">Gabo310599</a>
+               <div class="info" v-if="disableOptions()">
+                  <a href="#" class="d-block" >Gabo310599</a>
                </div>
             </div>
 
@@ -69,7 +105,7 @@ export default {
 
                   <!-- Tablero -->
                   <li class="nav-item">
-                     <a href="/admin/dashboard" class="nav-link">
+                     <a href="/admin/dashboard" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                            Tablero
@@ -79,7 +115,7 @@ export default {
 
                   <!-- Usuario -->
                   <li class="nav-item">
-                     <a href="/admin/user/" class="nav-link">
+                     <a href="/admin/user/" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-user"></i>
                         <p>
                            Usuario
@@ -89,7 +125,7 @@ export default {
 
                   <!-- Salir -->
                   <li class="nav-item">
-                     <a href="/" class="nav-link">
+                     <a href="/" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-door-open"></i>
                         <p>
                            Salir
@@ -101,7 +137,7 @@ export default {
 
                   <!-- Diseño Gráfico -->
                   <li class="nav-item">
-                     <a href="/admin/graphic-design" class="nav-link">
+                     <a href="/admin/graphic-design" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-regular fa-pen"></i>
                         <p>
                            Diseño Gráfico
@@ -112,7 +148,7 @@ export default {
 
                   <!-- Diseño Textil -->
                   <li class="nav-item">
-                     <a href="/admin/textile-design" class="nav-link">
+                     <a href="/admin/textile-design" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-ruler-vertical"></i>
                         <p>
                            Diseño Textil
@@ -123,7 +159,7 @@ export default {
 
                   <!-- Generar OP -->
                   <li class="nav-item">
-                     <a href="/admin/generate-op" class="nav-link">
+                     <a href="/admin/generate-op" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-plus"></i>
                         <p>
                            Generar OP
@@ -134,7 +170,7 @@ export default {
 
                   <!-- Imprimir OP -->
                   <li class="nav-item">
-                     <a href="/admin/print-op" class="nav-link">
+                     <a href="/admin/print-op" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-print"></i>
                         <p>
                            Imprimir OP
@@ -145,7 +181,7 @@ export default {
 
                   <!-- Tejeduría MQ-->
                   <li class="nav-item">
-                     <a href="/admin/weaving" class="nav-link">
+                     <a href="/admin/weaving" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-tag"></i>
                         <p>
                            Tejeduría
@@ -156,7 +192,7 @@ export default {
 
                   <!-- Enrollado MQ-->
                   <li class="nav-item">
-                     <a href="/admin/rolled-up" class="nav-link">
+                     <a href="/admin/rolled-up" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-spinner"></i>
                         <p>
                            Enrollado
@@ -167,7 +203,7 @@ export default {
 
                   <!-- Corte MQ-->
                   <li class="nav-item">
-                     <a href="/admin/cuting" class="nav-link">
+                     <a href="/admin/cuting" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-hand-scissors"></i>
                         <p>
                            Corte
@@ -178,7 +214,7 @@ export default {
 
                   <!-- Control de calidad -->
                   <li class="nav-item">
-                     <a href="/admin/quality" class="nav-link">
+                     <a href="/admin/quality" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-check"></i>
                         <p>
                            Control de Calidad
@@ -189,7 +225,7 @@ export default {
 
                   <!-- Facturación -->
                   <li class="nav-item">
-                     <a href="/admin/receipt" class="nav-link">
+                     <a href="/admin/receipt" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-receipt"></i>
                         <p>
                            Facturación
@@ -200,7 +236,7 @@ export default {
 
                   <!-- Despacho -->
                   <li class="nav-item">
-                     <a href="/admin/dispatch" class="nav-link">
+                     <a href="/admin/dispatch" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-truck"></i>
                         <p>
                            Despacho
@@ -213,9 +249,9 @@ export default {
          </div>
       </aside>
 
-      <div class="content-wrapper">
-         <RouterView />
-
+      <div class="content-wrapper" >
+         <RouterView v-if="disableOptions()"/>
+         <Login v-if="isNotLogin" v-on:success="checkLogin"/>
       </div>
 
       <aside class="control-sidebar control-sidebar-dark">
