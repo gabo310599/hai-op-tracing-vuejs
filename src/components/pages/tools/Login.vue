@@ -1,7 +1,6 @@
 <script>
 
 import axios from "axios";
-import { RouterLink } from 'vue-router';
 
 let user_name = "";
 let password = "";

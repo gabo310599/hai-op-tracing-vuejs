@@ -100,8 +100,7 @@ const fillHistoryList = () => {
 //Exports
 export default {
   props: [
-    'opList',
-    'userList'
+
   ],
   data() {
     return {
@@ -130,6 +129,7 @@ export default {
     fillModalInfo(info) {
       this.infoModalProcess = info;
     },
+    checkLogin(isNotLogged){}
   },
   components: {
     TimeLine,

@@ -4,9 +4,13 @@ import { ref } from 'vue';
 import { RouterView } from 'vue-router'
 import { userList, opList } from '../../../dataList';
 import Login  from '../tools/Login.vue'
+import Cookies from "js-cookie";
+import jwt_decode from 'jwt-decode';
+import axios from "axios";
 
 let user = [];
 let token = ref("");
+let isNotLogged
 
 //Exports
 export default {
@@ -17,48 +21,138 @@ export default {
          userList,
          user,
          token,
-         isNotLogin: true
+         isNotLogged: true,
+         Cookies
+         
       }
    },
    methods:{
+
+      //Metodo que administra el log
+      async createLog(msg){
+
+         await axios
+         .post("http://localhost:3000/log",
+            {user_id: this.user.id, log: msg},
+            {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
+         )
+         .then((res) => {
+
+         })
+         .catch((error) => {
+            console.log(error);
+            alert("Error: "+error.response.data.message);
+         });
+
+      },
+
+      //Metodo que desactiva las funciones si el usuario no inicio sesion
       disableOptions(){
-         
-         if(this.isNotLogin)         
+
+         if(this.isNotLogged)         
             return false;
          else
             return true
       },
-      checkLogin(data){
+
+      //Metodo que obtiene los datos de un inicio de sesion
+      catchLoginInfo(data){
 
          this.fillUserInfo(data)
-
-         this.isNotLogin = false;
+         this.isNotLogged = false;
 
       },
-      checkToken(){
-         console.log(this.token, "HELLO")
-      },
+
+      //Metodo que guarda los datos de un inicio de sesion
       fillUserInfo(data){
          this.user = data.user;
          this.token = data.accessToken;
+         Cookies.set("userLogged", this.token)
+         this.createLog("Inicio de sesión.")
+      },
+
+      //Metodo que obtiene de cookies el usuario que inicio sesion
+      getUserFromCookies(){
+
+         return Cookies.get("userLogged");
+      
+      },
+
+      //Metodo que elimina de las cookies el usuario
+      removeUserLogged(){
+         Cookies.remove('userLogged');
+      },
+
+      //Metodo que cierra sesion
+      logout(){
+         this.createLog("Sesión finalizada.");
+         this.removeUserLogged();
+      },
+
+      //Metodo que decodifica el token
+      getDecodedAccessToken(token) {
+         try {
+            return jwt_decode(token);
+         } catch(Error) {
+            return null;
+         }
       }
    },
    components:{
       Login
+   },
+   async created(){
+
+      const token = this.getUserFromCookies()
+
+      //Verificamos si el token esta activo, y luego lo renovamos
+      if(token){
+
+         await axios
+         .get("http://localhost:3000/user/"+this.getDecodedAccessToken(token).sub,
+            {headers: { Authorization: `Bearer ${token}` }}
+         )
+         .then((res) => {
+            this.user = res.data.data;
+            this.isNotLogged = false;
+         })
+         .catch((error) => {
+            console.log(error);
+            alert("Error: "+error.response.data.message);
+         });
+
+         if(this.user)
+            await axios
+            .get("http://localhost:3000/auth/refresh",
+            {
+               headers: { 
+                  Authorization: `Bearer ${token}`
+               }
+            })
+            .then((res) => {
+               this.token = res.data.data.accessToken;
+               Cookies.set("userLogged", this.token);
+            })
+            .catch((error) => {
+               console.log(error);
+            });
+
+
+
+      }
+      
    }
 }
 
 </script>
 
 <template>
-
-   {{ checkToken() }}
    <div class="wrapper" id="admin">
 
       <!--Aqui comienza el nav bar-->
       <nav class="main-header navbar navbar-expand navbar-white navbar-light">
          <ul class="navbar-nav">
-            <li class="nav-item">
+            <li class="nav-item" v-if="disableOptions()">
                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
@@ -96,7 +190,7 @@ export default {
                      alt="User Image">
                </div>
                <div class="info" v-if="disableOptions()">
-                  <a href="#" class="d-block" >Gabo310599</a>
+                  <a href="#" class="d-block" >{{user.user_name}}</a>
                </div>
             </div>
 
@@ -125,7 +219,7 @@ export default {
 
                   <!-- Salir -->
                   <li class="nav-item">
-                     <a href="/" class="nav-link" v-if="disableOptions()">
+                     <a href="/" class="nav-link" v-if="disableOptions()" v-on:click="logout()">
                         <i class="nav-icon fas fa-solid fa-door-open"></i>
                         <p>
                            Salir
@@ -251,7 +345,7 @@ export default {
 
       <div class="content-wrapper" >
          <RouterView v-if="disableOptions()"/>
-         <Login v-if="isNotLogin" v-on:success="checkLogin"/>
+         <Login v-if="isNotLogged" v-on:success="catchLoginInfo"/>
       </div>
 
       <aside class="control-sidebar control-sidebar-dark">
