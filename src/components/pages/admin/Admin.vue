@@ -10,7 +10,8 @@ import axios from "axios";
 
 let user = [];
 let token = ref("");
-let isNotLogged
+let isNotLogged;
+let count = [];
 
 //Exports
 export default {
@@ -22,7 +23,8 @@ export default {
          user,
          token,
          isNotLogged: true,
-         Cookies
+         Cookies,
+         count
          
       }
    },
@@ -71,7 +73,9 @@ export default {
             return
          }
          
-         this.fillUserInfo(data)
+         this.fillUserInfo(data);
+         
+         this.getProcessCountByDepartment();
          this.isNotLogged = false;
 
       },
@@ -112,9 +116,23 @@ export default {
          }
       },
 
-      //Metodo que calcula la cantidad de pedidos que hay por departamento
-      getOrdersByDepartment(){
-          
+      //Metodo que calcula la cantidad de procesos que hay por departamento
+      async getProcessCountByDepartment(){
+         
+         await axios
+         .get("http://localhost:3000/process/count/by-department",
+            {headers: { Authorization: `Bearer ${this.token}` }}
+         )
+         .then((res) => {
+
+            this.count = res.data.data;
+
+         })
+         .catch((error) => {
+            console.log(error.message);
+            alert("Error:cklnclsnac "+error.response.data.message);
+         });
+
       }
 
    },
@@ -158,6 +176,7 @@ export default {
             });
 
 
+         this.getProcessCountByDepartment();
 
       }
       
@@ -255,7 +274,7 @@ export default {
                         <i class="nav-icon fas fa-regular fa-pen"></i>
                         <p>
                            Diseño Gráfico
-                           <span class="right badge-pill badge-success">6</span>
+                           <span class="right badge-pill badge-success">{{count.DG}}</span>
                         </p>
                      </a>
                   </li>
@@ -266,7 +285,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-ruler-vertical"></i>
                         <p>
                            Diseño Textil
-                           <span class="right badge-pill badge-warning">10</span>
+                           <span class="right badge-pill badge-warning">{{count.DT}}</span>
                         </p>
                      </a>
                   </li>
@@ -277,7 +296,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-plus"></i>
                         <p>
                            Generar OP
-                           <span class="right badge-pill badge-warning">7</span>
+                           <span class="right badge-pill badge-warning">{{count.GOP}}</span>
                         </p>
                      </a>
                   </li>
@@ -288,7 +307,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-print"></i>
                         <p>
                            Imprimir OP
-                           <span class="right badge-pill badge-success">4</span>
+                           <span class="right badge-pill badge-success">{{count.IOP}}</span>
                         </p>
                      </a>
                   </li>
@@ -299,7 +318,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-tag"></i>
                         <p>
                            Tejeduría
-                           <span class="right badge-pill badge-danger">15</span>
+                           <span class="right badge-pill badge-danger">{{count.T}}</span>
                         </p>
                      </a>
                   </li>
@@ -310,7 +329,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-spinner"></i>
                         <p>
                            Enrollado
-                           <span class="right badge-pill badge-success">6</span>
+                           <span class="right badge-pill badge-success">{{count.E}}</span>
                         </p>
                      </a>
                   </li>
@@ -321,7 +340,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-hand-scissors"></i>
                         <p>
                            Corte
-                           <span class="right badge-pill badge-success">1</span>
+                           <span class="right badge-pill badge-success">{{count.C}}</span>
                         </p>
                      </a>
                   </li>
@@ -332,7 +351,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-check"></i>
                         <p>
                            Control de Calidad
-                           <span class="right badge-pill badge-success">4</span>
+                           <span class="right badge-pill badge-success">{{count.CC}}</span>
                         </p>
                      </a>
                   </li>
@@ -343,7 +362,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-receipt"></i>
                         <p>
                            Facturación
-                           <span class="right badge-pill badge-success">4</span>
+                           <span class="right badge-pill badge-success">{{count.F}}</span>
                         </p>
                      </a>
                   </li>
@@ -354,7 +373,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-truck"></i>
                         <p>
                            Despacho
-                           <span class="right badge-pill badge-success">4</span>
+                           <span class="right badge-pill badge-success">{{count.D}}</span>
                         </p>
                      </a>
                   </li>
