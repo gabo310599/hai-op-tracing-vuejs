@@ -31,18 +31,18 @@ export default {
       //Metodo que administra el log
       async createLog(msg){
 
-         await axios
-         .post("http://localhost:3000/log",
-            {user_id: this.user.id, log: msg},
-            {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
-         )
-         .then((res) => {
+         // await axios
+         // .post("http://localhost:3000/log",
+         //    {user_id: this.user.id, log: msg},
+         //    {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
+         // )
+         // .then((res) => {
 
-         })
-         .catch((error) => {
-            console.log(error);
-            alert("Error: "+error.response.data.message);
-         });
+         // })
+         // .catch((error) => {
+         //    console.log(error.message);
+         //    alert("Error: "+error.response.data.message);
+         // });
 
       },
 
@@ -58,6 +58,19 @@ export default {
       //Metodo que obtiene los datos de un inicio de sesion
       catchLoginInfo(data){
 
+         let flag = false;
+
+         if(data.user.roles)
+            data.user.roles.map(function(row){
+               if(row === "ADMIN")
+                  flag = true;
+            })
+
+         if(!flag){
+            alert("El usuario no tiene acceso de administrador.")
+            return
+         }
+         
          this.fillUserInfo(data)
          this.isNotLogged = false;
 
@@ -65,6 +78,7 @@ export default {
 
       //Metodo que guarda los datos de un inicio de sesion
       fillUserInfo(data){
+
          this.user = data.user;
          this.token = data.accessToken;
          Cookies.set("userLogged", this.token)
@@ -96,7 +110,13 @@ export default {
          } catch(Error) {
             return null;
          }
+      },
+
+      //Metodo que calcula la cantidad de pedidos que hay por departamento
+      getOrdersByDepartment(){
+          
       }
+
    },
    components:{
       Login
@@ -117,7 +137,7 @@ export default {
             this.isNotLogged = false;
          })
          .catch((error) => {
-            console.log(error);
+            console.log(error.message);
             alert("Error: "+error.response.data.message);
          });
 
@@ -134,7 +154,7 @@ export default {
                Cookies.set("userLogged", this.token);
             })
             .catch((error) => {
-               console.log(error);
+               console.log(error.message);
             });
 
 
@@ -152,7 +172,7 @@ export default {
       <!--Aqui comienza el nav bar-->
       <nav class="main-header navbar navbar-expand navbar-white navbar-light">
          <ul class="navbar-nav">
-            <li class="nav-item" v-if="disableOptions()">
+            <li class="nav-item" >
                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">

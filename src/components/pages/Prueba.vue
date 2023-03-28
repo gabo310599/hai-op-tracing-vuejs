@@ -26,7 +26,7 @@ export default {
                 this.data = res.data.data;
             })
             .catch((error) => {
-                console.log(error);
+                console.log(error.message);
             });
     }
 }

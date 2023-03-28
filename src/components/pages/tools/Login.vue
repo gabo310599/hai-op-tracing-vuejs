@@ -2,9 +2,11 @@
 
 import axios from "axios";
 
+let input = document.getElementById("myInput");
 let user_name = "";
 let password = "";
 let data = [];
+
 
 export default{
     data(){
@@ -37,15 +39,16 @@ export default{
                 this.$emit('success', this.data);
             })
             .catch((error) => {
-                console.log(error);
+                console.log(error.message);
                 alert(error.response.data.message);
             });
 
+        },
+        exit(){
+            this.$router.push('/')
         }
     },
-    props:[
-        'path'
-    ]
+
 }
 
 </script>
@@ -65,7 +68,7 @@ export default{
             </div>
             <button type="button" class="btn btn-primary" style="margin: 5px" v-on:click="login()">Ingresar</button>
             <button type="button" class="btn btn-success" style="margin: 5px">Crear usuario</button>
-            <button type="button" class="btn btn-danger" style="margin: 5px">Salir</button>
+            <button type="button" class="btn btn-danger" style="margin: 5px" v-on:click="exit()">Salir</button>
         </form>
     </div>
 
@@ -79,10 +82,10 @@ export default{
 }
 
 .login-container{
-    position:absolute;
-    top: 45%;
-    left: 60%;
-    transform:  translate(-50%, -50%);
+    position:relative;
+    top: 50%;
+    left: 50%;
+    transform:  translate(-50%, 20%);
     width: 400px;
     text-align: center;
     border-radius: 10px;
