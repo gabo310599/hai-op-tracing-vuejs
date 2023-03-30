@@ -47,8 +47,7 @@ export default {
 
       //Metodo que regresa el color del badge por departamento
       getBadgeColor(){
-
-         console.log(this.delayList)
+         
             if(this.delayList.DG)
                this.delayColors.DG = "right badge-pill badge-danger";
 
@@ -448,7 +447,7 @@ export default {
       </aside>
 
       <div class="content-wrapper" >
-         <RouterView v-if="disableOptions()"/>
+         <RouterView v-if="disableOptions()" />
          <Login v-if="isNotLogged" v-on:success="catchLoginInfo"/>
       </div>
 

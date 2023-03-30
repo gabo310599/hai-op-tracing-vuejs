@@ -1,45 +1,95 @@
 <script>
 
-import { dashboardInfo } from '../../../../dataList';
+import axios from "axios";
+import Cookies from "js-cookie";
+import jwt_decode from 'jwt-decode';
 
 
-let urgentList = [];
-let notUrgentList = [];
+let user = [];
+let token = "";
+let urgentList = []
 
-//Llenamos la lista de urgente
-const fillList = () =>{
-   
-   dashboardInfo.map(function(info){
-      if(info.urgent == 1)
-         urgentList.push(info);
-      else
-         notUrgentList.push(info);
-   })
 
-   
-}
 
 //Exports
 export default {
    data() {
       return {
-         urgentList,
-         notUrgentList
+         user,
+         urgentList
       }
    },
    methods: {
-      fillList
+      
+      //Metodo que obtiene de cookies el usuario que inicio sesion
+      getUserFromCookies(){
+         return Cookies.get("userLogged");
+      },
+
+      //Metodo que decodifica el token
+      getDecodedAccessToken() {
+         try {
+            return jwt_decode(this.getUserFromCookies());
+         } catch(Error) {
+            return null;
+         }
+      },
+
+      //Metodo que administra el log
+      async createLog(msg){
+
+         await axios
+         .post("http://localhost:3000/log",
+            {user_id: this.user.id, log: msg},
+            {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
+         )
+         .then((res) => {
+
+         })
+         .catch((error) => {
+            console.log(error.message);
+            alert("Error: "+error.response.data.message);
+         });
+
+},
+
    },
    props: [
-      'data'
-   ]
+
+   ],
+   async created(){
+
+      await axios
+         .get("http://localhost:3000/user/"+this.getDecodedAccessToken().sub,
+            {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
+         )
+         .then((res) => {
+            this.user = res.data.data;
+         })
+         .catch((error) => {
+            console.log(error.message);
+            alert("Error: "+error.response.data.message);
+         });
+      
+      if(this.user){
+         await axios
+            .get("http://localhost:3000/process/delay/list-by-department",
+               {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
+            )
+            .then((res) => {
+               this.urgentList = res.data.data;
+            })
+            .catch((error) => {
+               console.log(error.message);
+               alert("Error: "+error.response.data.message);
+            });
+      }
+   }
 }
 
 </script>
 
 <template>
-
-   {{ fillList() }}
    <div class="content-header">
       <div class="container-fluid">
          <div class="row mb-2">
@@ -55,37 +105,29 @@ export default {
          </div>
       </div>
    </div>
-   <div class="content">
-      <div class="container-fluid">
-         <div class="row">
-            <!--Aqui empieza la columna de la izquierda-->
-            <div class="col-lg-6">
-               <h2>Urgente:</h2>
-               <div v-for="item in urgentList" :key="item.key" class="card card-primary card-outline">
-                  <div class="card-header">
-                     <h5 class="m-0">{{item.department}}</h5>
-                  </div>
-                  <div class="card-body">
-                     <p class="card-text">Hay {{item.op_quantity}} ordenes que necesitan su atención</p>
-                     <a :href="item.link" class="btn btn-primary">Revisar</a>
-                  </div>
-               </div>
-            </div>
-            <!--Aqui empieza la columna de la derecha-->
-            <div class="col-lg-6">
-               <h2>Revisar:</h2>
-               <div v-for="item in notUrgentList" :key="item.key" class="card card-primary card-outline">
-                  <div class="card-header">
-                     <h5 class="m-0">{{item.department}}</h5>
-                  </div>
-                  <div class="card-body">
-                     <p class="card-text">Hay {{item.op_quantity}} ordenes que necesitan su atención</p>
-                     <a :href="item.link" class="btn btn-primary">Revisar</a>
-                  </div>
-               </div>
-            </div>
+
+   <div class="container-dashboard"> 
+      <div class="card card-primary card-outline" v-for="item in urgentList" :key="item.id">
+         <div class="card-header">
+            <h5 class="m-0">{{item.department}}</h5>
+         </div>
+         <div class="card-body">
+            <p class="card-text">{{item.request}}</p>
+            <a class="btn btn-primary">Revisar</a>
          </div>
       </div>
    </div>
-
+   
 </template>
+
+<style>
+.container-dashboard {
+
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   grid-gap: 10px;
+   padding-left: 20px;
+   padding-right: 20px;
+   justify-content: space-evenly;
+ }
+</style>
