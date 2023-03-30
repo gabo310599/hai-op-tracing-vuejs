@@ -12,6 +12,19 @@ let user = [];
 let token = ref("");
 let isNotLogged;
 let count = [];
+let delayList = [];
+let delayColors = {
+   DG: "right badge-pill badge-success",
+   DT: "right badge-pill badge-success",
+   GOP: "right badge-pill badge-success",
+   IOP: "right badge-pill badge-success",
+   T: "right badge-pill badge-success",
+   E: "right badge-pill badge-success",
+   C: "right badge-pill badge-success",
+   CC: "right badge-pill badge-success",
+   F: "right badge-pill badge-success",
+   D: "right badge-pill badge-success"
+};
 
 //Exports
 export default {
@@ -24,11 +37,49 @@ export default {
          token,
          isNotLogged: true,
          Cookies,
-         count
+         count,
+         delayList,
+         delayColors
          
       }
    },
    methods:{
+
+      //Metodo que regresa el color del badge por departamento
+      getBadgeColor(){
+
+         console.log(this.delayList)
+            if(this.delayList.DG)
+               this.delayColors.DG = "right badge-pill badge-danger";
+
+            if(this.delayList.DT)
+               this.delayColors.DT = "right badge-pill badge-danger";
+            
+            if(this.delayList.GOP)
+               this.delayColors.GOP = "right badge-pill badge-danger";
+
+            if(this.delayList.IOP)
+               this.delayColors.IOP = "right badge-pill badge-danger";
+
+            if(this.delayList.T)
+               this.delayColors.T = "right badge-pill badge-danger";
+
+            if(this.delayList.E)
+               this.delayColors.E = "right badge-pill badge-danger";
+
+            if(this.delayList.C)
+               this.delayColors.C = "right badge-pill badge-danger";
+
+            if(this.delayList.CC)
+               this.delayColors.CC = "right badge-pill badge-danger";
+
+            if(this.delayList.F)
+               this.delayColors.F = "right badge-pill badge-danger";
+
+            if(this.delayList.D)
+               this.delayColors.D = "right badge-pill badge-danger";
+      
+      },
 
       //Metodo que administra el log
       async createLog(msg){
@@ -74,7 +125,6 @@ export default {
          }
          
          this.fillUserInfo(data);
-         
          this.getProcessCountByDepartment();
          this.isNotLogged = false;
 
@@ -130,7 +180,22 @@ export default {
          })
          .catch((error) => {
             console.log(error.message);
-            alert("Error:cklnclsnac "+error.response.data.message);
+            alert("Error: "+error.response.data.message);
+         });
+
+         await axios
+         .get("http://localhost:3000/process/delay/by-department",
+            {headers: { Authorization: `Bearer ${this.token}` }}
+         )
+         .then((res) => {
+
+            this.delayList = res.data.data;
+            this.getBadgeColor();
+
+         })
+         .catch((error) => {
+            console.log(error.message);
+            alert("Error: "+error.response.data.message);
          });
 
       }
@@ -141,7 +206,7 @@ export default {
    },
    async created(){
 
-      const token = this.getUserFromCookies()
+      const token = this.getUserFromCookies();
 
       //Verificamos si el token esta activo, y luego lo renovamos
       if(token){
@@ -159,7 +224,7 @@ export default {
             alert("Error: "+error.response.data.message);
          });
 
-         if(this.user)
+         if(this.user){
             await axios
             .get("http://localhost:3000/auth/refresh",
             {
@@ -175,8 +240,8 @@ export default {
                console.log(error.message);
             });
 
-
-         this.getProcessCountByDepartment();
+            this.getProcessCountByDepartment();
+         }
 
       }
       
@@ -274,7 +339,7 @@ export default {
                         <i class="nav-icon fas fa-regular fa-pen"></i>
                         <p>
                            Diseño Gráfico
-                           <span class="right badge-pill badge-success">{{count.DG}}</span>
+                           <span :class="delayColors.DG">{{count.DG}}</span>
                         </p>
                      </a>
                   </li>
@@ -285,7 +350,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-ruler-vertical"></i>
                         <p>
                            Diseño Textil
-                           <span class="right badge-pill badge-warning">{{count.DT}}</span>
+                           <span :class="delayColors.DT">{{count.DT}}</span>
                         </p>
                      </a>
                   </li>
@@ -296,7 +361,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-plus"></i>
                         <p>
                            Generar OP
-                           <span class="right badge-pill badge-warning">{{count.GOP}}</span>
+                           <span :class="delayColors.GOP">{{count.GOP}}</span>
                         </p>
                      </a>
                   </li>
@@ -307,7 +372,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-print"></i>
                         <p>
                            Imprimir OP
-                           <span class="right badge-pill badge-success">{{count.IOP}}</span>
+                           <span :class="delayColors.IOP">{{count.IOP}}</span>
                         </p>
                      </a>
                   </li>
@@ -318,7 +383,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-tag"></i>
                         <p>
                            Tejeduría
-                           <span class="right badge-pill badge-danger">{{count.T}}</span>
+                           <span :class="delayColors.T">{{count.T}}</span>
                         </p>
                      </a>
                   </li>
@@ -329,7 +394,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-spinner"></i>
                         <p>
                            Enrollado
-                           <span class="right badge-pill badge-success">{{count.E}}</span>
+                           <span :class="delayColors.E">{{count.E}}</span>
                         </p>
                      </a>
                   </li>
@@ -340,7 +405,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-hand-scissors"></i>
                         <p>
                            Corte
-                           <span class="right badge-pill badge-success">{{count.C}}</span>
+                           <span :class="delayColors.C">{{count.C}}</span>
                         </p>
                      </a>
                   </li>
@@ -351,7 +416,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-check"></i>
                         <p>
                            Control de Calidad
-                           <span class="right badge-pill badge-success">{{count.CC}}</span>
+                           <span :class="delayColors.CC">{{count.CC}}</span>
                         </p>
                      </a>
                   </li>
@@ -362,7 +427,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-receipt"></i>
                         <p>
                            Facturación
-                           <span class="right badge-pill badge-success">{{count.F}}</span>
+                           <span :class="delayColors.F">{{count.F}}</span>
                         </p>
                      </a>
                   </li>
@@ -373,7 +438,7 @@ export default {
                         <i class="nav-icon fas fa-solid fa-truck"></i>
                         <p>
                            Despacho
-                           <span class="right badge-pill badge-success">{{count.D}}</span>
+                           <span :class="delayColors.D">{{count.D}}</span>
                         </p>
                      </a>
                   </li>

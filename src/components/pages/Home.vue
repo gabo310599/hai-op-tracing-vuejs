@@ -1,6 +1,8 @@
 <script>
 
 import { RouterLink } from 'vue-router';
+import Cookies from "js-cookie";
+import { createDOMCompilerError } from '@vue/compiler-dom';
 
 let path = "default";
 
@@ -16,6 +18,9 @@ export default{
     fillPath(path, token){
       this.path = path;
     }  
+  },
+  created(){
+    Cookies.remove('userLogged');
   }
 }
 </script>
