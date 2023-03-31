@@ -79,6 +79,7 @@ export default{
         </form>
     </div>
 
+    <!--MODAL-->
     <div class="modal fade" id="CreateUserModal" tabindex="-1" role="dialog" aria-labelledby="CreateUserModalLabel" aria-hidden="true">
         <Sign_Up />
     </div>

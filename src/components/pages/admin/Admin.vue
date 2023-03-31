@@ -315,7 +315,7 @@ export default {
                      <a href="/admin/user/" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-user"></i>
                         <p>
-                           Usuario
+                           Usuarios
                         </p>
                      </a>
                   </li>
