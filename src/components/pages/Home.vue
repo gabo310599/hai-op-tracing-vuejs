@@ -2,7 +2,7 @@
 
 import { RouterLink } from 'vue-router';
 import Cookies from "js-cookie";
-import { createDOMCompilerError } from '@vue/compiler-dom';
+import Sign_Up from "./tools/Sign_Up.vue"
 
 let path = "default";
 
@@ -21,6 +21,9 @@ export default{
   },
   created(){
     Cookies.remove('userLogged');
+  },
+  components:{
+    Sign_Up
   }
 }
 </script>
@@ -34,7 +37,7 @@ export default{
       <nav class="navbar navbar-expand navbar navbar-dark bg-dark">
         <ul class="navbar-nav">
            <li class="nav-item d-none d-sm-inline-block">
-              <a class="nav-link font-weight-bold">SIGN UP</a>
+              <a class="nav-link font-weight-bold" data-toggle="modal" data-target="#CreateUserModal">SIGN UP</a>
            </li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -72,10 +75,16 @@ export default{
           </div>
         </RouterLink>
 
+        </div>
       </div>
+    </div>
   </div>
-</div>
-     </div>
+
+  <div class="modal fade" id="CreateUserModal" tabindex="-1" role="dialog" aria-labelledby="CreateUserModalLabel" aria-hidden="true">
+    <Sign_Up />
+  </div>
+
+
 
 </template>
 

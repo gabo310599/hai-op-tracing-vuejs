@@ -1,6 +1,7 @@
 <script>
 
 import axios from "axios";
+import Sign_Up from "./Sign_Up.vue"
 
 let input = document.getElementById("myInput");
 let user_name = "";
@@ -16,6 +17,9 @@ export default{
             password 
         }       
     },
+    emits :[
+        "success"
+    ],
     methods:{
         async login(){
 
@@ -48,6 +52,9 @@ export default{
             this.$router.push('/')
         }
     },
+    components:{
+        Sign_Up
+    }
 
 }
 
@@ -67,12 +74,14 @@ export default{
                 <input type="password" class="form-control" id="password_input" v-model="password">
             </div>
             <button type="button" class="btn btn-primary" style="margin: 5px" v-on:click="login()">Ingresar</button>
-            <button type="button" class="btn btn-success" style="margin: 5px">Crear usuario</button>
+            <button type="button" class="btn btn-success" style="margin: 5px" data-toggle="modal" data-target="#CreateUserModal">Crear usuario</button>
             <button type="button" class="btn btn-danger" style="margin: 5px" v-on:click="exit()">Salir</button>
         </form>
     </div>
 
-        
+    <div class="modal fade" id="CreateUserModal" tabindex="-1" role="dialog" aria-labelledby="CreateUserModalLabel" aria-hidden="true">
+        <Sign_Up />
+    </div>
 
 </template>
 
