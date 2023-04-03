@@ -174,6 +174,10 @@ export default {
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
+                    if(this.getDecodedAccessToken().sub === user.id){
+                        alert("El usuario ha sido suspendido.")
+                        this.$router.push('/')
+                    }
                     window.location.reload();
                 })
                 .catch((error) => {
