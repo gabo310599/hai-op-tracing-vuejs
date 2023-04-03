@@ -1,9 +1,12 @@
 <script>
 
 ////// AQUI EMPIEZA EL JS DEl DATATABLE ///////////
-let dataTableProcess;
+
+let dataTableActive;
+let dataTableSuspended;
 let dataTableIsInitialized = false;
 
+//Opciones de la data table
 const dataTableOptions = {
     //scrollX: "2000px",
     lengthMenu: [5, 10, 15, 20, 25],
@@ -12,15 +15,15 @@ const dataTableOptions = {
     columnDefs: [
         {
             className: "centered",
-            targets: [0, 1, 2, 3, 4],
+            targets: [0, 1, 2, 3, 4, 5],
         },
         {
             orderable: false,
-            targets: [4],
+            targets: [4,5],
         },
         {
             searchable: false,
-            targets: [4],
+            targets: [4,5],
         },
         //{ width: "50%", targets: [0], },
     ],
@@ -45,45 +48,149 @@ const dataTableOptions = {
     }
 };
 
+//Inicializo la data table
 const initDataTable = async () => {
     if (dataTableIsInitialized) {
-        dataTableProcess.destroy();
+        dataTableActive.destroy();
+        dataTableSuspended.destroy();
     }
 
-    dataTableProcess = $("#datatable_user").DataTable(dataTableOptions);
+    dataTableActive = $("#datatable_active").DataTable(dataTableOptions);
+    dataTableSuspended = $("#datatable_suspended").DataTable(dataTableOptions);
 
     dataTableIsInitialized = true;
 };
 
-window.addEventListener("load", async () => {
-    await initDataTable();
-});
-
 ////// AQUI TERMINA EL JS DEl DATATABLE ///////////
-import { userList } from '../../../../dataList';
 
-let infoModal = [];
+import axios from "axios";
+import Cookies from "js-cookie";
+import jwt_decode from 'jwt-decode';
+import UserInfoModal from '../tools/UserInfoModal.vue'
+
+let infoModal = {
+    user_name: null,
+    operator: {
+        name: null,
+        last_name: null,
+    },
+    roles: null
+};
 let counter = 1;
+let activeList = [];
+let suspendedList = [];
 
 //Exports
 export default {
     data() {
         return {
             infoModal,
-            userList
+            activeList,
+            suspendedList
         }
     },
     methods: {
+
         fillModalInfo(info) {
             this.infoModal = info;
         },
+
         incrementCounter() {
             return counter++;
         },
+
         resetCounter() {
             counter = 1;
+        },
+
+        //Metodo que obtiene de cookies el usuario que inicio sesion
+        getUserFromCookies() {
+            return Cookies.get("userLogged");
+        },
+
+        //Metodo que decodifica el token
+        getDecodedAccessToken() {
+            try {
+                return jwt_decode(this.getUserFromCookies());
+            } catch (Error) {
+                return null;
+            }
+        },
+
+        //Metodo que administra el log
+        async createLog(msg) {
+
+            await axios
+                .post("http://localhost:3000/log",
+                    { user_id: this.user.id, log: msg },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+
+        },
+
+        //Metodo que llena las listas de usuarios
+        async fillUserList() {
+
+            await axios
+                .get("http://localhost:3000/user",
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
+                    const activeList = [];
+                    const suspendedList = [];
+
+                    res.data.data.map(function (row){
+                        if(row.status)
+                            activeList.push(row);
+                        else
+                            suspendedList.push(row);
+                    });
+
+                    this.activeList = activeList;
+                    this.suspendedList = suspendedList;
+
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+
+        },
+
+        //Metodo que modifica el estado de un usuario
+        async updateStatusUser(status, user){
+
+            await axios
+                .put("http://localhost:3000/user/"+user.id,
+                    { status: status },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
         }
+
+    },
+    async created() {
+        await this.fillUserList();
+        await initDataTable();
+    },
+    components:{
+        UserInfoModal
     }
+
 }
 
 </script>
@@ -92,76 +199,87 @@ export default {
     <h1 class="center-text font-weight-bold">Lista de Usuarios</h1>
     <br />
 
+    <!--ACTIVOS-->
     {{ resetCounter() }}
+    <h2 class="font-weight-bold">Usuarios Activos:</h2>
     <div class="container my-4">
         <div class="row">
-          <div class="col-sm-12 col-md-12 col-xl-12 col-md-12">
-            <table id="datatable_user" class="table table-striped">
-              <thead>
-                <tr>
-                    <th scope="col" class="center-text">#</th>
-                    <th scope="col" class="center-text">Usuario</th>
-                    <th scope="col" class="center-text">Nombre</th>
-                    <th scope="col" class="center-text">Apellido</th>
-                    <th scope="col" class="center-text">Más Información</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="user in userList" :key="user.key">
-                    <th scope="row" class="center-text">{{ incrementCounter() }}</th>
-                    <td class="center-text">{{ user.user }}</td>
-                    <td class="center-text">{{ user.name }}</td>
-                    <td class="center-text">{{ user.last_name }}</td>
-                    <td class="center-text">
-                        <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#userModal"
-                            v-on:click="fillModalInfo(user)">Información
-                        </button>
-                    </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <div class="col-sm-12 col-md-12 col-xl-12 col-md-12">
+                <table id="datatable_active" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="center-text">#</th>
+                            <th scope="col" class="center-text">Usuario</th>
+                            <th scope="col" class="center-text">Nombre</th>
+                            <th scope="col" class="center-text">Apellido</th>
+                            <th scope="col" class="center-text">Más Información</th>
+                            <th scope="col" class="center-text">Suspender</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in activeList" :key="user.id">
+                            <th scope="row" class="center-text">{{ incrementCounter() }}</th>
+                            <td class="center-text">{{ user.user_name }}</td>
+                            <td class="center-text">{{ user.operator.name }}</td>
+                            <td class="center-text">{{ user.operator.last_name }}</td>
+                            <td class="center-text">
+                                <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                                    data-target="#userModal" v-on:click="fillModalInfo(user)">Información
+                                </button>
+                            </td>
+                            <td class="center-text">
+                                <button type="button" class="btn btn-danger" v-on:click="updateStatusUser(false, user)">Suspender</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
+    </div>
+
+    <Br/>
+
+    <!--SUSPENDIDOS-->
+    {{ resetCounter() }}
+    <h2 class="font-weight-bold">Usuarios Suspendidos:</h2>
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-xl-12 col-md-12">
+                <table id="datatable_suspended" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="center-text">#</th>
+                            <th scope="col" class="center-text">Usuario</th>
+                            <th scope="col" class="center-text">Nombre</th>
+                            <th scope="col" class="center-text">Apellido</th>
+                            <th scope="col" class="center-text">Más Información</th>
+                            <th scope="col" class="center-text">Activar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in suspendedList" :key="user.id">
+                            <th scope="row" class="center-text">{{ incrementCounter() }}</th>
+                            <td class="center-text">{{ user.user_name }}</td>
+                            <td class="center-text">{{ user.operator.name }}</td>
+                            <td class="center-text">{{ user.operator.last_name }}</td>
+                            <td class="center-text">
+                                <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                                    data-target="#userModal" v-on:click="fillModalInfo(user)">Información
+                                </button>
+                            </td>
+                            <td class="center-text">
+                                <button type="button" class="btn btn-success" v-on:click="updateStatusUser(true, user)">Activar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="userModalLabel">Más Información</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="center-text">
-                        <form>
-                            <div class="form-group">
-                                <label for="user/user_input">Usuario</label>
-                                <input class="form-control" id="user/user_input" :value="infoModal.user" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="user/name_input">Nombres</label>
-                                <input class="form-control" id="user/name_input" :value="infoModal.name" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="user/last_name_input">Apellidos</label>
-                                <input class="form-control" id="user/last_name_input" :value="infoModal.last_name" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="user/last_name_input">Correo</label>
-                                <input type="email" class="form-control" id="user/last_name_input" value="user@email.com"
-                                    readonly>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Salir</button>
-                </div>
-            </div>
-        </div>
+        <UserInfoModal :infoModal="infoModal" />
     </div>
 </template>
 

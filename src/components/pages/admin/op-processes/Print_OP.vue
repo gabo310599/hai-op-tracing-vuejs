@@ -5,7 +5,48 @@ let dataTableProcess;
 let dataTableHistory;
 let dataTableIsInitialized = false;
 
-const dataTableOptions = {
+const dataTableOptionsActive = {
+  //scrollX: "2000px",
+  lengthMenu: [5, 10, 15, 20, 25],
+
+  // Centrado de datos dentro de la columna
+  columnDefs: [
+    {
+      className: "centered",
+      targets: [0, 1, 2, 3, 4, 5, 6],
+    },
+    {
+      orderable: false,
+      targets: [6],
+    },
+    {
+      searchable: false,
+      targets: [6],
+    },
+    //{ width: "50%", targets: [0], },
+  ],
+  // Cantidad inicial por pagina 
+  pageLength: 5,
+  destroy: true,
+  // Señalizacion en español
+  language: {
+    lengthMenu: "Mostrar _MENU_ registros por página",
+    zeroRecords: "Ningún registro encontrado",
+    info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+    infoEmpty: "Ningún registro encontrado",
+    infoFiltered: "(filtrados desde _MAX_ registros totales)",
+    search: "Buscar: ",
+    loadingRecords: "Cargando... ",
+    paginate: {
+      first: "Primero",
+      last: "Último",
+      next: "Siguiente",
+      previous: "Anterior",
+    },
+  }
+};
+
+const dataTableSuspended = {
   //scrollX: "2000px",
   lengthMenu: [5, 10, 15, 20, 25],
 
@@ -52,8 +93,8 @@ const initDataTable = async () => {
     dataTableHistory.destroy();
   }
 
-  dataTableProcess = $("#datatable_process_print_op").DataTable(dataTableOptions);
-  dataTableHistory = $("#datatable_history_print_op").DataTable(dataTableOptions);
+  dataTableProcess = $("#datatable_process_print_op").DataTable(dataTableOptionsActive);
+  dataTableHistory = $("#datatable_history_print_op").DataTable(dataTableSuspended);
 
   dataTableIsInitialized = true;
 };

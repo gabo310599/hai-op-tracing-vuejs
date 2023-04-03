@@ -7,6 +7,7 @@ let last_name = "";
 let user_name = "";
 let password = "";
 let confirmPassword = "";
+let rol = ""
 
 export default{
     data(){
@@ -15,7 +16,8 @@ export default{
             last_name,
             user_name,
             password,
-            confirmPassword
+            confirmPassword,
+            rol
         }       
     },
     methods:{
@@ -93,6 +95,7 @@ export default{
             .post("http://localhost:3000/user",{
                 user_name: this.user_name,
                 password: this.password,
+                roles: [document.getElementById("rol").value],
                 operator_id: operator_id
             })
             .then((res) => {
@@ -141,6 +144,13 @@ export default{
                             <div class="form-group">
                                 <label for="create_user/user_input">Usuario:</label>
                                 <input class="form-control" id="create_user/user_input" v-model="user_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="create_user/roles_input">Rol:</label>
+                                <select class="form-select" aria-label="Default select example" id="rol">
+                                    <option value="AUTHOR">Author</option>
+                                    <option value="ADMIN">Admin</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="create_user/password_input">Contraseña:</label>

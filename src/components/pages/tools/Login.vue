@@ -8,6 +8,16 @@ let user_name = "";
 let password = "";
 let data = [];
 
+document.addEventListener("keydown", (event) => {
+
+    const keyName = event.key;
+    
+    if(keyName === "Enter"){
+        document.getElementById("loginBtn").click();
+    }
+
+});
+
 
 export default{
     data(){
@@ -73,7 +83,7 @@ export default{
                 <label for="process/op_number_input">Contraseña</label>
                 <input type="password" class="form-control" id="password_input" v-model="password">
             </div>
-            <button type="button" class="btn btn-primary" style="margin: 5px" v-on:click="login()">Ingresar</button>
+            <button type="button" class="btn btn-primary" style="margin: 5px" v-on:click="login()" id="loginBtn">Ingresar</button>
             <button type="button" class="btn btn-success" style="margin: 5px" data-toggle="modal" data-target="#CreateUserModal">Crear usuario</button>
             <button type="button" class="btn btn-danger" style="margin: 5px" v-on:click="exit()">Salir</button>
         </form>
