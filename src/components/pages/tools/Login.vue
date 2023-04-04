@@ -73,19 +73,21 @@ export default{
 <template>
 
     <div class="login-container">
-        <h1 class="center-text font-weight-bold form-padding">Login</h1>
+        <h1 class="center-text font-weight-bold form-padding" style="color: white;">Login</h1>
         <form>
             <div class="form-group form-padding">
-                <label for="process/op_number_input">Usuario</label>
+                <label for="process/op_number_input" style="color: white;">Usuario:</label>
                 <input class="form-control" id="user_name_input" v-model="user_name">
             </div>
             <div class="form-group form-padding" >
-                <label for="process/op_number_input">Contraseña</label>
+                <label for="process/op_number_input" style="color: white;">Contraseña:</label>
                 <input type="password" class="form-control" id="password_input" v-model="password">
             </div>
-            <button type="button" class="btn btn-primary" style="margin: 5px" v-on:click="login()" id="loginBtn">Ingresar</button>
-            <button type="button" class="btn btn-success" style="margin: 5px" data-toggle="modal" data-target="#CreateUserModal">Crear usuario</button>
-            <button type="button" class="btn btn-danger" style="margin: 5px" v-on:click="exit()">Salir</button>
+            <div class="btn-center">
+                <button type="button" class="btn btn-primary" style="margin: 5px" v-on:click="login()" id="loginBtn">Ingresar</button>
+                <button type="button" class="btn btn-success" style="margin: 5px" data-toggle="modal" data-target="#CreateUserModal">Crear usuario</button>
+                <button type="button" class="btn btn-danger" style="margin: 5px" v-on:click="exit()">Salir</button>
+            </div>
         </form>
     </div>
 
@@ -107,15 +109,20 @@ export default{
     left: 50%;
     transform:  translate(-50%, 20%);
     width: 400px;
-    text-align: center;
-    border-radius: 10px;
+    border-radius: 30px;
     padding-top: 10px;
     padding-right: 10px;
     padding-bottom: 10px;
     padding-left: 10px;
-  }
+    background-color: #343a40;
+}
 
   .form-padding{
     padding-bottom: 10px;
   }
+
+  .btn-center{
+    margin-left: 14%;
+  }
+
 </style>

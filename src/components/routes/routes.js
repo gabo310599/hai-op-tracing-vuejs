@@ -3,7 +3,7 @@ import Home from "../pages/Home.vue";
 import Prueba from "../pages/Prueba.vue";
 import Admin from "../pages/admin/Admin.vue";
 import Dashboard from "../pages/admin/others/Dashboard.vue";
-import User from "../pages/admin/others/User.vue";
+import Users_List from "../pages/admin/others/Users_List.vue";
 import Cuting from "../pages/admin/op-processes/Cuting.vue";
 import Dispatch from "../pages/admin/op-processes/Dispatch.vue";
 import Generate_OP from "../pages/admin/op-processes/Generate_OP.vue";
@@ -15,6 +15,7 @@ import Rolled_Up from "../pages/admin/op-processes/Rolled_Up.vue";
 import Textile_Design from "../pages/admin/op-processes/Textile_Design.vue";
 import Weaving from "../pages/admin/op-processes/Weaving.vue";
 import Contact from "../pages/admin/others/Contact.vue";
+import Edit_User from "../pages/admin/others/Edit_User.vue"
 
 const Foo = { template: "<div>foo</div>" };
 //Creo el router
@@ -48,6 +49,12 @@ const router = createRouter({
             props: true
         },
         {
+          path: "/admin/edit-user",
+          name: "admin.edit-user",
+          component: Edit_User,
+          props: true
+        },
+        {
           path: "/admin/dashboard",
           name: "/admin/dashboard",
           component: Dashboard,
@@ -55,9 +62,9 @@ const router = createRouter({
         },
 
         {
-          path: "/admin/user",
-          name: "admin.user",
-          component: User,
+          path: "/admin/users-list",
+          name: "admin.user-list",
+          component: Users_List,
           props: true
         },
 

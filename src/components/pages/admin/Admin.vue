@@ -293,7 +293,7 @@ export default {
                      alt="User Image">
                </div>
                <div class="info" v-if="disableOptions()">
-                  <a href="#" class="d-block" >{{user.user_name}}</a>
+                  <a href="/admin/edit-user" class="d-block" >{{user.user_name}}</a>
                </div>
             </div>
 
@@ -312,7 +312,7 @@ export default {
 
                   <!-- Usuario -->
                   <li class="nav-item">
-                     <a href="/admin/user/" class="nav-link" v-if="disableOptions()">
+                     <a href="/admin/users-list/" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-user"></i>
                         <p>
                            Usuarios Registrados
