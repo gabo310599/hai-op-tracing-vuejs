@@ -63,7 +63,7 @@ window.addEventListener("load", async () => {
 });
 
 ////// AQUI TERMINA EL JS DEl DATATABLE ///////////
-import ProcessModalInfo from '../tools/ProcessModalInfo.vue'
+import ProcessModal from '../tools/ProcessModal.vue'
 import TimeLine from '../tools/TimeLine.vue';
 import { opListFinal, machineData } from '../../../../dataList';
 
@@ -153,7 +153,7 @@ export default {
   },
   components: {
     TimeLine,
-    ProcessModalInfo
+    ProcessModal
   }
 }
 
@@ -290,7 +290,7 @@ export default {
           </button>
         </div>
         <div class="modal-body">
-          <ProcessModalInfo :infoModalProcess="infoModalProcess" />
+          <ProcessModal :infoModalProcess="infoModalProcess" />
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Salir</button>
