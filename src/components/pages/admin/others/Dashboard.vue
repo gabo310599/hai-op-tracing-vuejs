@@ -252,17 +252,16 @@ export default {
             <div class="card-body">
                <h5>Pedidos con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listDG" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.request}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listDG" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 
@@ -274,17 +273,16 @@ export default {
             <div class="card-body">
                <h5>Pedidos con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listDT" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.request}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listDT" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 
@@ -296,17 +294,16 @@ export default {
             <div class="card-body">
                <h5>Pedidos con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listGOP" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.request}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listGOP" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 
@@ -318,17 +315,16 @@ export default {
             <div class="card-body">
                <h5>Ordenes con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listIOP" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.order}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listIOP" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 
@@ -340,17 +336,16 @@ export default {
             <div class="card-body">
                <h5>Ordenes con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listT" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.order}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listT" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 
@@ -362,17 +357,16 @@ export default {
             <div class="card-body">
                <h5>Ordenes con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listE" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.order}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listE" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
          
@@ -384,17 +378,16 @@ export default {
             <div class="card-body">
                <h5>Ordenes con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listC" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.order}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listC" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 
@@ -406,17 +399,16 @@ export default {
             <div class="card-body">
                <h5>Ordenes con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listCC" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.order}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listCC" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 
@@ -428,17 +420,16 @@ export default {
             <div class="card-body">
                <h5>Ordenes con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listF" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.order}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listF" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 
@@ -450,17 +441,16 @@ export default {
             <div class="card-body">
                <h5>Ordenes con retrasos:</h5>
                <br/>
-               <ol>
-                  <li v-for="item in listD" :key="item.id">
-                     <p class="card-text font-weight-bold">{{item.order}} </p>
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger" v-for="item in listD" :key="item.id">
+                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
+                        {{item.request}} 
+                     </a>
                      <p>
                         Retraso de {{ item.delay }} días 
-                        <a class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#DashboardModal" v-on:click="fillModalInfo(item.id)">
-                           revisar
-                        </a>
                      </p>
                   </li>
-               </ol>
+               </ul>
             </div>
          </div>
 

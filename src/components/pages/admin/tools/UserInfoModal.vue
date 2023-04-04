@@ -30,11 +30,11 @@ export default {
                             <input class="form-control" id="user/user_input" :value="infoModal.user_name" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="user/name_input">Nombre:</label>
+                            <label for="user/name_input">Nombres:</label>
                             <input class="form-control" id="user/name_input" :value="infoModal.operator.name" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="user/last_name_input">Apellido:</label>
+                            <label for="user/last_name_input">Apellidos:</label>
                             <input class="form-control" id="user/last_name_input" :value="infoModal.operator.last_name" readonly>
                         </div>
                         <div class="form-group">
