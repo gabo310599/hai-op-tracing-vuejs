@@ -37,7 +37,7 @@ export default{
       <nav class="navbar navbar-expand navbar navbar-dark bg-dark">
         <ul class="navbar-nav">
            <li class="nav-item d-none d-sm-inline-block">
-              <a class="nav-link font-weight-bold" data-toggle="modal" data-target="#CreateUserModal">SIGN UP</a>
+              <a class="nav-link font-weight-bold" data-toggle="modal" data-target="#CreateUserModal">CREAR USUARIO</a>
            </li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -56,7 +56,7 @@ export default{
         <br />
 
         <!--OPERADORES-->
-        <RouterLink to="/prueba">
+        <RouterLink to="/operator/check-out">
           <div>
             <button type="submit" class="btn btn-success btn-lg btn-block">
               Operador

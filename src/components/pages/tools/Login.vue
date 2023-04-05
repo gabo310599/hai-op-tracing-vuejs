@@ -115,6 +115,7 @@ export default{
     padding-bottom: 10px;
     padding-left: 10px;
     background-color: #343a40;
+    margin-left: 1%;
 }
 
   .form-padding{

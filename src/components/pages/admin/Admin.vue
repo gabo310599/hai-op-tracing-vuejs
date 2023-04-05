@@ -1,15 +1,13 @@
 <script>
 
-import { ref } from 'vue';
 import { RouterView } from 'vue-router'
-import { userList, opList } from '../../../dataList';
 import Login  from '../tools/Login.vue'
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import axios from "axios";
 
 let user = [];
-let token = ref("");
+let token = "";
 let isNotLogged;
 let count = [];
 let delayList = [];
@@ -31,8 +29,6 @@ export default {
    data() {
       return {
          RouterView,
-         opList,
-         userList,
          user,
          token,
          isNotLogged: true,
@@ -135,14 +131,12 @@ export default {
          this.user = data.user;
          this.token = data.accessToken;
          Cookies.set("userLogged", this.token)
-         this.createLog("Inicio de sesión.")
+         this.createLog("Inicio de sesión admin.")
       },
 
       //Metodo que obtiene de cookies el usuario que inicio sesion
       getUserFromCookies(){
-
-         return Cookies.get("userLogged");
-      
+         return Cookies.get("userLogged");   
       },
 
       //Metodo que elimina de las cookies el usuario

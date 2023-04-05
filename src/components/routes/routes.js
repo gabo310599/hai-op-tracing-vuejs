@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../pages/Home.vue";
-import Prueba from "../pages/Prueba.vue";
 import Admin from "../pages/admin/Admin.vue";
 import Dashboard from "../pages/admin/others/Dashboard.vue";
 import Users_List from "../pages/admin/others/Users_List.vue";
@@ -15,7 +14,11 @@ import Rolled_Up from "../pages/admin/op-processes/Rolled_Up.vue";
 import Textile_Design from "../pages/admin/op-processes/Textile_Design.vue";
 import Weaving from "../pages/admin/op-processes/Weaving.vue";
 import Contact from "../pages/admin/others/Contact.vue";
-import Edit_User from "../pages/admin/others/Edit_User.vue"
+import Edit_User from "../pages/admin/others/Edit_User.vue";
+import Operator from "../pages/operator/Operator.vue";
+import Check_Out from "../pages/operator/functions/Check_Out.vue";
+import Register_OP from "../pages/operator/functions/Register_OP.vue";
+import Register_Request from "../pages/operator/functions/Register_Request.vue"
 
 const Foo = { template: "<div>foo</div>" };
 //Creo el router
@@ -30,10 +33,30 @@ const router = createRouter({
     },
 
     {
-      path: "/prueba",
-      name: "prueba",
-      component: Prueba,
-      props: true
+      path: "/operator",
+      name: "operator",
+      component: Operator,
+      props: true,
+      children: [
+        {
+          path: "/operator/check-out",
+          name: "admin.check-out",
+          component: Check_Out,
+          props: true
+        },
+        {
+          path: "/operator/register-request",
+          name: "operator.register-request",
+          component: Register_Request,
+          props: true
+        },
+        {
+          path: "/operator/register-op",
+          name: "operator.register-op",
+          component: Register_OP,
+          props: true
+        },
+      ],
     },
 
     {
