@@ -5,7 +5,48 @@ let dataTableProcess;
 let dataTableHistory;
 let dataTableIsInitialized = false;
 
-const dataTableOptions = {
+const dataTableProcessOptions = {
+  //scrollX: "2000px",
+  lengthMenu: [5, 10, 15, 20, 25],
+
+  // Centrado de datos dentro de la columna
+  columnDefs: [
+    {
+      className: "centered",
+      targets: [0, 1, 2, 3, 4, 5],
+    },
+    {
+      orderable: false,
+      targets: [5],
+    },
+    {
+      searchable: false,
+      targets: [5],
+    },
+    //{ width: "50%", targets: [0], },
+  ],
+  // Cantidad inicial por pagina 
+  pageLength: 5,
+  destroy: true,
+  // Señalizacion en español
+  language: {
+    lengthMenu: "Mostrar _MENU_ registros por página",
+    zeroRecords: "Ningún registro encontrado",
+    info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+    infoEmpty: "Ningún registro encontrado",
+    infoFiltered: "(filtrados desde _MAX_ registros totales)",
+    search: "Buscar: ",
+    loadingRecords: "Cargando... ",
+    paginate: {
+      first: "Primero",
+      last: "Último",
+      next: "Siguiente",
+      previous: "Anterior",
+    },
+  }
+};
+
+const dataTableHistoryOptions = {
   //scrollX: "2000px",
   lengthMenu: [5, 10, 15, 20, 25],
 
@@ -52,163 +93,237 @@ const initDataTable = async () => {
     dataTableHistory.destroy();
   }
 
-  dataTableProcess = $("#datatable_process_weaving").DataTable(dataTableOptions);
-  dataTableHistory = $("#datatable_history_weaving").DataTable(dataTableOptions);
+  dataTableProcess = $("#datatable_process_graphic_design").DataTable(dataTableProcessOptions);
+  dataTableHistory = $("#datatable_history_graphic_design").DataTable(dataTableHistoryOptions);
 
   dataTableIsInitialized = true;
 };
 
-window.addEventListener("load", async () => {
-  await initDataTable();
-});
-
 ////// AQUI TERMINA EL JS DEl DATATABLE ///////////
+
+import axios from "axios";
+import Cookies from "js-cookie";
+import jwt_decode from 'jwt-decode';
 import ProcessModal from '../tools/ProcessModal.vue'
 import TimeLine from '../tools/TimeLine.vue';
-import { opListFinal, machineData } from '../../../../dataList';
 
-//Atributos
+const process_type = 3;
 let counter = 1;
-let opSelected = [];
-let opListProcess = [];
-let opListHistory = [];
-let infoModalProcess = [];
-let blackMachineList = [];
-let whiteMachineList = [];
-let flag = true;
+let processList = [];
+let historyList = [];
+let department = {
+  id: null,
+  name: null,
+  days_time_limit: null
+};
+let modalInfo = {};
+  
+  //Metodo que determina el delay de un pedido
+  const delayColor = (date_in, days_time_limit) => {
 
-//Llenamos la lista de proceso
-const fillProcessList = () => {
+      const today = new Date();
+      const difference = today.getTime() - date_in.getTime();
+      const differenceInDays = difference / 1000 / 60 / 60 / 24;
 
-  if (flag) {
-    opListFinal.map(function (op) {
-      if (op.department_number == 5)
-        opListProcess.push(op);
-    });
-  };
-
-}
-
-//Llenamos la lista de historial
-const fillHistoryList = () => {
-
-  if (flag) {
-    opListFinal.map(function (op) {
-      if (op.department_number > 5)
-        opListHistory.push(op);
-    });
-  }
-}
-
-//Llenamos la lista de urdidos
-const fillMachineList = () =>{
-
-  if(flag){
-    machineData.map(function(data) {
-      if(data.warped == "blanco")
-        whiteMachineList.push(data);
+      if(differenceInDays > parseFloat(days_time_limit))
+        return "right badge-pill badge-danger"
       else
-        if(data.warped == "negro")
-          blackMachineList.push(data);
-    })
-  }
-}
+        return "right badge-pill badge-success"
+
+    }
 
 //Exports
 export default {
-  props: [
-    'opList',
-    'userList'
-  ],
   data() {
     return {
-      counter,
-      opSelected,
-      opListProcess,
-      opListHistory,
-      infoModalProcess,
-      whiteMachineList,
-      blackMachineList
+      historyList,
+      processList,
+      department,
+      process_type,
+      modalInfo,
+      modalProcess: false,
+      modalHistory: false
     }
   },
   methods: {
+
     incrementCounter() {
       return counter++;
     },
+
     resetCounter() {
       counter = 1;
     },
-    fillSelectedOp(op) {
-      this.opSelected = op;
+
+    //Metodo que obtiene de cookies el usuario que inicio sesion
+    getUserFromCookies() {
+      return Cookies.get("userLogged");
     },
-    fillLists() {
-      fillProcessList();
-      fillHistoryList();
-      fillMachineList();
-      flag = false;
+
+    //Metodo que decodifica el token
+    getDecodedAccessToken() {
+      try {
+        return jwt_decode(this.getUserFromCookies());
+      } catch (Error) {
+        return null;
+      }
     },
-    fillModalInfo(info) {
-      this.infoModalProcess = info;
+
+    //Metodo que administra el log
+    async createLog(msg) {
+
+      await axios
+        .post("http://localhost:3000/log",
+          { user_id: this.user.id, log: msg },
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+        )
+        .then((res) => {
+
+        })
+        .catch((error) => {
+          console.log(error.message);
+          alert("Error: " + error.response.data.message);
+        });
+
     },
+
+    //Metodo que obtiene los datos del departamento
+    async getDepartmentInfo() {
+
+      await axios
+        .post("http://localhost:3000/department/get/by-name",
+            { name: "Tejeduría" },
+            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+        )
+        .then((res) => {
+          this.department.id = res.data.data.id;
+          this.department.name = res.data.data.name;
+          this.department.days_time_limit = res.data.data.days_time_limit;
+
+          console.log(this.department)
+        })
+        .catch((error) => {
+          console.log(error.message);
+          alert("Error: " + error.response.data.message);
+        });
+    },
+
+    //Metodo que llena las lista de procesos activos e historial.
+    async fillLists() {
+      await axios
+        .get("http://localhost:3000/process/by-department/" + this.department.id,
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+        )
+        .then((res) => {
+
+          const processList = [];
+          const historyList = [];
+
+          const days_time_limit = this.department.days_time_limit;
+
+          res.data.data.map(function (row) {
+
+            let process = {
+              id: null,
+              date_in: null,
+              hours_in: null,
+              operator: null,
+              request: null,
+              machine: null,
+              order: null,
+              date_out: null,
+              color_badge: null,
+              days_in: null
+            }
+
+            //Llenamos los datos de la lista con procesos activos
+            if (!row.date_out) {
+              process.id = row.id;
+              let date_in_format = new Date(row.date_in).toLocaleString();
+              process.date_in = date_in_format;
+              process.operator = row.operator;
+              process.request = row.request;
+              process.machine = row.machine;
+              process.order = row.order;
+              if(row.date_out){
+                date_in_format = new Date(row.date_out).toLocaleString();
+                process.date_out = date_in_format;
+              }
+              process.color_badge = delayColor(new Date(row.date_in), days_time_limit);
+              let today = new Date();
+              let difference = today.getTime() - new Date(row.date_in).getTime();
+              process.days_in = (difference / 1000 / 60 / 60 / 24).toFixed(2);
+              processList.push(process);
+            }
+
+            //Llenamos los datos de la lista de historial
+            else {
+              historyList.push(row);
+            }
+          });
+
+          this.processList = processList;
+          this.historyList = historyList;
+
+        })
+        .catch((error) => {
+          console.log(error.message);
+          alert("Error: " + error.response.data.message);
+        });
+
+    },
+
+    //Metodo que llena la informacion del modal
+    fillModalInfo(data){
+      this.modalInfo = data;
+      this.modalProcess = true;
+    }
+
   },
   components: {
     TimeLine,
     ProcessModal
+  },
+  async created() {
+    await this.getDepartmentInfo();
+    await this.fillLists();
+    await initDataTable();
   }
 }
 
 </script>
 
 <template>
-  {{ fillLists() }}
   <h1 class="center-text font-weight-bold">Tejeduría</h1>
-  <br/>
-
-
-  <!--MAQUINAS-->
-  <div class="wrapper-machine">
-    <div v-for="machine in blackMachineList" :key="machine.key">
-      <i class="fa-solid fa-square-caret-down icon-size"></i>
-      <div class="msg-grid font-weight-bold">{{machine.name}}</div>
-      <button type="button" class="btn btn-info button-grid">Revisar</button>
-    </div>
-    <div v-for="machine in whiteMachineList" :key="machine.key">
-      <i class="fa-regular fa-square-caret-down icon-size"/>
-      <div class="msg-grid font-weight-bold">{{machine.name}}</div>
-      <button type="button" class="btn btn-info button-grid">Revisar</button>
-    </div>
-  </div>
-
+  <h2 class="font-weight-bold">En Proceso:</h2>
 
   <!--PROCESO-->
-  <h2 class="font-weight-bold">En Proceso:</h2>
   {{ resetCounter() }}
   <div class="container my-4">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-xl-12 col-md-12">
-        <table id="datatable_process_weaving" class="table table-striped">
+        <table id="datatable_process_graphic_design" class="table table-striped">
           <thead>
             <tr>
               <th scope="col" class="center-text">#</th>
-              <th scope="col" class="center-text">Nro. OP</th>
+              <th scope="col" class="center-text">Número OP</th>
               <th scope="col" class="center-text">Descripción</th>
               <th scope="col" class="center-text">Fecha de Ingreso</th>
-              <th scope="col" class="center-text">Días en Proceso</th>
-              <th scope="col" class="center-text">Operario</th>
+              <th scope="col" class="center-text">Operador</th>
               <th scope="col" class="center-text">Más Información</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="op in opListProcess" :key="op.key">
-              <th scope="row" class="center-text">{{ incrementCounter() }}</th>
-              <td class="center-text">{{ op.number }}</td>
-              <td class="center-text">{{ op.description }}</td>
-              <td class="center-text">{{ op.date_in }}</td>
-              <td class="center-text">{{ op.days }}</td>
-              <td class="center-text">{{ op.operator_user }}</td>
+            <tr v-for="process in processList" :key="process.id">
+              <th scope="row" class="center-text"><span :class="process.color_badge">{{ incrementCounter() }}</span></th>
+              <td class="center-text">{{ process.order.op_number }}</td>
+              <td class="center-text">{{ process.request.description }}</td>
+              <td class="center-text">{{ process.date_in }}</td>
+              <td class="center-text">{{ process.operator.name + " " + process.operator.last_name }}</td>
               <td class="center-text">
-                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#processModal"
-                  v-on:click="fillModalInfo(op)">Información</button>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#processModal" v-on:click="fillModalInfo(process)">
+                  Información
+                </button>
               </td>
             </tr>
           </tbody>
@@ -225,29 +340,29 @@ export default {
   <div class="container my-4">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-xl-12 col-md-12">
-        <table id="datatable_history_weaving" class="table table-striped">
+        <table id="datatable_history_graphic_design" class="table table-striped">
           <thead>
             <tr>
               <th scope="col" class="center-text">#</th>
-              <th scope="col" class="center-text">Nro. OP</th>
+              <th scope="col" class="center-text">Número OP</th>
               <th scope="col" class="center-text">Descripción</th>
-              <th scope="col" class="center-text">Fecha de Ingreso</th>
               <th scope="col" class="center-text">Fecha de Salida</th>
+              <th scope="col" class="center-text">Días en Proceso</th>
               <th scope="col" class="center-text">Operario</th>
               <th scope="col" class="center-text">Linea de Tiempo</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="op in opListHistory" :key="op.key">
+            <tr>
               <th scope="row" class="center-text">{{ incrementCounter() }}</th>
-              <td class="center-text">{{ op.number }}</td>
-              <td class="center-text">{{ op.description }}</td>
-              <td class="center-text">{{ op.date_in }}</td>
-              <td class="center-text">{{ op.date_out }}</td>
-              <td class="center-text">{{ op.operator_user }}</td>
+              <td class="center-text">serial</td>
+              <td class="center-text">descripcion</td>
+              <td class="center-text">fecha</td>
+              <td class="center-text">dias</td>
+              <td class="center-text">usuario</td>
               <td class="center-text">
-                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#timeLineModal"
-                  v-on:click="fillSelectedOp(op)">Tracing
+                <button type="button" class="btn btn-outline-info">
+                  Tracing
                 </button>
               </td>
             </tr>
@@ -257,48 +372,16 @@ export default {
     </div>
   </div>
 
-  <!-- Modal Historial -->
-  <div class="modal fade" id="timeLineModal" tabindex="-1" role="dialog" aria-labelledby="timeLineModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="timeLineModalLabel">Tracing</h2>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <TimeLine :opSelected="opSelected" />
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Salir</button>
-        </div>
-      </div>
-    </div>
+  <!-- Process Modal -->
+  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel" aria-hidden="true" v-if="modalProcess">
+    <ProcessModal  :process_type="process_type" :modalInfo="modalInfo"/>
   </div>
 
-  <!-- Modal Process -->
-  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="processModalLabel">Más Información</h2>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <ProcessModal :infoModalProcess="infoModalProcess" />
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Salir</button>
-        </div>
-      </div>
-    </div>
+  <!-- History Modal -->
+  <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true" v-if="modalHistory">
+    <TimeLine />
   </div>
-  
+
 </template>
 
 <style>
@@ -310,27 +393,4 @@ export default {
   text-align: center !important;
   vertical-align: middle !important;
 }
-
-.wrapper-machine{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
-  justify-content: space-evenly;
-}
-
-.icon-size{
-  margin-left: 150px;
-  font-size: 110px;
-}
-
-.button-grid{
-  margin-left: 160px;
-  margin-bottom: 50px;
-}
-
-.msg-grid{
-  margin-left: 170px;
-  margin-bottom: 5px;
-}
-
 </style>

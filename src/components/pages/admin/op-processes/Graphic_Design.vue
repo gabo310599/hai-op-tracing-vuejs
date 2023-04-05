@@ -106,7 +106,6 @@ import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import ProcessModal from '../tools/ProcessModal.vue'
 import TimeLine from '../tools/TimeLine.vue';
-import { genPropsAccessExp } from "@vue/shared";
 
 const process_type = 1;
 let counter = 1;
@@ -142,7 +141,8 @@ export default {
       department,
       process_type,
       modalInfo,
-      modal: false
+      modalProcess: false,
+      modalHistory: false
     }
   },
   methods: {
@@ -191,9 +191,9 @@ export default {
     async getDepartmentInfo() {
 
       await axios
-        .get("http://localhost:3000/department/get/by-name",
-          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } },
-          { name: "Diseño Gráfico" }
+        .post("http://localhost:3000/department/get/by-name/",
+          { name: "Diseño Gráfico" },
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
           this.department.id = res.data.data.id;
@@ -274,7 +274,7 @@ export default {
     //Metodo que llena la informacion del modal
     fillModalInfo(data){
       this.modalInfo = data;
-      this.modal = true;
+      this.modalProcess = true;
     }
 
   },
@@ -346,7 +346,7 @@ export default {
               <th scope="col" class="center-text">Descripción</th>
               <th scope="col" class="center-text">Fecha de Salida</th>
               <th scope="col" class="center-text">Días en Proceso</th>
-              <th scope="col" class="center-text">Usuario Operario</th>
+              <th scope="col" class="center-text">Operario</th>
               <th scope="col" class="center-text">Linea de Tiempo</th>
             </tr>
           </thead>
@@ -370,9 +370,14 @@ export default {
     </div>
   </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel" aria-hidden="true" v-if="modal">
+  <!-- Process Modal -->
+  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel" aria-hidden="true" v-if="modalProcess">
     <ProcessModal  :process_type="process_type" :modalInfo="modalInfo"/>
+  </div>
+
+  <!-- History Modal -->
+  <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true" v-if="modalHistory">
+    <TimeLine />
   </div>
 
 </template>
