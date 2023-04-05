@@ -79,6 +79,7 @@ let infoModal = {
 let counter = 1;
 let activeList = [];
 let suspendedList = [];
+let modal = false;
 
 //Exports
 export default {
@@ -86,7 +87,8 @@ export default {
         return {
             infoModal,
             activeList,
-            suspendedList
+            suspendedList,
+            modal
         }
     },
     methods: {
@@ -156,6 +158,7 @@ export default {
 
                     this.activeList = activeList;
                     this.suspendedList = suspendedList;
+                    this.modal = true;
 
                 })
                 .catch((error) => {
@@ -241,7 +244,7 @@ export default {
         </div>
     </div>
 
-    <Br/>
+    <br/>
 
     <!--SUSPENDIDOS-->
     {{ resetCounter() }}
@@ -282,7 +285,7 @@ export default {
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true" v-if="modal">
         <UserInfoModal :infoModal="infoModal" />
     </div>
 </template>

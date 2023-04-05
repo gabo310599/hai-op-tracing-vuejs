@@ -230,7 +230,8 @@ export default {
               machine: null,
               order: null,
               date_out: null,
-              color_badge: null
+              color_badge: null,
+              days_in: null
             }
 
             //Llenamos los datos de la lista con procesos activos
@@ -247,6 +248,9 @@ export default {
                 process.date_out = date_in_format;
               }
               process.color_badge = delayColor(new Date(row.date_in), days_time_limit);
+              let today = new Date();
+              let difference = today.getTime() - new Date(row.date_in).getTime();
+              process.days_in = (difference / 1000 / 60 / 60 / 24).toFixed(2);
               processList.push(process);
             }
 
