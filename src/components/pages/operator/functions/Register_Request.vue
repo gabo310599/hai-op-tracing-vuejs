@@ -99,10 +99,10 @@ export default{
             await axios
                 .post("http://localhost:3000/request-note",
                     {
-                    serial: this.serial,
-                    description: this.description,
-                    code: this.code,
-                    characters: this.character
+                    serial: this.serial.toUpperCase(),
+                    description: this.description.toUpperCase(),
+                    code: this.code.toUpperCase(),
+                    characters: this.character.toUpperCase()
                     },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
