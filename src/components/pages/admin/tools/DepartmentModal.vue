@@ -197,7 +197,7 @@ export default {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="departmentModaLabel">Más Información</h2>
+                <h2 class="modal-title font-weight-bold" id="departmentModaLabel">Departamentos de: {{infoModal.user_name}}</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -209,7 +209,7 @@ export default {
                             <ul class="list-group">
                                 <li class="list-group-item list-group-item-secondary" v-for="department in departementOperator" :key="department.id">
                                     <p class="font-weight-bold">{{department.name}}</p>
-                                    <a class="delete-btn-alignment" v-on:click="deleteDepartment(department.id, department.name)">Eliminar</a>
+                                    <a class="delete-btn-alignment" v-on:click="deleteDepartment(department.id)">Eliminar</a>
                                 </li>
                             </ul>
                         </div>

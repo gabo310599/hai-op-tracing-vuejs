@@ -18,13 +18,15 @@ let permissions = {
    D: false
 };
 let operator_id = "";
+let count = [];
 
 export default{
     data(){
         return{
             completeAccess,
             permissions,
-            operator_id
+            operator_id,
+            count
         }
     },
     methods:{
@@ -93,8 +95,7 @@ export default{
                 .then((res) => {
 
                     let flag = false;
-                    
-                    this.operator_id = res.data.data.operator_id;
+                    this.operator_id = res.data.data.operator.id;
 
                     res.data.data.roles.map(function (role){
                         if(role == "ADMIN")
@@ -130,7 +131,51 @@ export default{
                             }
                         })
                     .then((res) => {
-                        console.log(res.data.data)
+                        console.log(res.data.data[0].name)
+                        for(let i = 0; i < res.data.data.length; i++){
+                            switch(res.data.data[i].name){
+                                case "Diseño Gráfico":{
+                                    this.permissions.DG = true;
+                                    break;
+                                };
+                                case "Diseño Textil":{
+                                    this.permissions.DT = true;
+                                    break;
+                                };
+                                case "Generar OP":{
+                                    this.permissions.GOP = true;
+                                    break;
+                                };
+                                case "Imprimir OP":{
+                                    this.permissions.IOP = true;
+                                    break;
+                                };
+                                case "Tejeduría":{
+                                    this.permissions.T = true;
+                                    break;
+                                };
+                                case "Enrollado":{
+                                    this.permissions.E = true;
+                                    break;
+                                };
+                                case "Corte":{
+                                    this.permissions.C = true;
+                                    break;
+                                };
+                                case "Control de Calidad":{
+                                    this.permissions.CC = true;
+                                    break;
+                                };
+                                case "Facturación":{
+                                    this.permissions.F = true;
+                                    break;
+                                };
+                                case "Despacho":{
+                                    this.permissions.D = true;
+                                    break;
+                                };
+                            }
+                        }
                     })
                     .catch((error) => {
                         console.log(error.message);
@@ -138,11 +183,34 @@ export default{
 
             }
 
-        }
+        },
+
+        //Metodo que calcula la cantidad de procesos que hay por departamento
+        async getProcessCountByDepartment(){
+         
+            await axios
+                .get("http://localhost:3000/process/count/by-department",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.getUserFromCookies()}`
+                        }
+                    }
+                )
+                .then((res) => {
+
+                this.count = res.data.data;
+
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: "+error.response.data.message);
+                });
+      }
 
     },
     async created(){
         await this.verifyUser();
+        await this.getProcessCountByDepartment();
     }
 }
 
@@ -152,7 +220,7 @@ export default{
     <div class="check-out-container">
 
         <!--DISEÑO GRAFICO-->
-        <div class="card card-primary card-outline">
+        <div class="card card-primary card-outline" v-if="permissions.DG">
             <div class="card-header">
                <h3 class="m-0 font-weight-bold">Diseño Gráfico</h3>
             </div>
@@ -160,7 +228,7 @@ export default{
                <ul class="list-group">
                   <li class="list-group-item list-group-item-secondary">
                     <p>
-                        Total pedidos en el departamento: 
+                        Total pedidos en el departamento: {{ count.DG }}
                     </p>
                     <a class="card-text font-weight-bold">
                         REVISAR
@@ -168,7 +236,178 @@ export default{
                   </li>
                </ul>
             </div>
-         </div>
+        </div>
+
+        <!--Diseño Textil-->
+        <div class="card card-primary card-outline" v-if="permissions.DT">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Diseño Textil</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.DT }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
+
+        <!--Generar OP-->
+        <div class="card card-primary card-outline" v-if="permissions.GOP">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Generar OP</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.GOP }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
+
+        <!--Imprimir OP-->
+        <div class="card card-primary card-outline" v-if="permissions.IOP">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Imprimir OP</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.IOP }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
+
+        <!--Tejeduría-->
+        <div class="card card-primary card-outline" v-if="permissions.T">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Tejeduría</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.T }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
+
+        <!--Enrollado-->
+        <div class="card card-primary card-outline" v-if="permissions.E">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Enrollado</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.E }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
+
+        <!--Corte-->
+        <div class="card card-primary card-outline" v-if="permissions.C">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Corte</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.C }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
+
+        <!--Control de Calidad-->
+        <div class="card card-primary card-outline" v-if="permissions.CC">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Control de Calidad</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.CC }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
+
+        <!--Facturación-->
+        <div class="card card-primary card-outline" v-if="permissions.F">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Facturación</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.F }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
+
+        <!--Despacho-->
+        <div class="card card-primary card-outline" v-if="permissions.D">
+            <div class="card-header">
+               <h3 class="m-0 font-weight-bold">Despacho</h3>
+            </div>
+            <div class="card-body">
+               <ul class="list-group">
+                  <li class="list-group-item list-group-item-secondary">
+                    <p>
+                        Total pedidos en el departamento: {{ count.D }}
+                    </p>
+                    <a class="card-text font-weight-bold">
+                        REVISAR
+                    </a>
+                  </li>
+               </ul>
+            </div>
+        </div>
 
 
     </div>
