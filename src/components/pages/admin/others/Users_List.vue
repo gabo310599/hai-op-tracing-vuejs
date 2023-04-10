@@ -7,7 +7,49 @@ let dataTableSuspended;
 let dataTableIsInitialized = false;
 
 //Opciones de la data table
-const dataTableOptions = {
+const dataTableOptionsActive = {
+    //scrollX: "2000px",
+    lengthMenu: [5, 10, 15, 20, 25],
+
+    // Centrado de datos dentro de la columna
+    columnDefs: [
+        {
+            className: "centered",
+            targets: [0, 1, 2, 3, 4, 5, 6],
+        },
+        {
+            orderable: false,
+            targets: [4,5,6],
+        },
+        {
+            searchable: false,
+            targets: [4,5,6],
+        },
+        //{ width: "50%", targets: [0], },
+    ],
+    // Cantidad inicial por pagina 
+    pageLength: 5,
+    destroy: true,
+    // Señalizacion en español
+    language: {
+        lengthMenu: "Mostrar _MENU_ registros por página",
+        zeroRecords: "Ningún registro encontrado",
+        info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Ningún registro encontrado",
+        infoFiltered: "(filtrados desde _MAX_ registros totales)",
+        search: "Buscar: ",
+        loadingRecords: "Cargando... ",
+        paginate: {
+            first: "Primero",
+            last: "Último",
+            next: "Siguiente",
+            previous: "Anterior",
+        },
+    }
+};
+
+//Opciones de la data table
+const dataTableOptionsSuspended = {
     //scrollX: "2000px",
     lengthMenu: [5, 10, 15, 20, 25],
 
@@ -55,8 +97,8 @@ const initDataTable = async () => {
         dataTableSuspended.destroy();
     }
 
-    dataTableActive = $("#datatable_active").DataTable(dataTableOptions);
-    dataTableSuspended = $("#datatable_suspended").DataTable(dataTableOptions);
+    dataTableActive = $("#datatable_active").DataTable(dataTableOptionsActive);
+    dataTableSuspended = $("#datatable_suspended").DataTable(dataTableOptionsSuspended);
 
     dataTableIsInitialized = true;
 };
@@ -66,7 +108,8 @@ const initDataTable = async () => {
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
-import UserInfoModal from '../tools/UserInfoModal.vue'
+import UserInfoModal from '../tools/UserInfoModal.vue';
+import DepartmentModal from '../tools/DepartmentModal.vue';
 
 let infoModal = {
     user_name: null,
@@ -80,6 +123,8 @@ let counter = 1;
 let activeList = [];
 let suspendedList = [];
 let modal = false;
+let modalInstance = null;
+
 
 //Exports
 export default {
@@ -88,13 +133,15 @@ export default {
             infoModal,
             activeList,
             suspendedList,
-            modal
+            modal,
+            modalInstance
         }
     },
     methods: {
 
         fillModalInfo(info) {
             this.infoModal = info;
+            this.modal = true;
         },
 
         incrementCounter() {
@@ -158,7 +205,6 @@ export default {
 
                     this.activeList = activeList;
                     this.suspendedList = suspendedList;
-                    this.modal = true;
 
                 })
                 .catch((error) => {
@@ -195,9 +241,9 @@ export default {
         await initDataTable();
     },
     components:{
-        UserInfoModal
-    }
-
+        UserInfoModal,
+        DepartmentModal
+    },
 }
 
 </script>
@@ -220,6 +266,7 @@ export default {
                             <th scope="col" class="center-text">Nombre</th>
                             <th scope="col" class="center-text">Apellido</th>
                             <th scope="col" class="center-text">Más Información</th>
+                            <th scope="col" class="center-text">Departamentos</th>
                             <th scope="col" class="center-text">Suspender</th>
                         </tr>
                     </thead>
@@ -232,6 +279,11 @@ export default {
                             <td class="center-text">
                                 <button type="button" class="btn btn-outline-info" data-toggle="modal"
                                     data-target="#userModal" v-on:click="fillModalInfo(user)">Información
+                                </button>
+                            </td>
+                            <td class="center-text">
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                    data-target="#departmentModal" v-on:click="fillModalInfo(user)">Depatamentos
                                 </button>
                             </td>
                             <td class="center-text">
@@ -288,6 +340,12 @@ export default {
     <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true" v-if="modal">
         <UserInfoModal :infoModal="infoModal" />
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModaLabel" aria-hidden="true" v-if="modal">
+        <DepartmentModal :infoModal="infoModal"  />
+    </div>
+
 </template>
 
 <style>

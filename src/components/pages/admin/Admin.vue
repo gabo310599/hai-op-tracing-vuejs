@@ -314,6 +314,7 @@ export default {
                      </a>
                   </li>
 
+
                   <!-- Salir -->
                   <li class="nav-item">
                      <a href="/" class="nav-link" v-if="disableOptions()" v-on:click="logout()">

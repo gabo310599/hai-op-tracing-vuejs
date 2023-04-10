@@ -71,8 +71,10 @@ export default{
         },
 
         //Metodo que registra el predido en la BD
-        saveRequest(){
+        async saveRequest(){
             
+            this.refresToken();
+
             if(this.serial.length == 0){
                 alert("Por favor ingresar el serial del pedido.");
                 return;
@@ -93,7 +95,29 @@ export default{
                 return;
             }
 
-            //FALTA EL PEDIDO AL ENDPOINT
+            //Guardamos en la base de datos
+            await axios
+                .post("http://localhost:3000/request-note",
+                    {
+                    serial: this.serial,
+                    description: this.description,
+                    code: this.code,
+                    characters: this.character
+                    },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    this.serial = "";
+                    this.description = "";
+                    this.code = "";
+                    this.character = "";
+                    alert("Pedido registrado con exito.");
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: "+error.response.data.message);
+                });
+
         }
 
 
