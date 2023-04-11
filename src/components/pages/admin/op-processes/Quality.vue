@@ -348,7 +348,7 @@ export default {
               <th scope="col" class="center-text">Descripción</th>
               <th scope="col" class="center-text">Fecha de Salida</th>
               <th scope="col" class="center-text">Días en Proceso</th>
-              <th scope="col" class="center-text">Operario</th>
+              <th scope="col" class="center-text">Operador</th>
               <th scope="col" class="center-text">Linea de Tiempo</th>
             </tr>
           </thead>

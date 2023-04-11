@@ -1,6 +1,5 @@
 <script>
 
-import { computed } from "@vue/reactivity";
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
@@ -197,7 +196,7 @@ export default {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title font-weight-bold" id="departmentModaLabel">Departamentos de: {{infoModal.user_name}}</h2>
+                <h2 class="modal-title font-weight-bold" id="departmentModalLabel">Departamentos de: {{infoModal.user_name}}</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

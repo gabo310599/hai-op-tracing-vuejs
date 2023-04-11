@@ -316,7 +316,7 @@ export default {
           <tbody>
             <tr v-for="process in processList" :key="process.id">
               <th scope="row" class="center-text"><span :class="process.color_badge">{{ incrementCounter() }}</span></th>
-              <td class="center-text">{{ process.request.serial }}</td>
+              <td class="center-text">{{ process.request.serial + process.request.characters }}</td>
               <td class="center-text">{{ process.request.description }}</td>
               <td class="center-text">{{ process.date_in }}</td>
               <td class="center-text">{{ process.operator.name + " " + process.operator.last_name }}</td>
@@ -348,7 +348,7 @@ export default {
               <th scope="col" class="center-text">Descripción</th>
               <th scope="col" class="center-text">Fecha de Salida</th>
               <th scope="col" class="center-text">Días en Proceso</th>
-              <th scope="col" class="center-text">Operario</th>
+              <th scope="col" class="center-text">Operador</th>
               <th scope="col" class="center-text">Linea de Tiempo</th>
             </tr>
           </thead>

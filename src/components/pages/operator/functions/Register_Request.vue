@@ -8,6 +8,7 @@ let serial = "";
 let description = "";
 let character = "";
 let code = "";
+let department_id = "";
 
 export default{
     data(){
@@ -15,7 +16,8 @@ export default{
             serial,
             description,
             character,
-            code
+            code,
+            department_id
         }
     },
     methods:{
@@ -96,6 +98,7 @@ export default{
             }
 
             //Guardamos en la base de datos
+            let request_id = "";
             await axios
                 .post("http://localhost:3000/request-note",
                     {
@@ -111,7 +114,29 @@ export default{
                     this.description = "";
                     this.code = "";
                     this.character = "";
+                    if(res.data.msg == "Error."){
+                        alert(res.data.type)
+                        return
+                    }
                     alert("Pedido registrado con exito.");
+                    request_id = res.data.data.id;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: "+error.response.data.message);
+                });
+
+            //Creamos un proceso en la base de datos
+            await axios
+                .post("http://localhost:3000/process",
+                    {
+                        request_id: request_id,
+                        department_id: this.department_id,
+                    },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -121,6 +146,22 @@ export default{
         }
 
 
+    },
+    async created(){
+
+        //Obtengo el id del primer departamento en la cadena de procesos
+        await axios
+            .post("http://localhost:3000/department/get/by-name/",
+                { name: "Diseño Gráfico" },
+                { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+            )
+            .then((res) => {
+                this.department_id = res.data.data.id;
+            })
+            .catch((error) => {
+                console.log(error.message);
+                alert("Error: " + error.response.data.message);
+            });
     }
 }
 

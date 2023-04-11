@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import CheckOutModalType1 from "../tools/CheckOutType1Modal.vue";
 
 let completeAccess = false;
 let permissions = {
@@ -19,6 +20,50 @@ let permissions = {
 };
 let operator_id = "";
 let count = [];
+let modalType1 = false;
+let departmentList = {
+    DG:{
+        id: null,
+        name: "Diseño Gráfico",
+    },
+    DT:{
+        id: null, 
+        name: "Diseño Textil",
+    },
+    GOP:{ 
+        id: null,
+        name: "Generar OP",
+    },
+    IOP:{
+        id: null, 
+        name: "Imprimir OP",
+    },
+    T:{ 
+        id: null,
+        name: "Tejeduría",
+    },
+    E:{ 
+        id: null,
+        name: "Enrollado",
+    },
+    C:{
+        id: null, 
+        name: "Corte",
+    },
+    CC:{
+        id: null,
+        name: "Control de Calidad",
+    },
+    F:{ 
+        id: null,
+        name: "Facturación",
+    },
+    D:{ 
+        id: null,
+        name: "Despacho",
+    }
+}
+let modalInfoType1 = {}
 
 export default{
     data(){
@@ -26,7 +71,10 @@ export default{
             completeAccess,
             permissions,
             operator_id,
-            count
+            count,
+            departmentList,
+            modalType1,
+            modalInfoType1
         }
     },
     methods:{
@@ -205,13 +253,113 @@ export default{
                     console.log(error.message);
                     alert("Error: "+error.response.data.message);
                 });
-      }
+        },
+
+        //Metodo que llena la informacion del modal tipo 1
+        async fillModalType1(department, next_department_id){
+            
+            this.modalInfoType1 = {
+                department:{
+                    id: null,
+                    name: null,
+                    next_department_id: null
+                },
+                
+            }            
+
+            this.modalInfoType1.department.id = department.id;
+            this.modalInfoType1.department.name = department.name;
+            this.modalInfoType1.next_department_id = next_department_id;
+
+            this.modalType1 = true;
+            
+        },
+
+        //Metodo que obtiene los id de los departamentos
+        async getDepartmentsIds(){
+
+            await axios
+                .get("http://localhost:3000/department",
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    
+                    for(let i = 0; i < res.data.data.length; i++){
+                        
+                        switch(res.data.data[i].name){
+
+                            case this.departmentList.DG.name: {
+                                this.departmentList.DG.id = res.data.data[i].id;
+                                break;
+                            }
+                            
+                            case this.departmentList.DT.name: {
+                                this.departmentList.DT.id = res.data.data[i].id;
+                                break;
+                            }
+
+                            case this.departmentList.GOP.name: {
+                                this.departmentList.GOP.id = res.data.data[i].id;
+                                break;
+                            }
+
+                            case this.departmentList.IOP.name: {
+                                this.departmentList.IOP.id = res.data.data[i].id;
+                                break;
+                            }
+
+                            case this.departmentList.T.name: {
+                                this.departmentList.T.id = res.data.data[i].id;
+                                break;
+                            }
+
+                            case this.departmentList.E.name: {
+                                this.departmentList.E.id = res.data.data[i].id;
+                                break;
+                            }
+
+                            case this.departmentList.C.name: {
+                                this.departmentList.C.id = res.data.data[i].id;
+                                break;
+                            }
+
+                            case this.departmentList.CC.name: {
+                                this.departmentList.CC.id = res.data.data[i].id;
+                                break;
+                            }
+
+                            case this.departmentList.F.name: {
+                                this.departmentList.F.id = res.data.data[i].id;
+                                break;
+                            }
+
+                            case this.departmentList.D.name: {
+                                this.departmentList.D.id = res.data.data[i].id;
+                                break;
+                            }
+                        }
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+            
+        }
 
     },
     async created(){
+        await this.getDepartmentsIds();
         await this.verifyUser();
         await this.getProcessCountByDepartment();
-    }
+
+
+    },
+    components:{
+        CheckOutModalType1
+    },
+    
 }
 
 </script>
@@ -219,7 +367,7 @@ export default{
 <template>
     <div class="check-out-container">
 
-        <!--DISEÑO GRAFICO-->
+        <!--Diseño Gráfico-->
         <div class="card card-primary card-outline" v-if="permissions.DG">
             <div class="card-header">
                <h3 class="m-0 font-weight-bold">Diseño Gráfico</h3>
@@ -230,7 +378,8 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.DG }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" 
+                    data-toggle="modal" data-target="#checkOutModalType1" v-on:click="fillModalType1(departmentList.DG, departmentList.DT.id)"> 
                         REVISAR
                     </a>
                   </li>
@@ -249,7 +398,8 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.DT }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" 
+                    data-toggle="modal" data-target="#checkOutModalType1" v-on:click="fillModalType1(departmentList.DT, departmentList.GOP.id)">
                         REVISAR
                     </a>
                   </li>
@@ -268,7 +418,8 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.GOP }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" 
+                    data-toggle="modal" data-target="#checkOutModalType1" v-on:click="fillModalType1(departmentList.GOP, departmentList.IOP.id)">
                         REVISAR
                     </a>
                   </li>
@@ -287,7 +438,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.IOP }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
                         REVISAR
                     </a>
                   </li>
@@ -306,7 +457,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.T }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
                         REVISAR
                     </a>
                   </li>
@@ -325,7 +476,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.E }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
                         REVISAR
                     </a>
                   </li>
@@ -344,7 +495,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.C }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
                         REVISAR
                     </a>
                   </li>
@@ -363,7 +514,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.CC }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
                         REVISAR
                     </a>
                   </li>
@@ -382,7 +533,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.F }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
                         REVISAR
                     </a>
                   </li>
@@ -401,7 +552,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.D }}
                     </p>
-                    <a class="card-text font-weight-bold">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
                         REVISAR
                     </a>
                   </li>
@@ -411,6 +562,12 @@ export default{
 
 
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="checkOutModalType1" tabindex="-1" role="dialog" aria-labelledby="checkOutModalType1Label" aria-hidden="true" v-if="modalType1">
+        <CheckOutModalType1 :modalInfoType1="modalInfoType1" />
+    </div>
+
 </template>
 
 <style>

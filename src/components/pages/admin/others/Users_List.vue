@@ -342,7 +342,7 @@ export default {
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModaLabel" aria-hidden="true" v-if="modal">
+    <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModalLabel" aria-hidden="true" v-if="modal">
         <DepartmentModal :infoModal="infoModal"  />
     </div>
 
