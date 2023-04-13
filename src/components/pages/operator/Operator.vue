@@ -41,7 +41,7 @@ export default {
         fillUserInfo(data) {
             this.user = data.user;
             this.token = data.accessToken;
-            Cookies.set("userLogged", this.token)
+            Cookies.set("userLoggedOperator", this.token)
             this.createLog("Inicio de sesión operador.")
         },
 
@@ -65,12 +65,12 @@ export default {
 
         //Metodo que obtiene de cookies el usuario que inicio sesion
         getUserFromCookies() {
-            return Cookies.get("userLogged");
+            return Cookies.get("userLoggedOperator");
         },
 
         //Metodo que elimina de las cookies el usuario
         removeUserLogged() {
-            Cookies.remove('userLogged');
+            Cookies.remove('userLoggedOperator');
         },
 
         //Metodo que cierra sesion

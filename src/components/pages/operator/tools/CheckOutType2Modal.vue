@@ -21,10 +21,10 @@ export default{
         await this.fillCheckOutList();
     },
     props:[
-        "modalInfoType1"
+        "modalInfoType2"
     ],
     watch:{
-        modalInfoType1(){
+        modalInfoType2(){
             this.fillCheckInList();
             this.fillCheckOutList();
         }
@@ -43,7 +43,7 @@ export default{
 
         //Metodo que obtiene de cookies el usuario que inicio sesion
         getUserFromCookies() {
-            return Cookies.get("userLogged");
+            return Cookies.get("userLoggedOperator");
         },
 
         //Metodo que decodifica el token
@@ -78,7 +78,7 @@ export default{
 
             this.checkInList = [];
             await axios
-                .get("http://localhost:3000/process/list/check-in/" + this.modalInfoType1.department.id,
+                .get("http://localhost:3000/process/list/check-in/" + this.modalInfoType2.department.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -131,7 +131,7 @@ export default{
 
             this.checkOutList = [];
             await axios
-                .get("http://localhost:3000/process/list/check-out/" + this.modalInfoType1.department.id,
+                .get("http://localhost:3000/process/list/check-out/" + this.modalInfoType2.department.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -147,8 +147,8 @@ export default{
         async checkOut(process){
 
             //En el caso que sea el ultimo caso tipo 1
-            let orders_ids = [{id: null}];
-            if(this.modalInfoType1.department.name == "Generar OP"){
+
+            if(this.modalInfoType2.department.name == "Generar OP"){
 
                 let opArray = [];
 
@@ -172,12 +172,11 @@ export default{
                 if(opArray.length <= 0){
                     alert("Por favor asociar una OP antes de marcar la salida del pedido.")
                     return
-                }else{
-                    orders_ids = opArray
                 }
             }
 
             let operator_id = "";
+
             await axios
                 .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub ,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
@@ -209,25 +208,22 @@ export default{
                 });
             
             //Creamos el nuevo registro del siguiente departamento
-            for(let i = 0; i < orders_ids.length; i++){
-                if(this.modalInfoType1.next_department_id){
-                    await axios
-                    .post("http://localhost:3000/process",
-                        {
-                            request_id: process.request.id,
-                            department_id: this.modalInfoType1.next_department_id,
-                            order_id: orders_ids[i].id
-                        },
-                        { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
-                    )
-                    .then((res) => {
+            if(this.modalInfoType2.next_department_id){
+                await axios
+                .post("http://localhost:3000/process",
+                    {
+                        request_id: process.request.id,
+                        department_id: this.modalInfoType2.next_department_id,
+                    },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
 
-                    })
-                    .catch((error) => {
-                        console.log(error.message);
-                        alert("Error: "+error.response.data.message);
-                    });
-                }
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: "+error.response.data.message);
+                });
             }
         }
 
@@ -241,7 +237,7 @@ export default{
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title font-weight-bold" id="checkOutModalType1Label">{{modalInfoType1.department.name}}</h2>
+                <h2 class="modal-title font-weight-bold" id="checkOutModalType2Label">{{modalInfoType2.department.name}}</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -257,6 +253,7 @@ export default{
                             <th scope="col" class="center-text">Serial</th>
                             <th scope="col" class="center-text">Descripción</th>
                             <th scope="col" class="center-text">Código</th>
+                            <th scope="col" class="center-text">OP</th>
                             <th scope="col" class="center-text">Marcar Entrada</th>
                         </tr>
                     </thead>
@@ -266,6 +263,7 @@ export default{
                             <td class="center-text">{{row.request.serial + row.request.characters}}</td>
                             <td class="center-text">{{row.request.description}}</td>
                             <td class="center-text">{{row.request.code}}</td>
+                            <td class="center-text">{{row.order.op_number}}</td>
                             <td class="center-text">
                                 <button button type="button" class="btn btn-outline-success" v-on:click="checkIn(row)">
                                     Entrada

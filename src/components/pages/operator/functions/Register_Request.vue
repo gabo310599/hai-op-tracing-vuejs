@@ -9,6 +9,7 @@ let description = "";
 let character = "";
 let code = "";
 let department_id = "";
+let token = "";
 
 export default{
     data(){
@@ -17,7 +18,8 @@ export default{
             description,
             character,
             code,
-            department_id
+            department_id,
+            token
         }
     },
     methods:{
@@ -33,7 +35,7 @@ export default{
                     })
                 .then((res) => {
                     this.token = res.data.data.accessToken;
-                    Cookies.set("userLogged", this.token);
+                    Cookies.set("userLoggedOperator", this.token);
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -69,7 +71,7 @@ export default{
 
         //Metodo que obtiene de cookies el usuario que inicio sesion
         getUserFromCookies() {
-            return Cookies.get("userLogged");
+            return Cookies.get("userLoggedOperator");
         },
 
         //Metodo que registra el predido en la BD

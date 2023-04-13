@@ -3,8 +3,10 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
-import CheckOutModalType1 from "../tools/CheckOutType1Modal.vue";
+import CheckOutType1Modal from "../tools/CheckOutType1Modal.vue";
+import CheckOutType2Modal from "../tools/CheckOutType2Modal.vue";
 
+let token = "";
 let completeAccess = false;
 let permissions = {
    DG: false,
@@ -21,6 +23,7 @@ let permissions = {
 let operator_id = "";
 let count = [];
 let modalType1 = false;
+let modalType2 = false;
 let departmentList = {
     DG:{
         id: null,
@@ -63,7 +66,8 @@ let departmentList = {
         name: "Despacho",
     }
 }
-let modalInfoType1 = {}
+let modalInfoType1 = {};
+let modalInfoType2 = {};
 
 export default{
     data(){
@@ -74,7 +78,10 @@ export default{
             count,
             departmentList,
             modalType1,
-            modalInfoType1
+            modalType2,
+            modalInfoType1,
+            modalInfoType2,
+            token
         }
     },
     methods:{
@@ -90,7 +97,7 @@ export default{
                     })
                 .then((res) => {
                     this.token = res.data.data.accessToken;
-                    Cookies.set("userLogged", this.token);
+                    Cookies.set("userLoggedOperator", this.token);
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -126,7 +133,7 @@ export default{
 
         //Metodo que obtiene de cookies el usuario que inicio sesion
         getUserFromCookies() {
-            return Cookies.get("userLogged");
+            return Cookies.get("userLoggedOperator");
         },
 
         //Metodo que verifica los permisos del usuario
@@ -179,7 +186,6 @@ export default{
                             }
                         })
                     .then((res) => {
-                        console.log(res.data.data[0].name)
                         for(let i = 0; i < res.data.data.length; i++){
                             switch(res.data.data[i].name){
                                 case "Diseño Gráfico":{
@@ -258,12 +264,14 @@ export default{
         //Metodo que llena la informacion del modal tipo 1
         async fillModalType1(department, next_department_id){
             
+            this.refresToken();
+
             this.modalInfoType1 = {
                 department:{
                     id: null,
                     name: null,
-                    next_department_id: null
                 },
+                next_department_id: null
                 
             }            
 
@@ -346,7 +354,30 @@ export default{
                     alert("Error: " + error.response.data.message);
                 });
             
-        }
+        },
+
+        //Metodo que llena la informacion del modal tipo 1
+        async fillModalType2(department, next_department_id){
+            
+            this.refresToken();
+
+            this.modalInfoType2 = {
+                department:{
+                    id: null,
+                    name: null,
+                },
+                next_department_id: null
+                
+            }            
+
+            this.modalInfoType2.department.id = department.id;
+            this.modalInfoType2.department.name = department.name;
+            this.modalInfoType2.next_department_id = next_department_id;
+
+            this.modalType2 = true;
+            
+        },
+
 
     },
     async created(){
@@ -357,7 +388,8 @@ export default{
 
     },
     components:{
-        CheckOutModalType1
+        CheckOutType1Modal,
+        CheckOutType2Modal
     },
     
 }
@@ -438,7 +470,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.IOP }}
                     </p>
-                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType2" v-on:click="fillModalType2(departmentList.IOP, departmentList.T.id)">
                         REVISAR
                     </a>
                   </li>
@@ -563,9 +595,14 @@ export default{
 
     </div>
 
-    <!-- Modal -->
+    <!-- Modal 1 -->
     <div class="modal fade" id="checkOutModalType1" tabindex="-1" role="dialog" aria-labelledby="checkOutModalType1Label" aria-hidden="true" v-if="modalType1">
-        <CheckOutModalType1 :modalInfoType1="modalInfoType1" />
+        <CheckOutType1Modal :modalInfoType1="modalInfoType1" />
+    </div>
+
+    <!-- Modal 2 -->
+    <div class="modal fade" id="checkOutModalType2" tabindex="-1" role="dialog" aria-labelledby="checkOutModalType2Label" aria-hidden="true" v-if="modalType2">
+        <CheckOutType2Modal :modalInfoType2="modalInfoType2" />
     </div>
 
 </template>
