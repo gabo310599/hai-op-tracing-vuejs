@@ -90,7 +90,7 @@ export default {
 
         //Metodo que elimina de las cookies el usuario
         removeUserLogged() {
-            Cookies.remove('userLogged');
+            Cookies.remove('userLoggedOperator');
         },
     },
     async created() {
@@ -123,7 +123,7 @@ export default {
                         })
                     .then((res) => {
                         this.token = res.data.data.accessToken;
-                        Cookies.set("userLogged", this.token);
+                        Cookies.set("userLoggedOperator", this.token);
                     })
                     .catch((error) => {
                         console.log(error.message);

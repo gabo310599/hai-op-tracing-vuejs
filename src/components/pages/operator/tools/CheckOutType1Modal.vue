@@ -43,7 +43,7 @@ export default{
 
         //Metodo que obtiene de cookies el usuario que inicio sesion
         getUserFromCookies() {
-            return Cookies.get("userLogged");
+            return Cookies.get("userLoggedOperator");
         },
 
         //Metodo que decodifica el token
@@ -86,7 +86,7 @@ export default{
                 })
                 .catch((error) => {
                     console.log(error.message);
-                    alert("Error: " + error.response.data.message);
+                    alert("Error: " + error.response.data.message + "HOLA");
                 });
         },
 
