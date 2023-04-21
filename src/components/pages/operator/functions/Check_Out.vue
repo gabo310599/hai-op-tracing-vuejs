@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import CheckOutType1Modal from "../tools/CheckOutType1Modal.vue";
 import CheckOutType2Modal from "../tools/CheckOutType2Modal.vue";
+import CheckOutType3Modal from "../tools/CheckOutType3Modal.vue";
 
 let token = "";
 let completeAccess = false;
@@ -24,6 +25,7 @@ let operator_id = "";
 let count = [];
 let modalType1 = false;
 let modalType2 = false;
+let modalType3 = false;
 let departmentList = {
     DG:{
         id: null,
@@ -68,6 +70,7 @@ let departmentList = {
 }
 let modalInfoType1 = {};
 let modalInfoType2 = {};
+let modalInfoType3 = {};
 
 export default{
     data(){
@@ -81,7 +84,9 @@ export default{
             modalType2,
             modalInfoType1,
             modalInfoType2,
-            token
+            token,
+            modalInfoType3,
+            modalType3
         }
     },
     methods:{
@@ -356,7 +361,7 @@ export default{
             
         },
 
-        //Metodo que llena la informacion del modal tipo 1
+        //Metodo que llena la informacion del modal tipo 2
         async fillModalType2(department, next_department_id){
             
             this.refresToken();
@@ -378,6 +383,28 @@ export default{
             
         },
 
+        //Metodo que llena la informacion del modal tipo 3
+        async fillModalType3(department, next_department_id){
+            
+            this.refresToken();
+
+            this.modalInfoType3 = {
+                department:{
+                    id: null,
+                    name: null,
+                },
+                next_department_id: null
+                
+            }            
+
+            this.modalInfoType3.department.id = department.id;
+            this.modalInfoType3.department.name = department.name;
+            this.modalInfoType3.next_department_id = next_department_id;
+
+            this.modalType3 = true;
+            
+        },
+
 
     },
     async created(){
@@ -389,7 +416,8 @@ export default{
     },
     components:{
         CheckOutType1Modal,
-        CheckOutType2Modal
+        CheckOutType2Modal,
+        CheckOutType3Modal
     },
     
 }
@@ -489,7 +517,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.T }}
                     </p>
-                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType3" v-on:click="fillModalType3(departmentList.T, departmentList.E.id)">
                         REVISAR
                     </a>
                   </li>
@@ -603,6 +631,11 @@ export default{
     <!-- Modal 2 -->
     <div class="modal fade" id="checkOutModalType2" tabindex="-1" role="dialog" aria-labelledby="checkOutModalType2Label" aria-hidden="true" v-if="modalType2">
         <CheckOutType2Modal :modalInfoType2="modalInfoType2" />
+    </div>
+
+     <!-- Modal 3 -->
+     <div class="modal fade" id="checkOutModalType3" tabindex="-1" role="dialog" aria-labelledby="checkOutModalType3Label" aria-hidden="true" v-if="modalType3">
+        <CheckOutType3Modal :modalInfoType3="modalInfoType3" />
     </div>
 
 </template>

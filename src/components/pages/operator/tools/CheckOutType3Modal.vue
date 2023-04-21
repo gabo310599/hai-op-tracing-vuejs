@@ -21,10 +21,10 @@ export default{
         await this.fillCheckOutList();
     },
     props:[
-        "modalInfoType2"
+        "modalInfoType3"
     ],
     watch:{
-        modalInfoType2(){
+        modalInfoType3(){
             this.fillCheckInList();
             this.fillCheckOutList();
         }
@@ -78,10 +78,11 @@ export default{
 
             this.checkInList = [];
             await axios
-                .get("http://localhost:3000/process/list/check-in/" + this.modalInfoType2.department.id,
+                .get("http://localhost:3000/process/list/check-in/" + this.modalInfoType3.department.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
+                    console.log(res.data.data)
                     this.checkInList = res.data.data;
                 })
                 .catch((error) => {
@@ -131,7 +132,7 @@ export default{
 
             this.checkOutList = [];
             await axios
-                .get("http://localhost:3000/process/list/check-out/" + this.modalInfoType2.department.id,
+                .get("http://localhost:3000/process/list/check-out/" + this.modalInfoType3.department.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -143,62 +144,6 @@ export default{
                 });
         },
 
-        //Metodo que marca la salida de un pedido en el departamento
-        async checkOut(process){
-
-            //Obtenemos el id del operador que esta ejecutando la accion
-            let operator_id = "";
-            await axios
-                .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub ,
-                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
-                )
-                .then((res) => {
-                        operator_id = res.data.data.operator.id;
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                    alert("Error: " + error.response.data.message);
-                });
-
-            //Actualizamos el registro del proceso
-            await axios
-                .put("http://localhost:3000/process/" + process.id,
-                    {
-                        date_out: new Date(),
-                        operator_id: operator_id
-                    },
-                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
-                )
-                .then((res) => {
-                    this.fillCheckInList();
-                    this.fillCheckOutList();
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                    alert("Error: " + error.response.data.message);
-                });
-            
-            //Creamos el nuevo registro del siguiente departamento
-            if(this.modalInfoType2.next_department_id){
-                await axios
-                .post("http://localhost:3000/process",
-                    {
-                        request_id: process.request.id,
-                        department_id: this.modalInfoType2.next_department_id,
-                        order_id: process.order.id
-                    },
-                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
-                )
-                .then((res) => {
-
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                    alert("Error: "+error.response.data.message);
-                });
-            }
-        }
-
     }
 }
 
@@ -209,7 +154,7 @@ export default{
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title font-weight-bold" id="checkOutModalType2Label">{{modalInfoType2.department.name}}</h2>
+                <h2 class="modal-title font-weight-bold" id="checkOutModalType3Label">{{modalInfoType3.department.name}}</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -256,7 +201,6 @@ export default{
                                 <th scope="col" class="center-text">Serial</th>
                                 <th scope="col" class="center-text">Descripción</th>
                                 <th scope="col" class="center-text">Código</th>
-                                <th scope="col" class="center-text">OP</th>
                                 <th scope="col" class="center-text">Marcar Salida</th>
                             </tr>
                         </thead>
@@ -266,9 +210,8 @@ export default{
                                 <td class="center-text">{{row.request.serial + row.request.characters}}</td>
                                 <td class="center-text">{{row.request.description}}</td>
                                 <td class="center-text">{{row.request.code}}</td>
-                                <td class="center-text">{{row.order.op_number}}</td>
                                 <td class="center-text">
-                                    <button button type="button" class="btn btn-outline-danger" v-on:click="checkOut(row)">
+                                    <button button type="button" class="btn btn-outline-danger" >
                                         Salida
                                     </button>
                                 </td>
