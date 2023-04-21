@@ -536,7 +536,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.E }}
                     </p>
-                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType3" v-on:click="fillModalType3(departmentList.E, departmentList.C.id)">
                         REVISAR
                     </a>
                   </li>
@@ -555,7 +555,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.C }}
                     </p>
-                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType3" v-on:click="fillModalType3(departmentList.C, departmentList.CC.id)">
                         REVISAR
                     </a>
                   </li>
@@ -574,7 +574,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.CC }}
                     </p>
-                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType2" v-on:click="fillModalType2(departmentList.CC, departmentList.F.id)">
                         REVISAR
                     </a>
                   </li>
@@ -593,7 +593,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.F }}
                     </p>
-                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType2" v-on:click="fillModalType2(departmentList.F, departmentList.D.id)">
                         REVISAR
                     </a>
                   </li>
@@ -612,7 +612,7 @@ export default{
                     <p>
                         Total pedidos en el departamento: {{ count.D }}
                     </p>
-                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModal">
+                    <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType2" v-on:click="fillModalType2(departmentList.D, departmentList.D.id)">
                         REVISAR
                     </a>
                   </li>
