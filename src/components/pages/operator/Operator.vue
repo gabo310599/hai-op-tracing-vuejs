@@ -150,6 +150,9 @@ export default {
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
                     <a href="/operator/register-op" class="nav-link font-weight-bold">REGISTRAR OP</a>
                 </li>
+                <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
+                    <a href="/operator/machines" class="nav-link font-weight-bold">MAQUINAS</a>
+                </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="/" class="nav-link font-weight-bold" v-on:click="logout()">SALIR</a>
                 </li>
