@@ -16,6 +16,9 @@ export default{
             checkOutList
         }
     },
+    emits:[
+        "reload"
+    ],
     async created(){
         await this.fillCheckInList();
         await this.fillCheckOutList();
@@ -164,6 +167,8 @@ export default{
                     console.log(error.message);
                     alert("Error: " + error.response.data.message);
                 });
+
+                this.$emit('reload');
         },
 
         //Llenamos la lista de pedidos en este departamento
@@ -239,6 +244,8 @@ export default{
                     alert("Error: "+error.response.data.message);
                 });
             }
+
+            this.$emit('reload');
         }
 
     }

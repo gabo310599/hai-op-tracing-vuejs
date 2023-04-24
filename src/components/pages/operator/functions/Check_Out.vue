@@ -625,17 +625,17 @@ export default{
 
     <!-- Modal 1 -->
     <div class="modal fade" id="checkOutModalType1" tabindex="-1" role="dialog" aria-labelledby="checkOutModalType1Label" aria-hidden="true" v-if="modalType1">
-        <CheckOutType1Modal :modalInfoType1="modalInfoType1" />
+        <CheckOutType1Modal :modalInfoType1="modalInfoType1" v-on:reload="getProcessCountByDepartment" />
     </div>
 
     <!-- Modal 2 -->
     <div class="modal fade" id="checkOutModalType2" tabindex="-1" role="dialog" aria-labelledby="checkOutModalType2Label" aria-hidden="true" v-if="modalType2">
-        <CheckOutType2Modal :modalInfoType2="modalInfoType2" />
+        <CheckOutType2Modal :modalInfoType2="modalInfoType2" v-on:reload="getProcessCountByDepartment" />
     </div>
 
      <!-- Modal 3 -->
      <div class="modal fade" id="checkOutModalType3" tabindex="-1" role="dialog" aria-labelledby="checkOutModalType3Label" aria-hidden="true" v-if="modalType3">
-        <CheckOutType3Modal :modalInfoType3="modalInfoType3" />
+        <CheckOutType3Modal :modalInfoType3="modalInfoType3" v-on:reload="getProcessCountByDepartment" />
     </div>
 
 </template>

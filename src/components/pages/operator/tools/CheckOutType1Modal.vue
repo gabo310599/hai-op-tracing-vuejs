@@ -29,6 +29,9 @@ export default{
             this.fillCheckOutList();
         }
     },
+    emits: [
+        'reload'
+    ],
     methods:{
 
         //Metodo de refresh token
@@ -144,6 +147,8 @@ export default{
                     console.log(error.message);
                     alert("Error: " + error.response.data.message);
                 });
+
+            this.$emit('reload');
         },
 
         //Llenamos la lista de pedidos en este departamento
@@ -167,7 +172,7 @@ export default{
         async checkOut(process){
 
             this.refresToken();
-            
+
             //En el caso que sea el ultimo caso tipo 1
             let orders_ids = [{id: null}];
             if(this.modalInfoType1.department.name == "Generar OP"){
@@ -251,6 +256,8 @@ export default{
                     });
                 }
             }
+
+            this.$emit('reload');
         }
 
     }

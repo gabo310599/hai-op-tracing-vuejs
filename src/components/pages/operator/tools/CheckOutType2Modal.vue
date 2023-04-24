@@ -29,6 +29,9 @@ export default{
             this.fillCheckOutList();
         }
     },
+    emits: [
+        'reload'
+    ],
     methods:{
 
         //Metodo de refresh token
@@ -144,6 +147,8 @@ export default{
                     console.log(error.message);
                     alert("Error: " + error.response.data.message);
                 });
+
+                this.$emit('reload');
         },
 
         //Llenamos la lista de pedidos en este departamento
@@ -167,7 +172,7 @@ export default{
         async checkOut(process){
 
             this.refresToken();
-            
+
             //Obtenemos el id del operador que esta ejecutando la accion
             let operator_id = "";
             await axios
@@ -219,6 +224,8 @@ export default{
                     alert("Error: "+error.response.data.message);
                 });
             }
+
+            this.$emit('reload');
         }
 
     }
