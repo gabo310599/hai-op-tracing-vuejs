@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 
 let departmentOption = "";
+let department_id = "";
 let opList = [];
 let machineList = [];
 let processList = [];
@@ -15,7 +16,8 @@ export default{
             departmentOption,
             opList,
             machineList,
-            processList
+            processList,
+            department_id
         }
     },
     methods:{
@@ -71,15 +73,16 @@ export default{
         //Metodo que obtiene los procesos del departamento seleccionado
         async getProcessInDepartment(){
 
+            this.refresToken();
+
             //Obtenemos el id del departamento seleccionado
-            let department_id = "";
             await axios
                 .post("http://localhost:3000/department/get/by-name/",
                     { name: this.departmentOption },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
-                    department_id = res.data.data.id;
+                    this.department_id = res.data.data.id;
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -88,7 +91,7 @@ export default{
 
             //Obtenemos la lista de procesos activos en ese departamento.
             await axios
-                .get("http://localhost:3000/process/get/process-without-machine/"+department_id,
+                .get("http://localhost:3000/process/get/process-without-machine/"+ this.department_id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -102,7 +105,7 @@ export default{
             //Obtenemos la lista de maquinas en el departamento
             let machineArray = []
             await axios
-                .get("http://localhost:3000/machine/get/by-department/"+department_id,
+                .get("http://localhost:3000/machine/get/by-department/"+ this.department_id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -126,6 +129,54 @@ export default{
                 opArray.push(row.order)
             })
             this.opList = opArray;
+        },
+
+        //Metodo que asocia una maquina con un proceso
+        async assignMachineToProcess(){
+            
+            let process_id = "";
+            let machine_id = "";
+            let order_id = "";
+
+            //Obtenemos el id de la maquina a asociar
+            this.machineList.map( function (row){
+                if(row.id === document.getElementById("machine/machine_input").value)
+                    machine_id = row.id;
+            });
+
+            //Obtenemos el id de la orden a asociar
+            this.opList.map( function (row){
+                if(row.id === document.getElementById("machine/order_input").value)
+                    order_id = row.id;
+            });
+
+            //Obtenemos el id del proceso
+            this.processList.map( function (row){
+                if(row.order.id === order_id)
+                    process_id = row.id;
+            });
+
+            //Verificamos que tenemos los datos necesarios.
+            if( (process_id.length <= 0) || (order_id.length <= 0) || (machine_id.length <= 0) ){
+                alert("Por favor llenar todos los campos.");
+                return;
+            }
+
+            //Actualizamos el registro
+            await axios
+                .put("http://localhost:3000/process/" + process_id,
+                    { machine_id: machine_id },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    alert("Asociación aplicada exitosamente.")
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+
         }
 
     },
@@ -166,7 +217,7 @@ export default{
                 </select>
             </div>
             <div class="align-btn">
-                <button type="button" class="btn btn-primary">Asignar</button>
+                <button type="button" class="btn btn-primary" v-on:click="assignMachineToProcess()">Asignar</button>
             </div>
         </form>
         

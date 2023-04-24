@@ -221,7 +221,7 @@ export default{
         <h3 class="font-weight-bold title-style">Registrar Orden de Producción</h3>
         <form>
             <div class="form-group">
-                <label for="register_op/request_input">Pedidos sin OP:</label>
+                <label for="register_op/request_input">Pedidos:</label>
                 <select class="form-select" aria-label="Default select example" id="register_op/request_input">
                     <option value="SELECCIONAR">Seleccionar...</option>
                     <option v-for="process in processList" :value="process.request.id">{{process.request.serial + process.request.characters}}</option>

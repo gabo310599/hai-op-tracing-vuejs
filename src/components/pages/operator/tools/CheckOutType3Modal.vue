@@ -82,7 +82,6 @@ export default{
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
-                    console.log(res.data.data)
                     this.checkInList = res.data.data;
                 })
                 .catch((error) => {

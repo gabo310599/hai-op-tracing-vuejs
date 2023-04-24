@@ -178,7 +178,7 @@ export default{
                     alert("Error: " + error.response.data.message);
                 });
             
-            //Creamos el nuevo registro del siguiente departamento
+            //Creamos el nuevo registro del siguiente departamento si existe
             if(this.modalInfoType2.next_department_id){
                 await axios
                 .post("http://localhost:3000/process",
