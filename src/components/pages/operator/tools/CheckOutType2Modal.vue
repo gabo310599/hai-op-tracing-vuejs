@@ -30,6 +30,24 @@ export default{
         }
     },
     methods:{
+
+        //Metodo de refresh token
+        async refresToken(){
+            await axios
+                .get("http://localhost:3000/auth/refresh",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.getUserFromCookies()}`
+                        }
+                    })
+                .then((res) => {
+                    this.token = res.data.data.accessToken;
+                    Cookies.set("userLoggedOperator", this.token);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        },
         
         //Incrementamos el contador
         incrementCounter() {
@@ -93,6 +111,8 @@ export default{
         //Metodo que acepta un pedido en el departamento
         async checkIn(process){
 
+            this.refresToken();
+
             let operator_id = "";
 
             await axios
@@ -146,6 +166,8 @@ export default{
         //Metodo que marca la salida de un pedido en el departamento
         async checkOut(process){
 
+            this.refresToken();
+            
             //Obtenemos el id del operador que esta ejecutando la accion
             let operator_id = "";
             await axios

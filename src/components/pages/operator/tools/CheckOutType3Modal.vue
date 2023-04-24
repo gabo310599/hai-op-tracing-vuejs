@@ -31,6 +31,24 @@ export default{
     },
     methods:{
         
+        //Metodo de refresh token
+        async refresToken(){
+            await axios
+                .get("http://localhost:3000/auth/refresh",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.getUserFromCookies()}`
+                        }
+                    })
+                .then((res) => {
+                    this.token = res.data.data.accessToken;
+                    Cookies.set("userLoggedOperator", this.token);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        },
+
         //Incrementamos el contador
         incrementCounter() {
             return counter++;
@@ -93,8 +111,30 @@ export default{
         //Metodo que acepta un pedido en el departamento
         async checkIn(process){
 
-            let operator_id = "";
+            this.refresToken();
 
+            //Verificamos que el proceso  este asociado a una maquina
+            let machine = false;
+            await axios
+                .get("http://localhost:3000/process/" + process.id ,
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                        if(res.data.data.machine)
+                            machine = true;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+            
+            if(!machine){
+                alert("Por favor asignarle maquina al pedido.")
+                return;
+            }
+
+            //Obtenemos el id del operario a traves del usuario
+            let operator_id = "";
             await axios
                 .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub ,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
@@ -142,6 +182,64 @@ export default{
                     alert("Error: " + error.response.data.message);
                 });
         },
+
+        //Metodo de marca la salida de un pedido en el departamento.
+        async checkOut(process){
+
+            this.refresToken();
+            
+            //Obtenemos el id del operador que esta ejecutando la accion
+            let operator_id = "";
+            await axios
+                .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub ,
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                        operator_id = res.data.data.operator.id;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+
+            //Actualizamos el registro del proceso
+            await axios
+                .put("http://localhost:3000/process/" + process.id,
+                    {
+                        date_out: new Date(),
+                        operator_id: operator_id
+                    },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    this.fillCheckInList();
+                    this.fillCheckOutList();
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+            
+            //Creamos el nuevo registro del siguiente departamento si existe
+            if(this.modalInfoType3.next_department_id){
+                await axios
+                .post("http://localhost:3000/process",
+                    {
+                        request_id: process.request.id,
+                        department_id: this.modalInfoType3.next_department_id,
+                        order_id: process.order.id
+                    },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: "+error.response.data.message);
+                });
+            }
+        }
 
     }
 }
@@ -200,6 +298,8 @@ export default{
                                 <th scope="col" class="center-text">Serial</th>
                                 <th scope="col" class="center-text">Descripción</th>
                                 <th scope="col" class="center-text">Código</th>
+                                <th scope="col" class="center-text">OP</th>
+                                <th scope="col" class="center-text">Maquina</th>
                                 <th scope="col" class="center-text">Marcar Salida</th>
                             </tr>
                         </thead>
@@ -209,8 +309,10 @@ export default{
                                 <td class="center-text">{{row.request.serial + row.request.characters}}</td>
                                 <td class="center-text">{{row.request.description}}</td>
                                 <td class="center-text">{{row.request.code}}</td>
+                                <td class="center-text">{{row.order.op_number}}</td>
+                                <td class="center-text">{{row.machine.number}}</td>
                                 <td class="center-text">
-                                    <button button type="button" class="btn btn-outline-danger" >
+                                    <button button type="button" class="btn btn-outline-danger" v-on:click="checkOut(row)" >
                                         Salida
                                     </button>
                                 </td>
