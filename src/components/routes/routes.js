@@ -20,6 +20,7 @@ import Check_Out from "../pages/operator/functions/Check_Out.vue";
 import Register_OP from "../pages/operator/functions/Register_OP.vue";
 import Register_Request from "../pages/operator/functions/Register_Request.vue"
 import Machines from "../pages/operator/functions/Machines.vue";
+import Observation from "../pages/operator/functions/Observation.vue";
 
 const Foo = { template: "<div>foo</div>" };
 //Creo el router
@@ -61,6 +62,12 @@ const router = createRouter({
           path: "/operator/machines",
           name: "operator.machines",
           component: Machines,
+          props: true
+        },
+        {
+          path: "/operator/observation",
+          name: "operator.observation",
+          component: Observation,
           props: true
         },
       ],
