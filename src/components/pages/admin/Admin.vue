@@ -314,6 +314,15 @@ export default {
                      </a>
                   </li>
 
+                  <!-- Observaciones -->
+                  <li class="nav-item">
+                     <a href="/admin/order-observations/" class="nav-link" v-if="disableOptions()">
+                        <i class="nav-icon fas fa-solid fa-clipboard"></i>
+                        <p>
+                           Observaciones
+                        </p>
+                     </a>
+                  </li>
 
                   <!-- Salir -->
                   <li class="nav-item">
