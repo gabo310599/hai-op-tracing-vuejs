@@ -157,6 +157,9 @@ export default{
 
             this.refresToken();
 
+            if(document.getElementById(process.id).value.length <= 0)
+                return
+
             await axios
                 .put("http://localhost:3000/process/" + process.id,
                     { observation: document.getElementById(process.id).value },
@@ -199,8 +202,9 @@ export default{
         initDataTable();
     },
     watch:{
-        async departmentOption(){
+        departmentOption(){
             dataTableProcess.destroy();
+            this.refresToken();
             this.fillProcessesList(this.departmentOption);
         }
     }
