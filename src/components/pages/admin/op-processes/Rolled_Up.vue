@@ -2,7 +2,6 @@
 
 ////// AQUI EMPIEZA EL JS DEl DATATABLE ///////////
 let dataTableProcess;
-let dataTableHistory;
 let dataTableIsInitialized = false;
 
 const dataTableProcessOptions = {
@@ -46,55 +45,12 @@ const dataTableProcessOptions = {
   }
 };
 
-const dataTableHistoryOptions = {
-  //scrollX: "2000px",
-  lengthMenu: [5, 10, 15, 20, 25],
-
-  // Centrado de datos dentro de la columna
-  columnDefs: [
-    {
-      className: "centered",
-      targets: [0, 1, 2, 3, 4, 5, 6],
-    },
-    {
-      orderable: false,
-      targets: [6],
-    },
-    {
-      searchable: false,
-      targets: [6],
-    },
-    //{ width: "50%", targets: [0], },
-  ],
-  // Cantidad inicial por pagina 
-  pageLength: 5,
-  destroy: true,
-  // Señalizacion en español
-  language: {
-    lengthMenu: "Mostrar _MENU_ registros por página",
-    zeroRecords: "Ningún registro encontrado",
-    info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
-    infoEmpty: "Ningún registro encontrado",
-    infoFiltered: "(filtrados desde _MAX_ registros totales)",
-    search: "Buscar: ",
-    loadingRecords: "Cargando... ",
-    paginate: {
-      first: "Primero",
-      last: "Último",
-      next: "Siguiente",
-      previous: "Anterior",
-    },
-  }
-};
-
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
     dataTableProcess.destroy();
-    dataTableHistory.destroy();
   }
 
   dataTableProcess = $("#datatable_process_graphic_design").DataTable(dataTableProcessOptions);
-  dataTableHistory = $("#datatable_history_graphic_design").DataTable(dataTableHistoryOptions);
 
   dataTableIsInitialized = true;
 };
@@ -105,12 +61,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import ProcessModal from '../tools/ProcessModal.vue'
-import TimeLine from '../tools/TimeLine.vue';
 
 const process_type = 3;
 let counter = 1;
 let processList = [];
-let historyList = [];
 let department = {
   id: null,
   name: null,
@@ -136,13 +90,11 @@ let modalInfo = {};
 export default {
   data() {
     return {
-      historyList,
       processList,
       department,
       process_type,
       modalInfo,
       modalProcess: false,
-      modalHistory: false
     }
   },
   methods: {
@@ -199,8 +151,6 @@ export default {
           this.department.id = res.data.data.id;
           this.department.name = res.data.data.name;
           this.department.days_time_limit = res.data.data.days_time_limit;
-
-          console.log(this.department)
         })
         .catch((error) => {
           console.log(error.message);
@@ -217,7 +167,6 @@ export default {
         .then((res) => {
 
           const processList = [];
-          const historyList = [];
 
           const days_time_limit = this.department.days_time_limit;
 
@@ -256,14 +205,9 @@ export default {
               processList.push(process);
             }
 
-            //Llenamos los datos de la lista de historial
-            else {
-              historyList.push(row);
-            }
           });
 
           this.processList = processList;
-          this.historyList = historyList;
 
         })
         .catch((error) => {
@@ -281,7 +225,6 @@ export default {
 
   },
   components: {
-    TimeLine,
     ProcessModal
   },
   async created() {
@@ -332,54 +275,9 @@ export default {
     </div>
   </div>
 
-  <br />
-
-  <!--HISTORIAL-->
-  {{ resetCounter() }}
-  <h2 class="font-weight-bold">Historial: </h2>
-  <div class="container my-4">
-    <div class="row">
-      <div class="col-sm-12 col-md-12 col-xl-12 col-md-12">
-        <table id="datatable_history_graphic_design" class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col" class="center-text">#</th>
-              <th scope="col" class="center-text">Número OP</th>
-              <th scope="col" class="center-text">Descripción</th>
-              <th scope="col" class="center-text">Fecha de Salida</th>
-              <th scope="col" class="center-text">Días en Proceso</th>
-              <th scope="col" class="center-text">Operador</th>
-              <th scope="col" class="center-text">Linea de Tiempo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row" class="center-text">{{ incrementCounter() }}</th>
-              <td class="center-text">serial</td>
-              <td class="center-text">descripcion</td>
-              <td class="center-text">fecha</td>
-              <td class="center-text">dias</td>
-              <td class="center-text">usuario</td>
-              <td class="center-text">
-                <button type="button" class="btn btn-outline-info">
-                  Tracing
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
   <!-- Process Modal -->
   <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel" aria-hidden="true" v-if="modalProcess">
     <ProcessModal  :process_type="process_type" :modalInfo="modalInfo"/>
-  </div>
-
-  <!-- History Modal -->
-  <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true" v-if="modalHistory">
-    <TimeLine />
   </div>
 
 </template>
