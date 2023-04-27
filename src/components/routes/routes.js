@@ -21,7 +21,8 @@ import Register_OP from "../pages/operator/functions/Register_OP.vue";
 import Register_Request from "../pages/operator/functions/Register_Request.vue"
 import Machines from "../pages/operator/functions/Machines.vue";
 import Observation from "../pages/operator/functions/Observation.vue";
-import Order_Observations from "../pages/admin/others/Order_Observations.vue"
+import Order_Observations from "../pages/admin/others/Order_Observations.vue";
+import Time_Line from "../pages/admin/others/Time_Line.vue";
 
 const Foo = { template: "<div>foo</div>" };
 //Creo el router
@@ -110,6 +111,13 @@ const router = createRouter({
           path: "/admin/order-observations",
           name: "admin.order-observations",
           component: Order_Observations,
+          props: true
+        },
+
+        {
+          path: "/admin/time-line",
+          name: "admin.time-line",
+          component: Time_Line,
           props: true
         },
 

@@ -316,6 +316,16 @@ export default {
 
                   <!-- Observaciones -->
                   <li class="nav-item">
+                     <a href="/admin/time-line/" class="nav-link" v-if="disableOptions()">
+                        <i class="nav-icon fas fa-solid fa-clock"></i>
+                        <p>
+                           Linea de Tiempo
+                        </p>
+                     </a>
+                  </li>
+
+                  <!-- Observaciones -->
+                  <li class="nav-item">
                      <a href="/admin/order-observations/" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-clipboard"></i>
                         <p>

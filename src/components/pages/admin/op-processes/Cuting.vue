@@ -71,6 +71,7 @@ let department = {
   days_time_limit: null
 };
 let modalInfo = {};
+let machineList = [];
   
   //Metodo que determina el delay de un pedido
   const delayColor = (date_in, days_time_limit) => {
@@ -95,6 +96,7 @@ export default {
       process_type,
       modalInfo,
       modalProcess: false,
+      machineList
     }
   },
   methods: {
@@ -220,6 +222,24 @@ export default {
     fillModalInfo(data){
       this.modalInfo = data;
       this.modalProcess = true;
+    },
+
+    //Metodo que obtiene todas las maquinas de un departamento
+    async fillMachineList(){
+
+      await axios
+        .get("http://localhost:3000/machine/get/by-department/" + this.department.id,
+            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+        )
+        .then((res) => {
+          this.machineList = res.data.data;
+          this.machineList.sort((x, y) => x.number.localeCompare(y.number));
+        })
+        .catch((error) => {
+          console.log(error.message);
+          alert("Error: " + error.response.data.message);
+        });
+
     }
 
   },
@@ -229,6 +249,7 @@ export default {
   async created() {
     await this.getDepartmentInfo();
     await this.fillLists();
+    await this.fillMachineList();
     await initDataTable();
   }
 }
@@ -237,6 +258,20 @@ export default {
 
 <template>
   <h1 class="center-text font-weight-bold">Corte</h1>
+
+  <h2 class="font-weight-bold">Maquinas:</h2>
+  <br/>
+  <div class="admin-machine-container">
+
+    <div class="grid-item" v-for="machine in machineList" :key="machine.id">
+      <span class="fa-regular fa-square-minus span-style">
+        {{" "+machine.number}}
+      </span>
+    </div>
+
+  </div>
+
+  <br/>
   <h2 class="font-weight-bold">En Proceso:</h2>
 
   <!--PROCESO-->
@@ -292,4 +327,43 @@ export default {
   text-align: center !important;
   vertical-align: middle !important;
 }
+
+.admin-machine-container{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+  position:relative;
+  top: 50%;
+  left: 50%;
+  transform:  translate(-50%, 3%);
+  width: 1000px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  margin-left: 1%;
+}
+
+.grid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.2em;
+  border-radius: 35px;
+  border-color: black;
+  border-width: 5px;
+  border-style: solid;
+  background-color: powderblue;
+}
+
+.grid-item:hover {
+  background-color: rgb(23, 159, 177);
+}
+
+.span-style{
+  text-align: center;
+  font-size:xx-large;
+}
+
 </style>
