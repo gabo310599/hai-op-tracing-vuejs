@@ -2,6 +2,7 @@
 
 ////// AQUI EMPIEZA EL JS DEl DATATABLE ///////////
 let dataTableProcess;
+let dataTableCheckInProcess;
 let dataTableIsInitialized = false;
 
 const dataTableProcessOptions = {
@@ -45,12 +46,56 @@ const dataTableProcessOptions = {
   }
 };
 
+const dataTableCheckInProcessOptions = {
+  //scrollX: "2000px",
+  lengthMenu: [5, 10, 15, 20, 25],
+
+  // Centrado de datos dentro de la columna
+  columnDefs: [
+    {
+      className: "centered",
+      targets: [0, 1, 2],
+    },
+    {
+      orderable: false,
+      targets: [],
+    },
+    {
+      searchable: false,
+      targets: [],
+    },
+    //{ width: "50%", targets: [0], },
+  ],
+  // Cantidad inicial por pagina 
+  pageLength: 5,
+  destroy: true,
+  // Señalizacion en español
+  language: {
+    lengthMenu: "Mostrar _MENU_ registros por página",
+    zeroRecords: "Ningún registro encontrado",
+    info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+    infoEmpty: "Ningún registro encontrado",
+    infoFiltered: "(filtrados desde _MAX_ registros totales)",
+    search: "Buscar: ",
+    loadingRecords: "Cargando... ",
+    paginate: {
+      first: "Primero",
+      last: "Último",
+      next: "Siguiente",
+      previous: "Anterior",
+    },
+  }
+};
+
+
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
     dataTableProcess.destroy();
+    dataTableCheckInProcess.destroy();
   }
 
-  dataTableProcess = $("#datatable_process_graphic_design").DataTable(dataTableProcessOptions);
+  dataTableProcess = $("#datatable_process_receipt").DataTable(dataTableProcessOptions);
+  dataTableCheckInProcess = $("#datatable_process_check_in_receipt").DataTable(dataTableCheckInProcessOptions);
 
   dataTableIsInitialized = true;
 };
@@ -63,6 +108,7 @@ import jwt_decode from 'jwt-decode';
 import ProcessModal from '../tools/ProcessModal.vue'
 
 const process_type = 1;
+let checkInProcesses = [];
 let counter = 1;
 let processList = [];
 let department = {
@@ -71,20 +117,20 @@ let department = {
   days_time_limit: null
 };
 let modalInfo = {};
-  
-  //Metodo que determina el delay de un pedido
-  const delayColor = (date_in, days_time_limit) => {
 
-      const today = new Date();
-      const difference = today.getTime() - date_in.getTime();
-      const differenceInDays = difference / 1000 / 60 / 60 / 24;
+//Metodo que determina el delay de un pedido
+const delayColor = (date_in, days_time_limit) => {
 
-      if(differenceInDays > parseFloat(days_time_limit))
-        return "right badge-pill badge-danger"
-      else
-        return "right badge-pill badge-success"
+  const today = new Date();
+  const difference = today.getTime() - date_in.getTime();
+  const differenceInDays = difference / 1000 / 60 / 60 / 24;
 
-    }
+  if (differenceInDays > parseFloat(days_time_limit))
+    return "right badge-pill badge-danger"
+  else
+    return "right badge-pill badge-success"
+
+}
 
 //Exports
 export default {
@@ -95,6 +141,7 @@ export default {
       process_type,
       modalInfo,
       modalProcess: false,
+      checkInProcesses
     }
   },
   methods: {
@@ -144,8 +191,8 @@ export default {
 
       await axios
         .post("http://localhost:3000/department/get/by-name",
-            { name: "Facturación" },
-            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+          { name: "Facturación" },
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
           this.department.id = res.data.data.id;
@@ -196,7 +243,7 @@ export default {
               process.request = row.request;
               process.machine = row.machine;
               process.order = row.order;
-              if(row.date_out){
+              if (row.date_out) {
                 date_in_format = new Date(row.date_out).toLocaleString();
                 process.date_out = date_in_format;
               }
@@ -220,9 +267,24 @@ export default {
     },
 
     //Metodo que llena la informacion del modal
-    fillModalInfo(data){
+    fillModalInfo(data) {
       this.modalInfo = data;
       this.modalProcess = true;
+    },
+
+    //Metodo que obtiene la lista de procesos en espera para entrar a un departamento.
+    async fillCheckInProcesses() {
+      await axios
+        .get("http://localhost:3000/process/list/check-in/" + this.department.id,
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+        )
+        .then((res) => {
+          this.checkInProcesses = res.data.data;
+        })
+        .catch((error) => {
+          console.log(error.message);
+          alert("Error: " + error.response.data.message);
+        });
     }
 
   },
@@ -232,6 +294,7 @@ export default {
   async created() {
     await this.getDepartmentInfo();
     await this.fillLists();
+    await this.fillCheckInProcesses();
     await initDataTable();
   }
 }
@@ -240,14 +303,14 @@ export default {
 
 <template>
   <h1 class="center-text font-weight-bold">Facturación</h1>
-  <h2 class="font-weight-bold">En Proceso:</h2>
 
   <!--PROCESO-->
   {{ resetCounter() }}
+  <h2 class="font-weight-bold">En Proceso:</h2>
   <div class="container my-4">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-xl-12 col-md-12">
-        <table id="datatable_process_graphic_design" class="table table-striped">
+        <table id="datatable_process_receipt" class="table table-striped">
           <thead>
             <tr>
               <th scope="col" class="center-text">#</th>
@@ -266,7 +329,8 @@ export default {
               <td class="center-text">{{ process.date_in }}</td>
               <td class="center-text">{{ process.operator.name + " " + process.operator.last_name }}</td>
               <td class="center-text">
-                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#processModal" v-on:click="fillModalInfo(process)">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#processModal"
+                  v-on:click="fillModalInfo(process)">
                   Información
                 </button>
               </td>
@@ -277,11 +341,38 @@ export default {
     </div>
   </div>
 
-  <!-- Process Modal -->
-  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel" aria-hidden="true" v-if="modalProcess">
-    <ProcessModal  :process_type="process_type" :modalInfo="modalInfo"/>
+  <!--ESPERANDO ENTRADA-->
+  <br />
+  <h2 class="font-weight-bold">Esperando Entrada:</h2>
+  {{ resetCounter() }}
+  <div class="container my-4">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-xl-12 col-md-12">
+        <table id="datatable_process_check_in_receipt" class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col" class="center-text">#</th>
+              <th scope="col" class="center-text">Serial</th>
+              <th scope="col" class="center-text">Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="process in checkInProcesses" :key="process.id">
+              <th scope="row" class="center-text"><span :class="process.color_badge">{{ incrementCounter() }}</span></th>
+              <td class="center-text">{{ process.request.serial + process.request.characters }}</td>
+              <td class="center-text">{{ process.request.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
+  <!-- Process Modal -->
+  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel"
+    aria-hidden="true" v-if="modalProcess">
+    <ProcessModal :process_type="process_type" :modalInfo="modalInfo" />
+  </div>
 </template>
 
 <style>
