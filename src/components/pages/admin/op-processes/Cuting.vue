@@ -55,7 +55,7 @@ const dataTableCheckInProcessOptions = {
   columnDefs: [
     {
       className: "centered",
-      targets: [0, 1, 2, 3],
+      targets: [0, 1, 2],
     },
     {
       orderable: false,
