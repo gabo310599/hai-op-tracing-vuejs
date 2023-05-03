@@ -104,7 +104,9 @@ const initDataTable = async () => {
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
-import ProcessModal from '../tools/ProcessModal.vue'
+import ProcessModal from '../tools/ProcessModal.vue';
+import MachineInfoModal from '../tools/MachineInfoModal.vue';
+
 
 const process_type = 3;
 let checkInProcesses = [];
@@ -117,6 +119,7 @@ let department = {
 };
 let modalInfo = {};
 let machineList = [];
+let machineInfo = {};
 
 //Metodo que determina el delay de un pedido
 const delayColor = (date_in, days_time_limit) => {
@@ -142,7 +145,9 @@ export default {
       modalInfo,
       modalProcess: false,
       machineList,
-      checkInProcesses
+      checkInProcesses,
+      machineInfo,
+      machineModal: false
     }
   },
   methods: {
@@ -153,6 +158,24 @@ export default {
 
     resetCounter() {
       counter = 1;
+    },
+
+    //Metodo de refresh token
+    async refresToken() {
+      await axios
+        .get("http://localhost:3000/auth/refresh",
+          {
+            headers: {
+              Authorization: `Bearer ${this.getUserFromCookies()}`
+            }
+          })
+        .then((res) => {
+          this.token = res.data.data.accessToken;
+          Cookies.set("userLogged", this.token);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
     },
 
     //Metodo que obtiene de cookies el usuario que inicio sesion
@@ -269,6 +292,7 @@ export default {
     fillModalInfo(data) {
       this.modalInfo = data;
       this.modalProcess = true;
+      this.refresToken();
     },
 
     //Metodo que obtiene todas las maquinas de un departamento
@@ -302,11 +326,19 @@ export default {
           console.log(error.message);
           alert("Error: " + error.response.data.message);
         });
+    },
+
+    //Metodo que llena la informacion de la maquina elegida.
+    async fillMachineInfoModal(machine) {
+      this.refresToken();
+      this.machineInfo = machine;
+      this.machineModal = true;
     }
 
   },
   components: {
-    ProcessModal
+    ProcessModal,
+    MachineInfoModal
   },
   async created() {
     await this.getDepartmentInfo();
@@ -327,7 +359,8 @@ export default {
   <div class="admin-machine-container">
 
     <div class="grid-item" v-for="machine in machineList" :key="machine.id">
-      <span class="fa-regular fa-square-minus span-style">
+      <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal"
+        v-on:click="fillMachineInfoModal(machine)">
         {{ " " + machine.number }}
       </span>
     </div>
@@ -404,6 +437,13 @@ export default {
     aria-hidden="true" v-if="modalProcess">
     <ProcessModal :process_type="process_type" :modalInfo="modalInfo" />
   </div>
+
+  <!-- Machine Modal -->
+  <div class="modal fade" id="machineModal" tabindex="-1" role="dialog" aria-labelledby="machineModalLabel"
+    aria-hidden="true" v-if="machineModal">
+    <MachineInfoModal :machineInfo="machineInfo" />
+  </div>
+
 </template>
 
 <style>
@@ -452,5 +492,8 @@ export default {
 .span-style {
   text-align: center;
   font-size: xx-large;
+  width: 300px;
+  height: 43px;
+  object-fit: fill;
 }
 </style>

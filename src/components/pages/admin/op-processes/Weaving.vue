@@ -105,6 +105,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import ProcessModal from '../tools/ProcessModal.vue';
+import MachineInfoModal from '../tools/MachineInfoModal.vue';
 
 const process_type = 3;
 let checkInProcesses = [];
@@ -117,23 +118,24 @@ let department = {
   days_time_limit: null
 };
 let modalInfo = {};
-  
-  //Metodo que determina el delay de un pedido
-  const delayColor = (date_in, days_time_limit) => {
+let machineInfo = {};
 
-      const today = new Date();
-      const difference = today.getTime() - date_in.getTime();
-      const differenceInDays = difference / 1000 / 60 / 60 / 24;
+//Metodo que determina el delay de un pedido
+const delayColor = (date_in, days_time_limit) => {
 
-      if(differenceInDays > parseFloat(days_time_limit))
-        return "right badge-pill badge-danger"
-      else
-        return "right badge-pill badge-success"
+  const today = new Date();
+  const difference = today.getTime() - date_in.getTime();
+  const differenceInDays = difference / 1000 / 60 / 60 / 24;
 
-    }
+  if (differenceInDays > parseFloat(days_time_limit))
+    return "right badge-pill badge-danger"
+  else
+    return "right badge-pill badge-success"
+
+}
 
 //Exports
-export default{
+export default {
   data() {
     return {
       processList,
@@ -142,7 +144,9 @@ export default{
       modalInfo,
       modalProcess: false,
       machineList,
-      checkInProcesses
+      checkInProcesses,
+      machineInfo,
+      machineModal: false
     }
   },
   methods: {
@@ -153,6 +157,24 @@ export default{
 
     resetCounter() {
       counter = 1;
+    },
+
+    //Metodo de refresh token
+    async refresToken() {
+      await axios
+        .get("http://localhost:3000/auth/refresh",
+          {
+            headers: {
+              Authorization: `Bearer ${this.getUserFromCookies()}`
+            }
+          })
+        .then((res) => {
+          this.token = res.data.data.accessToken;
+          Cookies.set("userLogged", this.token);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
     },
 
     //Metodo que obtiene de cookies el usuario que inicio sesion
@@ -192,8 +214,8 @@ export default{
 
       await axios
         .post("http://localhost:3000/department/get/by-name",
-            { name: "Tejeduría" },
-            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+          { name: "Tejeduría" },
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
           this.department.id = res.data.data.id;
@@ -242,7 +264,7 @@ export default{
               process.request = row.request;
               process.machine = row.machine;
               process.order = row.order;
-              if(row.date_out){
+              if (row.date_out) {
                 date_in_format = new Date(row.date_out).toLocaleString();
                 process.date_out = date_in_format;
               }
@@ -266,17 +288,18 @@ export default{
     },
 
     //Metodo que llena la informacion del modal
-    fillModalInfo(data){
+    fillModalInfo(data) {
       this.modalInfo = data;
       this.modalProcess = true;
+      this.refresToken();
     },
 
     //Metodo que obtiene todas las maquinas de un departamento
-    async fillMachineList(){
+    async fillMachineList() {
 
       await axios
         .get("http://localhost:3000/machine/get/by-department/" + this.department.id,
-            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
           this.machineList = res.data.data;
@@ -286,15 +309,15 @@ export default{
           console.log(error.message);
           alert("Error: " + error.response.data.message);
         });
-        
+
     },
 
     //Metodo que obtiene la lista de procesos en espera para entrar a un departamento.
-    async fillCheckInProcesses(){
+    async fillCheckInProcesses() {
 
       await axios
         .get("http://localhost:3000/process/list/check-in/" + this.department.id,
-            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
           this.checkInProcesses = res.data.data;
@@ -304,11 +327,19 @@ export default{
           alert("Error: " + error.response.data.message);
         });
 
+    },
+
+    //Metodo que llena la informacion de la maquina elegida.
+    async fillMachineInfoModal(machine){
+      this.refresToken();
+      this.machineInfo = machine;
+      this.machineModal = true;
     }
 
   },
   components: {
-    ProcessModal
+    ProcessModal,
+    MachineInfoModal
   },
   async created() {
     await this.getDepartmentInfo();
@@ -325,12 +356,12 @@ export default{
   <h1 class="center-text font-weight-bold">Tejeduría</h1>
 
   <h2 class="font-weight-bold">Maquinas:</h2>
-  <br/>
+  <br />
   <div class="admin-machine-container">
 
     <div class="grid-item" v-for="machine in machineList" :key="machine.id">
-      <span class="fa-regular fa-square-minus span-style">
-        {{" "+machine.number}}
+      <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal" v-on:click="fillMachineInfoModal(machine)">
+        {{ " " + machine.number }}
       </span>
     </div>
 
@@ -338,7 +369,7 @@ export default{
 
 
   <!--PROCESO-->
-  <br/>
+  <br />
   <h2 class="font-weight-bold">En Proceso:</h2>
   {{ resetCounter() }}
   <div class="container my-4">
@@ -363,7 +394,8 @@ export default{
               <td class="center-text">{{ process.date_in }}</td>
               <td class="center-text">{{ process.operator.name + " " + process.operator.last_name }}</td>
               <td class="center-text">
-                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#processModal" v-on:click="fillModalInfo(process)">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#processModal"
+                  v-on:click="fillModalInfo(process)">
                   Información
                 </button>
               </td>
@@ -375,7 +407,7 @@ export default{
   </div>
 
   <!--ESPERANDO ENTRADA-->
-  <br/>
+  <br />
   <h2 class="font-weight-bold">Esperando Entrada:</h2>
   {{ resetCounter() }}
   <div class="container my-4">
@@ -402,8 +434,15 @@ export default{
   </div>
 
   <!-- Process Modal -->
-  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel" aria-hidden="true" v-if="modalProcess">
-    <ProcessModal  :process_type="process_type" :modalInfo="modalInfo"/>
+  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel"
+    aria-hidden="true" v-if="modalProcess">
+    <ProcessModal :process_type="process_type" :modalInfo="modalInfo" />
+  </div>
+
+  <!-- Machine Modal -->
+  <div class="modal fade" id="machineModal" tabindex="-1" role="dialog" aria-labelledby="machineModalLabel" 
+    aria-hidden="true" v-if="machineModal">
+    <MachineInfoModal :machineInfo="machineInfo" />
   </div>
 
 </template>
@@ -418,15 +457,15 @@ export default{
   vertical-align: middle !important;
 }
 
-.admin-machine-container{
+.admin-machine-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 10px;
   grid-auto-rows: minmax(100px, auto);
-  position:relative;
+  position: relative;
   top: 50%;
   left: 50%;
-  transform:  translate(-50%, 3%);
+  transform: translate(-50%, 3%);
   width: 1000px;
   padding-right: 20px;
   padding-bottom: 20px;
@@ -452,9 +491,11 @@ export default{
   background-color: rgb(23, 159, 177);
 }
 
-.span-style{
+.span-style {
   text-align: center;
-  font-size:xx-large;
+  font-size: xx-large;
+  width: 300px;
+  height: 43px;
+  object-fit: fill;
 }
-
 </style>

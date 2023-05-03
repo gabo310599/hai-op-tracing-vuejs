@@ -116,20 +116,20 @@ let department = {
   days_time_limit: null
 };
 let modalInfo = {};
-  
-  //Metodo que determina el delay de un pedido
-  const delayColor = (date_in, days_time_limit) => {
 
-      const today = new Date();
-      const difference = today.getTime() - date_in.getTime();
-      const differenceInDays = difference / 1000 / 60 / 60 / 24;
+//Metodo que determina el delay de un pedido
+const delayColor = (date_in, days_time_limit) => {
 
-      if(differenceInDays > parseFloat(days_time_limit))
-        return "right badge-pill badge-danger"
-      else
-        return "right badge-pill badge-success"
+  const today = new Date();
+  const difference = today.getTime() - date_in.getTime();
+  const differenceInDays = difference / 1000 / 60 / 60 / 24;
 
-    }
+  if (differenceInDays > parseFloat(days_time_limit))
+    return "right badge-pill badge-danger"
+  else
+    return "right badge-pill badge-success"
+
+}
 
 //Exports
 export default {
@@ -151,6 +151,24 @@ export default {
 
     resetCounter() {
       counter = 1;
+    },
+
+    //Metodo de refresh token
+    async refresToken() {
+      await axios
+        .get("http://localhost:3000/auth/refresh",
+          {
+            headers: {
+              Authorization: `Bearer ${this.getUserFromCookies()}`
+            }
+          })
+        .then((res) => {
+          this.token = res.data.data.accessToken;
+          Cookies.set("userLogged", this.token);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
     },
 
     //Metodo que obtiene de cookies el usuario que inicio sesion
@@ -190,8 +208,8 @@ export default {
 
       await axios
         .post("http://localhost:3000/department/get/by-name",
-            { name: "Despacho" },
-            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+          { name: "Despacho" },
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
           this.department.id = res.data.data.id;
@@ -240,7 +258,7 @@ export default {
               process.request = row.request;
               process.machine = row.machine;
               process.order = row.order;
-              if(row.date_out){
+              if (row.date_out) {
                 date_in_format = new Date(row.date_out).toLocaleString();
                 process.date_out = date_in_format;
               }
@@ -264,16 +282,17 @@ export default {
     },
 
     //Metodo que llena la informacion del modal
-    fillModalInfo(data){
+    fillModalInfo(data) {
       this.modalInfo = data;
       this.modalProcess = true;
+      this.refresToken();
     },
 
     //Metodo que obtiene la lista de procesos en espera para entrar a un departamento.
-    async fillCheckInProcesses(){
+    async fillCheckInProcesses() {
       await axios
         .get("http://localhost:3000/process/list/check-in/" + this.department.id,
-            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
           this.checkInProcesses = res.data.data;
@@ -281,7 +300,7 @@ export default {
         .catch((error) => {
           console.log(error.message);
           alert("Error: " + error.response.data.message);
-      });
+        });
 
     }
 
@@ -327,7 +346,8 @@ export default {
               <td class="center-text">{{ process.date_in }}</td>
               <td class="center-text">{{ process.operator.name + " " + process.operator.last_name }}</td>
               <td class="center-text">
-                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#processModal" v-on:click="fillModalInfo(process)">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#processModal"
+                  v-on:click="fillModalInfo(process)">
                   Información
                 </button>
               </td>
@@ -339,7 +359,7 @@ export default {
   </div>
 
   <!--ESPERANDO ENTRADA-->
-  <br/>
+  <br />
   <h2 class="font-weight-bold">Esperando Entrada:</h2>
   {{ resetCounter() }}
   <div class="container my-4">
@@ -366,10 +386,10 @@ export default {
   </div>
 
   <!-- Process Modal -->
-  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel" aria-hidden="true" v-if="modalProcess">
-    <ProcessModal  :process_type="process_type" :modalInfo="modalInfo"/>
+  <div class="modal fade" id="processModal" tabindex="-1" role="dialog" aria-labelledby="processModalLabel"
+    aria-hidden="true" v-if="modalProcess">
+    <ProcessModal :process_type="process_type" :modalInfo="modalInfo" />
   </div>
-
 </template>
 
 <style>

@@ -131,7 +131,7 @@ export default {
             if(this.modalInfo.machine){
 
                 //Nombre de la maquina
-                this.processModalInfo.machine = this.modalInfo.machine.name;
+                this.processModalInfo.machine = this.modalInfo.machine.number;
                 
             }
 

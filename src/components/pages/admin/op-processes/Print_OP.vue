@@ -153,6 +153,24 @@ export default {
       counter = 1;
     },
 
+    //Metodo de refresh token
+    async refresToken() {
+      await axios
+        .get("http://localhost:3000/auth/refresh",
+          {
+            headers: {
+              Authorization: `Bearer ${this.getUserFromCookies()}`
+            }
+          })
+        .then((res) => {
+          this.token = res.data.data.accessToken;
+          Cookies.set("userLogged", this.token);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    },
+
     //Metodo que obtiene de cookies el usuario que inicio sesion
     getUserFromCookies() {
       return Cookies.get("userLogged");
@@ -267,6 +285,7 @@ export default {
     fillModalInfo(data) {
       this.modalInfo = data;
       this.modalProcess = true;
+      this.refresToken();
     },
 
     //Metodo que obtiene la lista de procesos en espera para entrar a un departamento.
