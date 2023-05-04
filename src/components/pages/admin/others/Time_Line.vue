@@ -64,12 +64,18 @@ import jwt_decode from 'jwt-decode';
 
 let counter = 1;
 let processList = [];
+let processTimeLine = [];
+let requestName = "";
+let colorList = [];
 
 export default {
     data() {
         return {
             counter,
-            processList
+            processList,
+            processTimeLine,
+            requestName,
+            colorList,
         }
     },
     methods: {
@@ -135,7 +141,7 @@ export default {
         },
 
         //Llenamos la lista de procesos
-        async fillProcessesList(){
+        async fillProcessesList() {
             await axios
                 .get("http://localhost:3000/process/get/last-active",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
@@ -143,23 +149,102 @@ export default {
                 .then((res) => {
                     this.processList = res.data.data;
 
-                    console.log(this.processList)
-                    
-                    for(let i=0; i < this.processList.length; i++){
-                        if(!this.processList[i].order){
-                            this.processList.order = { op_number: "N/A" } 
-                            console.log("entre")
+                    for (let i = 0; i < this.processList.length; i++) {
+                        if (!this.processList[i].order) {
+                            this.processList[i].order = { op_number: "N/A" }
                         }
                     }
-                    
                 })
                 .catch((error) => {
                     console.log(error.message);
                     alert("Error: " + error.response.data.message);
                 });
+        },
+
+        //Llenamos la lista de colores para los departamentos
+        async fillColorList(){
+            
+            //Diseño Gráfico
+            this.colorList.push("--accent-color:#41516C" )
+
+            //Diseño Textil
+            this.colorList.push("--accent-color:#FBCA3E")
+
+            //Generar OP
+            this.colorList.push("--accent-color:#E24A68")
+
+            //Imprimir OP
+            this.colorList.push("--accent-color:#1B5F8C")
+
+            //Tejeduría
+            this.colorList.push("--accent-color:#4CADAD")
+
+            //Enrollado
+            this.colorList.push("--accent-color:#17A589")
+
+            //Corte
+            this.colorList.push("--accent-color:#6C3483")
+
+            //Control de Calidad
+            this.colorList.push("--accent-color:#B03A2E")
+
+            //Facturación
+            this.colorList.push("--accent-color:#9A7D0A")
+
+            //Despacho
+            this.colorList.push("--accent-color:#00FF00")
+
+        },
+
+        //Llenamos la linea de tiempo del pedido seleccionado
+        async fillTimeLineProcess(process, requestName) {
+           
+            this.processTimeLine = [];
+            
+            await axios
+                .get("http://localhost:3000/process/get/for-time-line/" + process.id,
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
+                    this.requestName = requestName;
+
+                    for(let i = 0; i < res.data.data.length ; i++){
+                        this.processTimeLine.push({ info: res.data.data[i], color: this.colorList[i] })
+                    }
+
+                    this.fixDates();
+
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+        },
+
+        //Arreglamos las fechas para que se vean bien en la linea de tiempo
+        fixDates(){
+
+
+            for(let i = 0; i < this.processTimeLine.length; i++){
+                if(this.processTimeLine[i].info.date_in){
+                    this.processTimeLine[i].info.date_in = new Date(this.processTimeLine[i].info.date_in).toLocaleString();
+                }else{
+                    this.processTimeLine[i].info.date_in = "No ha entrado al departamento.";                
+                }
+
+                if(this.processTimeLine[i].info.date_out){
+                    this.processTimeLine[i].info.date_out = new Date(this.processTimeLine[i].info.date_out).toLocaleString();
+                }else{
+                    this.processTimeLine[i].info.date_out = "No ha salido del departamento."
+                }
+
+            }
         }
+
     },
     async created() {
+        await this.fillColorList();
         await this.fillProcessesList();
         await initDataTable();
     }
@@ -185,19 +270,20 @@ export default {
                             <th scope="col" class="center-text">Descripción</th>
                             <th scope="col" class="center-text">Departamento</th>
                             <th scope="col" class="center-text">OP</th>
-                            <th scope="col" class="center-text">Más Información</th>
+                            <th scope="col" class="center-text">Lidea de Tiempo</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="process in processList" :key="process.id">
                             <th scope="row" class="center-text">{{ incrementCounter() }}</th>
-                            <td class="center-text">{{process.request.serial + process.request.characters}}</td>
-                            <td class="center-text">{{process.request.description}}</td>
-                            <td class="center-text">{{process.department.name}}</td>
-                            <td class="center-text">{{process.order.op_number}}</td>
+                            <td class="center-text">{{ process.request.serial + process.request.characters }}</td>
+                            <td class="center-text">{{ process.request.description }}</td>
+                            <td class="center-text">{{ process.department.name }}</td>
+                            <td class="center-text">{{ process.order.op_number }}</td>
                             <td class="center-text">
-                                <button type="button" class="btn btn-outline-info">
-                                    HOLA
+                                <button type="button" class="btn btn-outline-info"
+                                    v-on:click="fillTimeLineProcess(process, process.request.serial + process.request.characters)">
+                                    Mapa
                                 </button>
                             </td>
                         </tr>
@@ -206,4 +292,179 @@ export default {
             </div>
         </div>
     </div>
+
+    <!--AQUI EMPIEZA LA LINEA DE TIEMPO-->
+    <br/>
+    <h1 class="center-text font-weight-bold">Pedido: {{requestName}}</h1>
+    <br/>
+    <ul class="ul-time-line">
+        <li v-for="process in processTimeLine" :key="process.id" :style="process.color">
+            <div class="date">{{process.info.department.name}}</div>
+            <br/>
+            <div class="title">Fecha de ingreso: {{process.info.date_in }}</div>
+            <div class="title">Fecha de salida: {{process.info.date_out}}</div>
+            <div class="descr">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quas itaque hic quibusdam fugiat
+                est numquam harum, accusamus suscipit consequatur laboriosam!</div>
+        </li>
+    </ul>
+
 </template>
+
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.ul-time-line {
+  --col-gap: 2rem;
+  --row-gap: 2rem;
+  --line-w: 0.25rem;
+  display: grid;
+  grid-template-columns: var(--line-w) 1fr;
+  grid-auto-columns: max-content;
+  column-gap: var(--col-gap);
+  list-style: none;
+  width: min(60rem, 90%);
+  margin-inline: auto;
+}
+
+/* line */
+.ul-time-line::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 1 / span 20;
+  background: rgb(225, 225, 225);
+  border-radius: calc(var(--line-w) / 2);
+}
+
+/* columns*/
+
+/* row gaps */
+.ul-time-line li:not(:last-child) {
+  margin-bottom: var(--row-gap);
+}
+
+/* card */
+.ul-time-line li {
+  grid-column: 2;
+  --inlineP: 1.5rem;
+  margin-inline: var(--inlineP);
+  grid-row: span 2;
+  display: grid;
+  grid-template-rows: min-content min-content min-content;
+}
+
+/* date */
+.ul-time-line li .date {
+  --dateH: 3rem;
+  height: var(--dateH);
+  margin-inline: calc(var(--inlineP) * -1);
+
+  text-align: center;
+  background-color: var(--accent-color);
+
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+
+  display: grid;
+  place-content: center;
+  position: relative;
+
+  border-radius: calc(var(--dateH) / 2) 0 0 calc(var(--dateH) / 2);
+}
+
+/* date flap */
+.ul-time-line li .date::before {
+  content: "";
+  width: var(--inlineP);
+  aspect-ratio: 1;
+  background: var(--accent-color);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2) 100%, transparent);
+  position: absolute;
+  top: 100%;
+
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  right: 0;
+}
+
+/* circle */
+.ul-time-line li .date::after {
+  content: "";
+  position: absolute;
+  width: 2rem;
+  aspect-ratio: 1;
+  background: var(--bgColor);
+  border: 0.3rem solid var(--accent-color);
+  border-radius: 50%;
+  top: 50%;
+
+  transform: translate(50%, -50%);
+  right: calc(100% + var(--col-gap) + var(--line-w) / 2);
+}
+
+/* title descr */
+.ul-time-line li .title,
+.ul-time-line li .descr {
+  background: var(--bgColor);
+  position: relative;
+  padding-inline: 1.5rem;
+}
+.ul-time-line li .title {
+  overflow: hidden;
+  font-weight: 500;
+}
+.ul-time-line li .descr {
+  padding-block-end: 1.5rem;
+  font-weight: 300;
+}
+
+@media (min-width: 40rem) {
+    .ul-time-line {
+    grid-template-columns: 1fr var(--line-w) 1fr;
+  }
+  .ul-time-line::before {
+    grid-column: 2;
+  }
+  .ul-time-line li:nth-child(odd) {
+    grid-column: 1;
+  }
+  .ul-time-line li:nth-child(even) {
+    grid-column: 3;
+  }
+
+  /* start second card */
+  .ul-time-line li:nth-child(2) {
+    grid-row: 2/4;
+  }
+
+  .ul-time-line li:nth-child(odd) .date::before {
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    left: 0;
+  }
+
+  .ul-time-line li:nth-child(odd) .date::after {
+    transform: translate(-50%, -50%);
+    left: calc(100% + var(--col-gap) + var(--line-w) / 2);
+  }
+  .ul-time-line li:nth-child(odd) .date {
+    border-radius: 0 calc(var(--dateH) / 2) calc(var(--dateH) / 2) 0;
+  }
+}
+
+.credits {
+  margin-top: 1rem;
+  text-align: right;
+}
+.credits a {
+  color: var(--color);
+}
+
+</style>
