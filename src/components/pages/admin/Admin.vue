@@ -314,7 +314,17 @@ export default {
                      </a>
                   </li>
 
-                  <!-- Observaciones -->
+                  <!-- Historial -->
+                  <li class="nav-item">
+                     <a href="/admin/history/" class="nav-link" v-if="disableOptions()">
+                        <i class="nav-icon fas fa-solid fa-book"></i>
+                        <p>
+                           Historial
+                        </p>
+                     </a>
+                  </li>
+
+                  <!-- Linea de tiempo -->
                   <li class="nav-item">
                      <a href="/admin/time-line/" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-clock"></i>
@@ -333,6 +343,7 @@ export default {
                         </p>
                      </a>
                   </li>
+
 
                   <!-- Salir -->
                   <li class="nav-item">
