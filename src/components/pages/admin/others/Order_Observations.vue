@@ -128,7 +128,7 @@ export default{
 
         //Metodo que obtiene de cookies el usuario que inicio sesion
         getUserFromCookies() {
-            return Cookies.get("userLoggedOperator");
+            return Cookies.get("userLogged");
         },
 
         //Metodo que obtiene la lista de procesos con sus observaciones
