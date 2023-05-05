@@ -58,15 +58,18 @@ const initDataTable = async () => {
 ////// AQUI TERMINA EL JS DEl DATATABLE ///////////
 
 let counter = 0;
+let processList = [];
 
 export default{
     data(){
         return{
-            counter
+            counter,
+            processList
         }
     },
-    created(){
-        initDataTable();
+    async created(){
+        await this.getProcessList();
+        await initDataTable();
     },
     methods:{
         
@@ -128,6 +131,21 @@ export default{
             return Cookies.get("userLoggedOperator");
         },
 
+        //Metodo que obtiene la lista de procesos con sus observaciones
+        async getProcessList(){
+            await axios
+                .get("http://localhost:3000/process/get/by-observation",
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    this.processList = res.data.data;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+        }
+
     }
 }
 
@@ -149,22 +167,18 @@ export default{
                             <th scope="col" class="center-text">#</th>
                             <th scope="col" class="center-text">Pedido</th>
                             <th scope="col" class="center-text">Descripción</th>
+                            <th scope="col" class="center-text">Departamento</th>
                             <th scope="col" class="center-text">Observaciones</th>
-                            <th scope="col" class="center-text">Guardar Cambios</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr v-for="process in processList" :key="process.id">
                             <th scope="row" class="center-text">{{incrementCounter()}}</th>
-                            <td class="center-text">HOLA</td>
-                            <td class="center-text">HOLA</td>
+                            <td class="center-text">{{process.request.serial + process.request.characters}}</td>
+                            <td class="center-text">{{process.request.description}}</td>
+                            <td class="center-text">{{process.department.name}}</td>
                             <td class="center-text">
-                                <input type="text" size="50" maxlength="500">
-                            </td>
-                            <td class="center-text">
-                                <button button type="button" class="btn btn-outline-success">
-                                    HOLA
-                                </button>
+                                <textarea class="form-control" id="exampleFormControlTextarea3" rows="3" readonly>{{process.observation}}</textarea>
                             </td>
                         </tr>
                     </tbody>

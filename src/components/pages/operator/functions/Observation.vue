@@ -143,6 +143,7 @@ export default{
                 .then((res) => {
 
                     this.departmentList = res.data.data;
+                    this.departmentList.sort((a, b) => a.process_turn - b.process_turn );
 
                 })
                 .catch((error) => {
