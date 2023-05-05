@@ -7,6 +7,7 @@ import jwt_decode from 'jwt-decode';
 ////// AQUI EMPIEZA EL JS DEl DATATABLE ///////////
 
 let dataTableOrder;
+let dataTableIsInitialized = false;
 
 const dataTableOrderOptions = {
   //scrollX: "2000px",
@@ -51,8 +52,13 @@ const dataTableOrderOptions = {
 
 const initDataTable = async () => {
 
+    if (dataTableIsInitialized) {
+        dataTableOrder.destroy();
+    }
+
     dataTableOrder = $("#datatable_order_observation").DataTable(dataTableOrderOptions);
-    console.log(dataTableOrder)
+
+    dataTableIsInitialized = true;
 };
 
 ////// AQUI TERMINA EL JS DEl DATATABLE ///////////
