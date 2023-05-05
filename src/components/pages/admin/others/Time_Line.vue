@@ -312,7 +312,7 @@ export default {
             <div class="title">Fecha de ingreso: {{ process.info.date_in }}</div>
             <div class="title">Fecha de salida: {{ process.info.date_out }}</div>
             <div class="descr">
-                Este pedido fue suepervisado por: {{ process.info.operator.name + " " + process.info.operator.last_name }} 
+                Este pedido fue suepervisado por {{ process.info.operator.name + " " + process.info.operator.last_name }} durante {{ process.info.hours_in }} horas que el pedido estuvo en el departamento.
             </div>
         </li>
     </ul>
