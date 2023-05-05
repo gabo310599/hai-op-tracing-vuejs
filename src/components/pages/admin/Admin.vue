@@ -256,7 +256,7 @@ export default {
                <a href="/admin/dashboard" class="nav-link">Home</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-               <a href="/admin/contact" class="nav-link" >Contact</a>
+               <a href="/admin/info" class="nav-link" >Info</a>
             </li>
          </ul>
          <ul class="navbar-nav ml-auto">
@@ -485,7 +485,7 @@ export default {
 
       <footer class="main-footer">
          <div class="float-right d-none d-sm-inline">
-            Anything you want
+            Todos los derechos reservados Industrias Textiles Hai, C.A. Rif: J-002385448
          </div>
          <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
       </footer>

@@ -13,7 +13,7 @@ import Receipt from "../pages/admin/op-processes/Receipt.vue";
 import Rolled_Up from "../pages/admin/op-processes/Rolled_Up.vue";
 import Textile_Design from "../pages/admin/op-processes/Textile_Design.vue";
 import Weaving from "../pages/admin/op-processes/Weaving.vue";
-import Contact from "../pages/admin/others/Contact.vue";
+import Info from "../pages/admin/others/Info.vue";
 import Edit_User from "../pages/admin/others/Edit_User.vue";
 import Operator from "../pages/operator/Operator.vue";
 import Check_Out from "../pages/operator/functions/Check_Out.vue";
@@ -83,9 +83,9 @@ const router = createRouter({
       props: true,
       children: [
         {
-            path: "/admin/contact",
-            name: "admin.contact",
-            component: Contact,
+            path: "/admin/info",
+            name: "admin.info",
+            component: Info,
             props: true
         },
         {
