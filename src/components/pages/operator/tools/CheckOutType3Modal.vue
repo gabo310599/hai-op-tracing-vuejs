@@ -245,8 +245,78 @@ export default{
                     alert("Error: "+error.response.data.message);
                 });
             }
-            this.createLog("El pedido " + process.request.serial + process.request.characters + " ha saldio de " + process.department.name + ".")
+            this.createLog("El pedido " + process.request.serial + process.request.characters + " ha saldio de " + process.department.name + ".");
+
+            if(process.department.name === "Tejeduría")
+                this.assignHours(process.id);
+
             this.$emit('reload');
+        },
+
+        //Metodo que asigna la cantidad de horas trabajas a las maquinas de tejeduria
+        async assignHours(process_id){
+
+            let process;
+
+            //Obtenemos el proceso
+            await axios
+                .get("http://localhost:3000/process/" + process_id,
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    process = res.data.data;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+
+            //Calculamos las horas dependiendo del urdido
+            if(process.order.warped === "negro"){
+
+                let total_hours = +process.machine.total_black_hours;
+                const difference = new Date(process.date_out).getTime() - new Date(process.date_in).getTime();
+                const hours_to_add = difference / 1000 / 60 / 60;
+                total_hours = total_hours + hours_to_add;
+
+
+                //Actualizamos las horas del registro de la maquina
+                await axios
+                    .put("http://localhost:3000/machine/" + process.machine.id,
+                        { total_black_hours: total_hours },
+                        { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                    )
+                    .then((res) => {
+
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                        alert("Error: " + error.response.data.message);
+                    });
+
+            }else if(process.order.warped === "blanco"){
+
+                let total_hours = +process.machine.total_white_hours;
+                const difference = new Date(process.date_out).getTime() - new Date(process.date_in).getTime();
+                const hours_to_add = difference / 1000 / 60 / 60;
+                total_hours = total_hours + hours_to_add;
+
+                //Actualizamos las horas del registro de la maquina
+                await axios
+                    .put("http://localhost:3000/machine/" + process.machine.id,
+                        { total_white_hours: total_hours },
+                        { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                    )
+                    .then((res) => {
+
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                        alert("Error: " + error.response.data.message);
+                    });
+
+            }
+
         }
 
     }
