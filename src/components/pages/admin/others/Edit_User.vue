@@ -49,7 +49,7 @@ export default {
 
             await axios
                 .post("http://localhost:3000/log",
-                    { user_id: this.user.id, log: msg },
+                    { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -138,6 +138,7 @@ export default {
                 )
                 .then((res) => {
                     alert("Usuario actualizado con exito.");
+                    this.createLog("Usuario actualizado.");
                     window.location.reload();
                 })
                 .catch((error) => {

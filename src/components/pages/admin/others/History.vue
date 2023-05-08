@@ -65,17 +65,35 @@ import jwt_decode from 'jwt-decode';
 let counter = 1;
 let processesList = [];
 
-export default{
-    data(){
-        return{
+export default {
+    data() {
+        return {
             processesList
         }
     },
-    methods:{
-        
+    methods: {
+
         //Incrementamos el contador
         incrementCounter() {
             return counter++;
+        },
+
+        //Metodo de refresh token
+        async refresToken() {
+            await axios
+                .get("http://localhost:3000/auth/refresh",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.getUserFromCookies()}`
+                        }
+                    })
+                .then((res) => {
+                    this.token = res.data.data.accessToken;
+                    Cookies.set("userLogged", this.token);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
         },
 
         //Reiniciamos el contador
@@ -116,7 +134,7 @@ export default{
         },
 
         //Metodo que llena la lista de procesos
-        async fillProcessesList(){
+        async fillProcessesList() {
             await axios
                 .get("http://localhost:3000/process/get/history",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
@@ -131,7 +149,7 @@ export default{
         }
 
     },
-    async created(){
+    async created() {
         await this.fillProcessesList();
         await initDataTable();
     }
@@ -161,11 +179,11 @@ export default{
                     <tbody>
                         <tr v-for="process in processesList" :key="process.id">
                             <th scope="row" class="center-text">{{ incrementCounter() }}</th>
-                            <td class="center-text">{{process.request.serial + process.request.characters}}</td>
-                            <td class="center-text">{{process.request.description}}</td>
-                            <td class="center-text">{{process.request.code}}</td>
-                            <td class="center-text">{{process.order.op_number}}</td>
-                            <td class="center-text">{{process.order.points}}</td>
+                            <td class="center-text">{{ process.request.serial + process.request.characters }}</td>
+                            <td class="center-text">{{ process.request.description }}</td>
+                            <td class="center-text">{{ process.request.code }}</td>
+                            <td class="center-text">{{ process.order.op_number }}</td>
+                            <td class="center-text">{{ process.order.points }}</td>
                         </tr>
                     </tbody>
                 </table>

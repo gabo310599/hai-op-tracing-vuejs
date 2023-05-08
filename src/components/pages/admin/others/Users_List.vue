@@ -19,11 +19,11 @@ const dataTableOptionsActive = {
         },
         {
             orderable: false,
-            targets: [4,5,6],
+            targets: [4, 5, 6],
         },
         {
             searchable: false,
-            targets: [4,5,6],
+            targets: [4, 5, 6],
         },
         //{ width: "50%", targets: [0], },
     ],
@@ -61,11 +61,11 @@ const dataTableOptionsSuspended = {
         },
         {
             orderable: false,
-            targets: [4,5],
+            targets: [4, 5],
         },
         {
             searchable: false,
-            targets: [4,5],
+            targets: [4, 5],
         },
         //{ width: "50%", targets: [0], },
     ],
@@ -142,6 +142,7 @@ export default {
         fillModalInfo(info) {
             this.infoModal = info;
             this.modal = true;
+            this.refresToken();
         },
 
         incrementCounter() {
@@ -150,6 +151,24 @@ export default {
 
         resetCounter() {
             counter = 1;
+        },
+
+        //Metodo de refresh token
+        async refresToken() {
+            await axios
+                .get("http://localhost:3000/auth/refresh",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.getUserFromCookies()}`
+                        }
+                    })
+                .then((res) => {
+                    this.token = res.data.data.accessToken;
+                    Cookies.set("userLogged", this.token);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
         },
 
         //Metodo que obtiene de cookies el usuario que inicio sesion
@@ -171,7 +190,7 @@ export default {
 
             await axios
                 .post("http://localhost:3000/log",
-                    { user_id: this.user.id, log: msg },
+                    { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -196,8 +215,8 @@ export default {
                     const activeList = [];
                     const suspendedList = [];
 
-                    res.data.data.map(function (row){
-                        if(row.status)
+                    res.data.data.map(function (row) {
+                        if (row.status)
                             activeList.push(row);
                         else
                             suspendedList.push(row);
@@ -215,18 +234,25 @@ export default {
         },
 
         //Metodo que modifica el estado de un usuario
-        async updateStatusUser(status, user){
+        async updateStatusUser(status, user) {
 
             await axios
-                .put("http://localhost:3000/user/"+user.id,
+                .put("http://localhost:3000/user/" + user.id,
                     { status: status },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
-                    if(this.getDecodedAccessToken().sub === user.id){
+                    if (this.getDecodedAccessToken().sub === user.id) {
                         alert("El usuario ha sido suspendido.")
                         this.$router.push('/')
                     }
+
+                    if (status) {
+                        this.createLog("Se ha activado el usuario: " + user.user_name);
+                    } else {
+                        this.createLog("Se ha desactivado el usuario: " + user.user_name);
+                    }
+
                     window.location.reload();
                 })
                 .catch((error) => {
@@ -240,7 +266,7 @@ export default {
         await this.fillUserList();
         await initDataTable();
     },
-    components:{
+    components: {
         UserInfoModal,
         DepartmentModal
     },
@@ -287,7 +313,8 @@ export default {
                                 </button>
                             </td>
                             <td class="center-text">
-                                <button type="button" class="btn btn-danger" v-on:click="updateStatusUser(false, user)">Suspender</button>
+                                <button type="button" class="btn btn-danger"
+                                    v-on:click="updateStatusUser(false, user)">Suspender</button>
                             </td>
                         </tr>
                     </tbody>
@@ -296,7 +323,7 @@ export default {
         </div>
     </div>
 
-    <br/>
+    <br />
 
     <!--SUSPENDIDOS-->
     {{ resetCounter() }}
@@ -327,7 +354,8 @@ export default {
                                 </button>
                             </td>
                             <td class="center-text">
-                                <button type="button" class="btn btn-success" v-on:click="updateStatusUser(true, user)">Activar</button>
+                                <button type="button" class="btn btn-success"
+                                    v-on:click="updateStatusUser(true, user)">Activar</button>
                             </td>
                         </tr>
                     </tbody>
@@ -337,19 +365,19 @@ export default {
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true" v-if="modal">
+    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true"
+        v-if="modal">
         <UserInfoModal :infoModal="infoModal" />
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModalLabel" aria-hidden="true" v-if="modal">
-        <DepartmentModal :infoModal="infoModal"  />
+    <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModalLabel"
+        aria-hidden="true" v-if="modal">
+        <DepartmentModal :infoModal="infoModal" />
     </div>
-
 </template>
 
 <style>
 .center-text {
     text-align: center;
-}
-</style>
+}</style>

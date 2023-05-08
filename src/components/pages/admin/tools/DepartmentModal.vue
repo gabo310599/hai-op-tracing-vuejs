@@ -8,16 +8,16 @@ let departmentList = [];
 let departementOperator = [];
 
 export default {
-    props:[
+    props: [
         'infoModal'
     ],
-    data(){
-        return{
+    data() {
+        return {
             departmentList,
             departementOperator
         }
     },
-    methods:{
+    methods: {
 
         //Metodo que obtiene de cookies el usuario que inicio sesion
         getUserFromCookies() {
@@ -33,12 +33,30 @@ export default {
             }
         },
 
+        //Metodo de refresh token
+        async refresToken() {
+            await axios
+                .get("http://localhost:3000/auth/refresh",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.getUserFromCookies()}`
+                        }
+                    })
+                .then((res) => {
+                    this.token = res.data.data.accessToken;
+                    Cookies.set("userLogged", this.token);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        },
+
         //Metodo que administra el log
         async createLog(msg) {
 
             await axios
                 .post("http://localhost:3000/log",
-                    { user_id: this.user.id, log: msg },
+                    { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -52,17 +70,17 @@ export default {
         },
 
         //Metodo que obtiene la lista de departamentos del usuario
-        async fillDepartmentOperatorList(){
+        async fillDepartmentOperatorList() {
 
             await axios
                 .get("http://localhost:3000/operator-department-union/department-by-operator/" + this.infoModal.operator.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
-                    
+
                     let departmentsArray = [];
 
-                    res.data.data.map(function (row){
+                    res.data.data.map(function (row) {
                         departmentsArray.push({
                             id: row.id,
                             name: row.name
@@ -80,19 +98,22 @@ export default {
         },
 
         //Metodo que elimina un departamento de la lista
-        async deleteDepartment(department_id){
+        async deleteDepartment(department_id, department_name) {
 
+            this.refresToken();
             await axios
                 .post("http://localhost:3000/operator-department-union/delete/by-operator-and-department",
-                    { 
+                    {
                         operator_id: this.infoModal.operator.id,
                         department_id: department_id
                     },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
-                    
+
                     this.fillDepartmentOperatorList();
+
+                    this.createLog("Se ha eliminado el acceso del usuario " + this.infoModal.user_name + " para el departamento: " + department_name )
 
                 })
                 .catch((error) => {
@@ -103,7 +124,7 @@ export default {
         },
 
         //Metodo que determina los departamento que se pueden agregar a un operario
-        fillDepartmentList(){
+        fillDepartmentList() {
             this.departmentList = [];
             this.departmentList.push("Diseño Gráfico");
             this.departmentList.push("Diseño Textil");
@@ -118,37 +139,39 @@ export default {
 
             let indexToDelete = [];
 
-            for(let i = 0; i < this.departmentList.length; i++){
-                for(let j = 0; j < this.departementOperator.length; j++){
-                    if(this.departementOperator[j].name == this.departmentList[i]){
+            for (let i = 0; i < this.departmentList.length; i++) {
+                for (let j = 0; j < this.departementOperator.length; j++) {
+                    if (this.departementOperator[j].name == this.departmentList[i]) {
                         indexToDelete.push(i);
                     }
                 }
             }
 
-            for(let i = 0; i < indexToDelete.length; i++){
-                delete(this.departmentList[indexToDelete[i]])
+            for (let i = 0; i < indexToDelete.length; i++) {
+                delete (this.departmentList[indexToDelete[i]])
             }
 
-            this.departmentList = this.departmentList.filter(function(x) {
+            this.departmentList = this.departmentList.filter(function (x) {
                 return x !== undefined;
             });
         },
 
-        //Metodo que agrega un departamento a un operari
-        async addDepartment(){
-            
-            if(document.getElementById("add_department").value == "SELECCIONAR")
+        //Metodo que agrega un departamento a un operario
+        async addDepartment() {
+
+            this.refresToken();
+            if (document.getElementById("add_department").value == "SELECCIONAR")
                 return;
-            
+
             let department_id = "";
+
             await axios
                 .post("http://localhost:3000/department/get/by-name",
                     { name: document.getElementById("add_department").value },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
-                    
+
                     department_id = res.data.data.id;
 
                 })
@@ -159,30 +182,31 @@ export default {
 
             await axios
                 .post("http://localhost:3000/operator-department-union",
-                    { 
+                    {
                         department_id: department_id,
-                        operator_id: this.infoModal.operator.id 
+                        operator_id: this.infoModal.operator.id
                     },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
-                    
+
                     this.fillDepartmentOperatorList();
 
+                    this.createLog("Se ha dado acceso al usuario " + this.infoModal.user_name + " al departamento: " + document.getElementById("add_department").value);
                 })
                 .catch((error) => {
                     console.log(error.message);
                     alert("Error: " + error.response.data.message);
                 });
-            
+
         }
 
     },
-    async created(){
+    async created() {
         await this.fillDepartmentOperatorList();
     },
-    watch:{
-        infoModal(){
+    watch: {
+        infoModal() {
             this.fillDepartmentOperatorList();
         }
     }
@@ -192,11 +216,11 @@ export default {
 </script>
 
 <template>
-
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title font-weight-bold" id="departmentModalLabel">Departamentos de: {{infoModal.user_name}}</h2>
+                <h2 class="modal-title font-weight-bold" id="departmentModalLabel">Departamentos de: {{ infoModal.user_name }}
+                </h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -206,9 +230,11 @@ export default {
                     <form>
                         <div class="form-group">
                             <ul class="list-group">
-                                <li class="list-group-item list-group-item-secondary" v-for="department in departementOperator" :key="department.id">
-                                    <p class="font-weight-bold">{{department.name}}</p>
-                                    <a class="delete-btn-alignment" v-on:click="deleteDepartment(department.id)">Eliminar</a>
+                                <li class="list-group-item list-group-item-secondary"
+                                    v-for="department in departementOperator" :key="department.id">
+                                    <p class="font-weight-bold">{{ department.name }}</p>
+                                    <a class="delete-btn-alignment"
+                                        v-on:click="deleteDepartment(department.id, department.name)">Eliminar</a>
                                 </li>
                             </ul>
                         </div>
@@ -216,7 +242,7 @@ export default {
                             <label for="add_department">Asociar Departamento:</label>
                             <select class="form-select" aria-label="Default select example" id="add_department">
                                 <option value="SELECCIONAR">Seleccionar...</option>
-                                <option v-for="department in departmentList" :value="department">{{department}}</option>
+                                <option v-for="department in departmentList" :value="department">{{ department }}</option>
                             </select>
                         </div>
                     </form>
@@ -228,12 +254,10 @@ export default {
             </div>
         </div>
     </div>
-
 </template>
 
 <style>
-
-.delete-btn-alignment{
+.delete-btn-alignment {
     text-align: right;
 }
 </style>

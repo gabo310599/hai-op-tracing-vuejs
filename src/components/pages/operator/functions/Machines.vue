@@ -53,7 +53,7 @@ export default{
         async createLog(msg) {
             await axios
                 .post("http://localhost:3000/log",
-                    { user_id: this.user.id, log: msg },
+                    { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -170,13 +170,56 @@ export default{
                 )
                 .then((res) => {
                     alert("Asociación aplicada exitosamente.")
-                    window.location.reload();
                 })
                 .catch((error) => {
                     console.log(error.message);
                     alert("Error: " + error.response.data.message);
                 });
 
+                this.createLog("Se ha asociado la maquina " + machine_id + "con el proceso " + process_id);
+
+                if(document.getElementById("machine/department_input").value === "Tejeduría")
+                    await this.assignPoints(process_id)
+
+                window.location.reload();
+        },
+
+        //Asignamos los puntos a la maquina asociada si se encuentra en tejeduria.
+        async assignPoints(process_id){
+
+            let process;
+            let total_points = 0;
+
+            //Obtenemos el proceso
+            await axios
+                .get("http://localhost:3000/process/" + process_id,
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    process = res.data.data;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+            
+            //Sumamos los puntos
+            total_points = +process.machine.total_points;
+            total_points = total_points + process.order.points;
+
+            //Actualizamos el registro de la maquina.
+            await axios
+                .put("http://localhost:3000/machine/" + process.machine.id,
+                    { total_points: total_points },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
         }
 
     },

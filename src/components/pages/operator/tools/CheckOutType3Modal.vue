@@ -81,7 +81,7 @@ export default{
 
             await axios
                 .post("http://localhost:3000/log",
-                    { user_id: this.user.id, log: msg },
+                    { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -168,6 +168,7 @@ export default{
                     alert("Error: " + error.response.data.message);
                 });
 
+                this.createLog("El pedido " + process.request.serial + process.request.characters + " ha sido ingresado a " + process.department.name + ".")
                 this.$emit('reload');
         },
 
@@ -244,7 +245,7 @@ export default{
                     alert("Error: "+error.response.data.message);
                 });
             }
-
+            this.createLog("El pedido " + process.request.serial + process.request.characters + " ha saldio de " + process.department.name + ".")
             this.$emit('reload');
         }
 

@@ -56,7 +56,7 @@ export default{
 
             await axios
             .post("http://localhost:3000/log",
-                { user_id: this.user.id, log: msg },
+                { user_id: this.getDecodedAccessToken().sub, log: msg },
                 { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
             )
             .then((res) => {
@@ -112,6 +112,10 @@ export default{
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
+                    alert("Pedido registrado con exito.");
+                    request_id = res.data.data.id;
+                    this.createLog("Se ha creado el pedido " + this.serial.toUpperCase() + this.character.toUpperCase() + "." )
+
                     this.serial = "";
                     this.description = "";
                     this.code = "";
@@ -120,8 +124,6 @@ export default{
                         alert(res.data.type)
                         return
                     }
-                    alert("Pedido registrado con exito.");
-                    request_id = res.data.data.id;
                 })
                 .catch((error) => {
                     console.log(error.message);
@@ -145,7 +147,8 @@ export default{
                     alert("Error: "+error.response.data.message);
                 });
 
-        }
+                    
+            }
 
 
     },
