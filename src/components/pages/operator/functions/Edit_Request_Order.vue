@@ -213,6 +213,7 @@ export default {
         //Metodo que guarda los cambios de un pedido u orden
         async save(type, process){
 
+            this.refresToken();
 
             //Revisamos si estamos guardando una orden o un pedido
             if(type === 1){
@@ -247,6 +248,7 @@ export default {
                         )
                         .then((res) => {
 
+                            this.createLog("Se ha modificado el pedido: " + process.request.id );
                             alert("Pedido actualizado con exito")
                             window.location.reload();
 
@@ -290,6 +292,7 @@ export default {
                         )
                         .then((res) => {
 
+                            this.createLog("Se ha modificado la orden: " + process.order.id );
                             alert("Orden actualizada con exito")
                             window.location.reload();
 
