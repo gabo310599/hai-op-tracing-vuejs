@@ -24,6 +24,7 @@ import Observation from "../pages/operator/functions/Observation.vue";
 import Order_Observations from "../pages/admin/others/Order_Observations.vue";
 import Time_Line from "../pages/admin/others/Time_Line.vue";
 import History from "../pages/admin/others/History.vue";
+import Edit_Request_Order from "../pages/operator/functions/Edit_Request_Order.vue"
 
 const Foo = { template: "<div>foo</div>" };
 //Creo el router
@@ -71,6 +72,12 @@ const router = createRouter({
           path: "/operator/observation",
           name: "operator.observation",
           component: Observation,
+          props: true
+        },
+        {
+          path: "/operator/edit-request-order",
+          name: "operator.edit-request-order",
+          component: Edit_Request_Order,
           props: true
         },
       ],
