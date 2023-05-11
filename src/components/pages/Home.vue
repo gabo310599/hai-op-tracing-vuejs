@@ -53,6 +53,7 @@ export default{
       <div class="home-container">
         <br />
         <h1 class="font-weight-bold">Hai OP Tracing</h1>
+        <img src="http://textileshai.com.ve/img/logo-base.png" class="rounded img" alt="..." />
         <br />
 
         <!--OPERADORES-->
