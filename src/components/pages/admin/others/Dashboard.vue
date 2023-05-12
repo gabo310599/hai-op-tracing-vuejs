@@ -16,6 +16,7 @@ let listC = [];
 let listCC = [];
 let listF = [];
 let listD = [];
+let newRequestsList = [];
 let emptyPage = true;
 let modalData = {}
 
@@ -37,7 +38,8 @@ export default {
          listF,
          listD,
          emptyPage,
-         modalData
+         modalData,
+         newRequestsList
       }
    },
    methods: {
@@ -180,10 +182,17 @@ export default {
          });
 
       },
+
+      //Metodo que obtiene la lista de nuevos pedidos
+      async fillNewOrdersList(){
+
+      }
       
    },
    async created(){
 
+      await this.fillNewOrdersList();
+      
       await axios
          .get("http://localhost:3000/user/"+this.getDecodedAccessToken().sub,
             {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
@@ -238,6 +247,19 @@ export default {
                   <li class="breadcrumb-item active">Tablero</li>
                </ol>
             </div>
+         </div>
+      </div>
+   </div>
+
+
+   <div class="new-request-container">
+      <div class="small-box bg-info">
+         <div class="inner">
+            <h3>Nuevos Pedidos</h3>
+            <p>150</p>
+         </div>
+         <div class="icon">
+            <i class="fa-solid fa-bag-shopping" />
          </div>
       </div>
    </div>
@@ -521,5 +543,17 @@ export default {
    padding-right: 20px;
    justify-content: space-evenly;
  }
+
+.new-request-container{
+   position:relative;
+   top: 50%;
+   left: 50%;
+   transform:  translate(-50%, 3%);
+   width: 400px;
+   padding-right: 20px;
+   padding-bottom: 20px;
+   padding-left: 20px;
+   margin-left: 1%;
+}
 
 </style>
