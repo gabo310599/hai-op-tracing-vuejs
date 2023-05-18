@@ -16,7 +16,7 @@ let listC = [];
 let listCC = [];
 let listF = [];
 let listD = [];
-let newRequestsList = [];
+let newRequestsCount = 0;
 let emptyPage = true;
 let modalData = {}
 
@@ -39,7 +39,7 @@ export default {
          listD,
          emptyPage,
          modalData,
-         newRequestsList
+         newRequestsCount
       }
    },
    methods: {
@@ -169,29 +169,39 @@ export default {
       async createLog(msg){
 
          await axios
-         .post("http://localhost:3000/log",
-            {user_id: this.user.id, log: msg},
-            {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
-         )
-         .then((res) => {
+            .post("http://localhost:3000/log",
+               {user_id: this.user.id, log: msg},
+               {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
+            )
+            .then((res) => {
 
-         })
-         .catch((error) => {
-            console.log(error.message);
-            alert("Error: "+error.response.data.message);
-         });
+            })
+            .catch((error) => {
+               console.log(error.message);
+               alert("Error: "+error.response.data.message);
+            });
 
       },
 
-      //Metodo que obtiene la lista de nuevos pedidos
-      async fillNewOrdersList(){
-
+      //Metodo que obtiene la cantidad de nuevos pedidos
+      async getNewRequestsCount(){
+         await axios
+            .get("http://localhost:3000/process/get/new-request-count",
+               {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
+            )
+            .then((res) => {
+               this.newRequestsCount = res.data.data;
+            })
+            .catch((error) => {
+               console.log(error.message);
+               alert("Error: "+error.response.data.message);
+            });
       }
       
    },
    async created(){
 
-      await this.fillNewOrdersList();
+      await this.getNewRequestsCount();
       
       await axios
          .get("http://localhost:3000/user/"+this.getDecodedAccessToken().sub,
@@ -240,6 +250,18 @@ export default {
          <div class="row mb-2">
             <div class="col-sm-6">
                <h1 class="m-0 font-weight-bold">Tablero</h1>
+               <!--Nuevos Pedidos-->
+               <div class="new-request-container">
+                  <div class="small-box bg-info">
+                     <div class="inner">
+                        <h3>Nuevos Pedidos</h3>
+                        <p>{{newRequestsCount}}</p>
+                     </div>
+                     <div class="icon">
+                        <i class="fa-solid fa-bag-shopping" />
+                     </div>
+                  </div>
+               </div>
             </div>
             <div class="col-sm-6">
                <ol class="breadcrumb float-sm-right">
@@ -251,18 +273,6 @@ export default {
       </div>
    </div>
 
-
-   <div class="new-request-container">
-      <div class="small-box bg-info">
-         <div class="inner">
-            <h3>Nuevos Pedidos</h3>
-            <p>150</p>
-         </div>
-         <div class="icon">
-            <i class="fa-solid fa-bag-shopping" />
-         </div>
-      </div>
-   </div>
 
    <div class="container-dashboard">
 
@@ -513,7 +523,7 @@ export default {
                              <input class="form-control" id="dashboard/date_in_input" :value="modalData.date_in" readonly>
                          </div>
                          <div class="form-group">
-                             <label for="dashboard/operator_input">Operario:</label>
+                             <label for="dashboard/operator_input">Operador:</label>
                              <input class="form-control" id="dashboard/operator_input" :value="modalData.operator" readonly>
                          </div>
                          <div class="form-group" v-if="modalData.machine">
@@ -546,14 +556,11 @@ export default {
 
 .new-request-container{
    position:relative;
-   top: 50%;
-   left: 50%;
-   transform:  translate(-50%, 3%);
-   width: 400px;
+   transform:  translate(-4%, 10%);
+   width: 390px;
    padding-right: 20px;
-   padding-bottom: 20px;
    padding-left: 20px;
-   margin-left: 1%;
+   
 }
 
 </style>
