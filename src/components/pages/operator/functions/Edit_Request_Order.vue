@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 ////// AQUI EMPIEZA EL JS DEl DATATABLE ///////////
 
@@ -134,7 +135,7 @@ export default {
         //Metodo de refresh token
         async refresToken() {
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -161,7 +162,7 @@ export default {
         //Metodo que administra el log
         async createLog(msg) {
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -182,7 +183,7 @@ export default {
         //Metodo que llena las listas de pedidos y ordenes
         async fillLists() {
             await axios
-                .get("http://localhost:3000/process/get/request-without-check-in",
+                .get(mainRoute + "process/get/request-without-check-in",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -196,7 +197,7 @@ export default {
                 });
 
             await axios
-                .get("http://localhost:3000/process/get/order-without-check-in",
+                .get(mainRoute + "process/get/order-without-check-in",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -237,7 +238,7 @@ export default {
                 if(change){
 
                     await axios
-                        .put("http://localhost:3000/request-note/" + process.request.id,
+                        .put(mainRoute + "request-note/" + process.request.id,
                             {
                                 serial: document.getElementById(process.request.id+process.request.serial).value.toUpperCase(),
                                 description: document.getElementById(process.request.id+process.request.description).value.toUpperCase(),
@@ -281,7 +282,7 @@ export default {
                 if(change){
 
                     await axios
-                        .put("http://localhost:3000/production-order/" + process.order.id,
+                        .put(mainRoute + "production-order/" + process.order.id,
                             {
                                 op_number: document.getElementById(process.order.id+process.order.op_number).value.toUpperCase(),
                                 points: +document.getElementById(process.order.id+process.order.points).value,

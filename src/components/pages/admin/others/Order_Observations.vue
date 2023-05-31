@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 ////// AQUI EMPIEZA EL JS DEl DATATABLE ///////////
 
@@ -92,7 +93,7 @@ export default{
         //Metodo de refresh token
         async refresToken(){    
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -119,7 +120,7 @@ export default{
         //Metodo que administra el log
         async createLog(msg) {
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.user.id, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -140,7 +141,7 @@ export default{
         //Metodo que obtiene la lista de procesos con sus observaciones
         async getProcessList(){
             await axios
-                .get("http://localhost:3000/process/get/by-observation",
+                .get(mainRoute + "process/get/by-observation",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {

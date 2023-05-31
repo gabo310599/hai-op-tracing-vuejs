@@ -1,8 +1,7 @@
 <script>
 
 import axios from "axios";
-
-
+import mainRoute from "../../main.js"
 
 //Exports
 export default {
@@ -20,7 +19,7 @@ export default {
 
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4MDMxYTJmZS0yZjY0LTQxMGEtYjhkYi0wMDNhMWRmOGU3ODQiLCJpYXQiOjE2Nzk1ODA0NzksImV4cCI6MTY3OTU4NDA3OX0.6MnrjTQT0ZdFj30cLwHvXZeZCKHXb04jTLcRjJCtmRE"         
         await axios
-            .get("http://localhost:3000/user",
+            .get(mainRoute + "user",
             {headers: { Authorization: `Bearer ${token}` }})
             .then((res) => {
                 this.data = res.data.data;

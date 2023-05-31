@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let processList = [];
 let op_number = "";
@@ -24,7 +25,7 @@ export default{
         async refresToken(){
             
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -52,7 +53,7 @@ export default{
         async createLog(msg) {
 
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -78,7 +79,7 @@ export default{
 
             //Obtengo el id del departamento Generar OP
             await axios
-                .post("http://localhost:3000/department/get/by-name/",
+                .post(mainRoute + "department/get/by-name/",
                     { name: "Generar OP" },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -92,7 +93,7 @@ export default{
 
             //Obtengo la lista de procesos activos en dicho departamento sin una OP asociada
             await axios
-                .get("http://localhost:3000/process/get/request-whithout-op/generate-op/"+department_id,
+                .get(mainRoute + "process/get/request-whithout-op/generate-op/"+department_id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -144,7 +145,7 @@ export default{
             //Creamos la orden
             let order_id = "";
             await axios
-                .post("http://localhost:3000/production-order",
+                .post(mainRoute + "production-order",
                     { 
                         op_number: this.op_number,
                         warped: document.getElementById("register_op/warped_input").value,
@@ -171,7 +172,7 @@ export default{
                     process_id = row.id;
             })
             await axios
-                .put("http://localhost:3000/process/"+ process_id,
+                .put(mainRoute + "process/"+ process_id,
                     { order_id: order_id },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -185,7 +186,7 @@ export default{
 
             //Creamos la union entre orden y pedido
             await axios
-                .put("http://localhost:3000/production-order/request-note/union",
+                .put(mainRoute + "production-order/request-note/union",
                     { 
                         order_id: order_id,
                         request_id: document.getElementById("register_op/request_input").value

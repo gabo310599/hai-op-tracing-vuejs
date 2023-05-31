@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let counter = 1;
 let checkInList = [];
@@ -37,7 +38,7 @@ export default{
         //Metodo de refresh token
         async refresToken(){
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -80,7 +81,7 @@ export default{
         async createLog(msg) {
 
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -99,7 +100,7 @@ export default{
 
             this.checkInList = [];
             await axios
-                .get("http://localhost:3000/process/list/check-in/" + this.modalInfoType3.department.id,
+                .get(mainRoute + "process/list/check-in/" + this.modalInfoType3.department.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -119,7 +120,7 @@ export default{
             //Verificamos que el proceso  este asociado a una maquina
             let machine = false;
             await axios
-                .get("http://localhost:3000/process/" + process.id ,
+                .get(mainRoute +"process/" + process.id ,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -139,7 +140,7 @@ export default{
             //Obtenemos el id del operario a traves del usuario
             let operator_id = "";
             await axios
-                .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub ,
+                .get(mainRoute + "user/" + this.getDecodedAccessToken().sub ,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -152,7 +153,7 @@ export default{
 
             //Actualizamos el registro del proceso
             await axios
-                .put("http://localhost:3000/process/" + process.id,
+                .put(mainRoute + "process/" + process.id,
                     {
                         date_in: new Date(),
                         operator_id: operator_id
@@ -177,7 +178,7 @@ export default{
 
             this.checkOutList = [];
             await axios
-                .get("http://localhost:3000/process/list/check-out/" + this.modalInfoType3.department.id,
+                .get(mainRoute + "process/list/check-out/" + this.modalInfoType3.department.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -197,7 +198,7 @@ export default{
             //Obtenemos el id del operador que esta ejecutando la accion
             let operator_id = "";
             await axios
-                .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub ,
+                .get(mainRoute + "user/" + this.getDecodedAccessToken().sub ,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -210,7 +211,7 @@ export default{
 
             //Actualizamos el registro del proceso
             await axios
-                .put("http://localhost:3000/process/" + process.id,
+                .put(mainRoute + "process/" + process.id,
                     {
                         date_out: new Date(),
                         operator_id: operator_id
@@ -229,7 +230,7 @@ export default{
             //Creamos el nuevo registro del siguiente departamento si existe
             if(this.modalInfoType3.next_department_id){
                 await axios
-                .post("http://localhost:3000/process",
+                .post(mainRoute + "process",
                     {
                         request_id: process.request.id,
                         department_id: this.modalInfoType3.next_department_id,
@@ -260,7 +261,7 @@ export default{
 
             //Obtenemos el proceso
             await axios
-                .get("http://localhost:3000/process/" + process_id,
+                .get(mainRoute + "process/" + process_id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -282,7 +283,7 @@ export default{
 
                 //Actualizamos las horas del registro de la maquina
                 await axios
-                    .put("http://localhost:3000/machine/" + process.machine.id,
+                    .put(mainRoute + "machine/" + process.machine.id,
                         { total_black_hours: total_hours },
                         { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                     )
@@ -303,7 +304,7 @@ export default{
 
                 //Actualizamos las horas del registro de la maquina
                 await axios
-                    .put("http://localhost:3000/machine/" + process.machine.id,
+                    .put(mainRoute +"machine/" + process.machine.id,
                         { total_white_hours: total_hours },
                         { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                     )

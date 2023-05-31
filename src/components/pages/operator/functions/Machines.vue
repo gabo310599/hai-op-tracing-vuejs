@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let departmentOption = "";
 let department_id = "";
@@ -25,7 +26,7 @@ export default{
         //Metodo de refresh token
         async refresToken(){    
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -52,7 +53,7 @@ export default{
         //Metodo que administra el log
         async createLog(msg) {
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -77,7 +78,7 @@ export default{
 
             //Obtenemos el id del departamento seleccionado
             await axios
-                .post("http://localhost:3000/department/get/by-name/",
+                .post(mainRoute + "department/get/by-name/",
                     { name: this.departmentOption },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -91,7 +92,7 @@ export default{
 
             //Obtenemos la lista de procesos activos en ese departamento.
             await axios
-                .get("http://localhost:3000/process/get/process-without-machine/"+ this.department_id,
+                .get(mainRoute + "process/get/process-without-machine/"+ this.department_id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -105,7 +106,7 @@ export default{
             //Obtenemos la lista de maquinas en el departamento
             let machineArray = []
             await axios
-                .get("http://localhost:3000/machine/get/by-department/"+ this.department_id,
+                .get(mainRoute + "machine/get/by-department/"+ this.department_id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -164,7 +165,7 @@ export default{
 
             //Actualizamos el registro
             await axios
-                .put("http://localhost:3000/process/" + process_id,
+                .put(mainRoute + "process/" + process_id,
                     { machine_id: machine_id },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -192,7 +193,7 @@ export default{
 
             //Obtenemos el proceso
             await axios
-                .get("http://localhost:3000/process/" + process_id,
+                .get(mainRoute + "process/" + process_id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -209,7 +210,7 @@ export default{
 
             //Actualizamos el registro de la maquina.
             await axios
-                .put("http://localhost:3000/machine/" + process.machine.id,
+                .put(mainRoute + "machine/" + process.machine.id,
                     { total_points: total_points },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )

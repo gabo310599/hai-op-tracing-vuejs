@@ -61,6 +61,7 @@ const initDataTable = async () => {
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let counter = 1;
 let processList = [];
@@ -93,7 +94,7 @@ export default {
         //Metodo de refresh token
         async refresToken() {
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -126,7 +127,7 @@ export default {
         async createLog(msg) {
 
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.user.id, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -143,7 +144,7 @@ export default {
         //Llenamos la lista de procesos
         async fillProcessesList() {
             await axios
-                .get("http://localhost:3000/process/get/last-active",
+                .get(mainRoute + "process/get/last-active",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -203,7 +204,7 @@ export default {
             this.processTimeLine = [];
 
             await axios
-                .get("http://localhost:3000/process/get/for-time-line/" + process.id,
+                .get(mainRoute + "process/get/for-time-line/" + process.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {

@@ -9,9 +9,10 @@ import 'admin-lte/dist/js/adminlte.min.js';
 
 import './assets/main.css'
 
-
 const app = createApp(App)
 
 app.use(router)
 
 app.mount('#app')
+
+export const mainRoute = "http://localhost:3000/";

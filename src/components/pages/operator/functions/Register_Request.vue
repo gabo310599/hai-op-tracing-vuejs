@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let serial = "";
 let description = "";
@@ -27,7 +28,7 @@ export default{
         //Metodo de refresh token
         async refresToken(){
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -55,7 +56,7 @@ export default{
         async createLog(msg) {
 
             await axios
-            .post("http://localhost:3000/log",
+            .post(mainRoute + "log",
                 { user_id: this.getDecodedAccessToken().sub, log: msg },
                 { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
             )
@@ -102,7 +103,7 @@ export default{
             //Guardamos en la base de datos
             let request_id = "";
             await axios
-                .post("http://localhost:3000/request-note",
+                .post(mainRoute + "request-note",
                     {
                     serial: this.serial.toUpperCase(),
                     description: this.description.toUpperCase(),
@@ -132,7 +133,7 @@ export default{
 
             //Creamos un proceso en la base de datos
             await axios
-                .post("http://localhost:3000/process",
+                .post(mainRoute + "process",
                     {
                         request_id: request_id,
                         department_id: this.department_id,
@@ -156,7 +157,7 @@ export default{
 
         //Obtengo el id del primer departamento en la cadena de procesos
         await axios
-            .post("http://localhost:3000/department/get/by-name/",
+            .post(mainRoute + "department/get/by-name/",
                 { name: "Diseño Gráfico" },
                 { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
             )

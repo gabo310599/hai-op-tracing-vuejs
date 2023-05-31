@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let departmentList = [];
 let departementOperator = [];
@@ -36,7 +37,7 @@ export default {
         //Metodo de refresh token
         async refresToken() {
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -55,7 +56,7 @@ export default {
         async createLog(msg) {
 
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -73,7 +74,7 @@ export default {
         async fillDepartmentOperatorList() {
 
             await axios
-                .get("http://localhost:3000/operator-department-union/department-by-operator/" + this.infoModal.operator.id,
+                .get(mainRoute + "operator-department-union/department-by-operator/" + this.infoModal.operator.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -102,7 +103,7 @@ export default {
 
             this.refresToken();
             await axios
-                .post("http://localhost:3000/operator-department-union/delete/by-operator-and-department",
+                .post(mainRoute + "operator-department-union/delete/by-operator-and-department",
                     {
                         operator_id: this.infoModal.operator.id,
                         department_id: department_id
@@ -166,7 +167,7 @@ export default {
             let department_id = "";
 
             await axios
-                .post("http://localhost:3000/department/get/by-name",
+                .post(mainRoute + "department/get/by-name",
                     { name: document.getElementById("add_department").value },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -181,7 +182,7 @@ export default {
                 });
 
             await axios
-                .post("http://localhost:3000/operator-department-union",
+                .post(mainRoute + "operator-department-union",
                     {
                         department_id: department_id,
                         operator_id: this.infoModal.operator.id

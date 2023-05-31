@@ -6,6 +6,7 @@ import jwt_decode from 'jwt-decode';
 import CheckOutType1Modal from "../tools/CheckOutType1Modal.vue";
 import CheckOutType2Modal from "../tools/CheckOutType2Modal.vue";
 import CheckOutType3Modal from "../tools/CheckOutType3Modal.vue";
+import { mainRoute } from "../../../../main";
 
 let token = "";
 let completeAccess = false;
@@ -94,7 +95,7 @@ export default{
         //Metodo de refresh token
         async refresToken(){
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -122,7 +123,7 @@ export default{
         async createLog(msg) {
 
             await axios
-            .post("http://localhost:3000/log",
+            .post(mainRoute + "log",
                 { user_id: this.user.id, log: msg },
                 { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
             )
@@ -146,7 +147,7 @@ export default{
 
             //Verificamos si es admin
             await axios
-                .get("http://localhost:3000/user/"+ this.getDecodedAccessToken().sub,
+                .get(mainRoute + "user/"+ this.getDecodedAccessToken().sub,
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -184,7 +185,7 @@ export default{
 
                 //Verificamos los departamentos en que trabaja el usuario
                 await axios
-                    .get("http://localhost:3000/operator-department-union/department-by-operator/"+ this.operator_id,
+                    .get(mainRoute + "operator-department-union/department-by-operator/"+ this.operator_id,
                         {
                             headers: {
                                 Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -248,7 +249,7 @@ export default{
         async getProcessCountByDepartment(){
          
             await axios
-                .get("http://localhost:3000/process/count/by-department",
+                .get(mainRoute + "process/count/by-department",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -292,7 +293,7 @@ export default{
         async getDepartmentsIds(){
 
             await axios
-                .get("http://localhost:3000/department",
+                .get(mainRoute + "department",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {

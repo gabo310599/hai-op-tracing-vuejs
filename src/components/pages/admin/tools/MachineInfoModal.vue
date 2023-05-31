@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let counter = 1;
 let ordersList = [];
@@ -47,7 +48,7 @@ export default {
         async fillOrderList() {
 
             await axios
-                .get("http://localhost:3000/process/get/by-machine/" + this.machineInfo.id,
+                .get(mainRoute + "process/get/by-machine/" + this.machineInfo.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {

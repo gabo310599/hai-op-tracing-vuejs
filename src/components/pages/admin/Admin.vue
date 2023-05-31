@@ -5,6 +5,7 @@ import Login  from '../tools/Login.vue'
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import axios from "axios";
+import { mainRoute } from '../../../main';
 
 let user = [];
 let token = "";
@@ -80,7 +81,7 @@ export default {
       async createLog(msg){
 
          await axios
-         .post("http://localhost:3000/log",
+         .post(mainRoute + "log",
             {user_id: this.user.id, log: msg},
             {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
          )
@@ -163,7 +164,7 @@ export default {
       async getProcessCountByDepartment(){
          
          await axios
-         .get("http://localhost:3000/process/count/by-department",
+         .get(mainRoute + "process/count/by-department",
             {headers: { Authorization: `Bearer ${this.token}` }}
          )
          .then((res) => {
@@ -177,7 +178,7 @@ export default {
          });
 
          await axios
-         .get("http://localhost:3000/process/delay/by-department",
+         .get(mainRoute + "process/delay/by-department",
             {headers: { Authorization: `Bearer ${this.token}` }}
          )
          .then((res) => {
@@ -205,7 +206,7 @@ export default {
       if(token){
 
          await axios
-         .get("http://localhost:3000/user/"+this.getDecodedAccessToken(token).sub,
+         .get(mainRoute + "user/"+this.getDecodedAccessToken(token).sub,
             {headers: { Authorization: `Bearer ${token}` }}
          )
          .then((res) => {
@@ -219,7 +220,7 @@ export default {
 
          if(this.user){
             await axios
-            .get("http://localhost:3000/auth/refresh",
+            .get(mainRoute + "auth/refresh",
             {
                headers: { 
                   Authorization: `Bearer ${token}`

@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import Sign_Up from "./Sign_Up.vue"
+import { mainRoute } from "../../../main";
 
 let input = document.getElementById("myInput");
 let user_name = "";
@@ -12,9 +13,12 @@ document.addEventListener("keydown", (event) => {
 
     const keyName = event.key;
     
-    if(keyName === "Enter"){
-        document.getElementById("loginBtn").click();
+    try{
+        if(keyName === "Enter"){
+            document.getElementById("loginBtn").click();
     }
+    }catch{}
+
 
 });
 
@@ -44,7 +48,7 @@ export default{
             }
 
             await axios
-            .post("http://localhost:3000/auth/login",{
+            .post(mainRoute + "auth/login",{
                 user_name: this.user_name,
                 password: this.password
             })

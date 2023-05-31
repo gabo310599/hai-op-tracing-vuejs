@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 ////// AQUI EMPIEZA EL JS DEl DATATABLE ///////////
 
@@ -88,7 +89,7 @@ export default{
         //Metodo de refresh token
         async refresToken(){    
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -115,7 +116,7 @@ export default{
         //Metodo que administra el log
         async createLog(msg) {
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -137,7 +138,7 @@ export default{
         async fillDepartmentList(){
 
             await axios
-                .get("http://localhost:3000/department",
+                .get(mainRoute + "department",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -162,7 +163,7 @@ export default{
                 return
 
             await axios
-                .put("http://localhost:3000/process/" + process.id,
+                .put(mainRoute + "process/" + process.id,
                     { observation: document.getElementById(process.id).value },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -181,7 +182,7 @@ export default{
         async fillProcessesList(department_id){
             
             await axios
-                .get("http://localhost:3000/process/get/complete-by-department/" + department_id,
+                .get(mainRoute + "process/get/complete-by-department/" + department_id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {

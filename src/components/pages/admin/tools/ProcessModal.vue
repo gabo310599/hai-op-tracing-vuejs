@@ -11,6 +11,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let processModalInfo = {
     id: null,
@@ -99,7 +100,7 @@ export default {
 
             //Obtenemos el usuario del operador
             await axios
-                .get("http://localhost:3000/user/get-by-operator/"+this.modalInfo.operator.id,
+                .get(mainRoute + "user/get-by-operator/"+this.modalInfo.operator.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {

@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let user = [];
 let urgentList = [];
@@ -58,7 +59,7 @@ export default {
          }
 
          await axios
-         .get("http://localhost:3000/process/"+id,
+         .get(mainRoute + "process/"+id,
             {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
          )
          .then((res) => {
@@ -169,7 +170,7 @@ export default {
       async createLog(msg){
 
          await axios
-            .post("http://localhost:3000/log",
+            .post(mainRoute + "log",
                {user_id: this.user.id, log: msg},
                {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
             )
@@ -186,7 +187,7 @@ export default {
       //Metodo que obtiene la cantidad de nuevos pedidos
       async getNewRequestsCount(){
          await axios
-            .get("http://localhost:3000/process/get/new-request-count",
+            .get(mainRoute + "process/get/new-request-count",
                {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
             )
             .then((res) => {
@@ -204,7 +205,7 @@ export default {
       await this.getNewRequestsCount();
       
       await axios
-         .get("http://localhost:3000/user/"+this.getDecodedAccessToken().sub,
+         .get(mainRoute + "user/"+this.getDecodedAccessToken().sub,
             {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
          )
          .then((res) => {
@@ -217,7 +218,7 @@ export default {
       
       if(this.user){
          await axios
-            .get("http://localhost:3000/process/delay/list-by-department",
+            .get(mainRoute + "process/delay/list-by-department",
                {headers: { Authorization: `Bearer ${this.getUserFromCookies()}` }}
             )
             .then((res) => {

@@ -106,6 +106,7 @@ import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import ProcessModal from '../tools/ProcessModal.vue';
 import MachineInfoModal from '../tools/MachineInfoModal.vue';
+import { mainRoute } from "../../../../main";
 
 const process_type = 3;
 let checkInProcesses = [];
@@ -162,7 +163,7 @@ export default {
     //Metodo de refresh token
     async refresToken() {
       await axios
-        .get("http://localhost:3000/auth/refresh",
+        .get(mainRoute + "auth/refresh",
           {
             headers: {
               Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -195,7 +196,7 @@ export default {
     async createLog(msg) {
 
       await axios
-        .post("http://localhost:3000/log",
+        .post(mainRoute + "log",
           { user_id: this.user.id, log: msg },
           { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
@@ -213,7 +214,7 @@ export default {
     async getDepartmentInfo() {
 
       await axios
-        .post("http://localhost:3000/department/get/by-name",
+        .post(mainRoute + "department/get/by-name",
           { name: "Tejeduría" },
           { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
@@ -231,7 +232,7 @@ export default {
     //Metodo que llena las lista de procesos activos e historial.
     async fillLists() {
       await axios
-        .get("http://localhost:3000/process/by-department/" + this.department.id,
+        .get(mainRoute + "process/by-department/" + this.department.id,
           { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
@@ -298,7 +299,7 @@ export default {
     async fillMachineList() {
 
       await axios
-        .get("http://localhost:3000/machine/get/by-department/" + this.department.id,
+        .get(mainRoute + "machine/get/by-department/" + this.department.id,
           { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
@@ -316,7 +317,7 @@ export default {
     async fillCheckInProcesses() {
 
       await axios
-        .get("http://localhost:3000/process/list/check-in/" + this.department.id,
+        .get(mainRoute + "process/list/check-in/" + this.department.id,
           { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {

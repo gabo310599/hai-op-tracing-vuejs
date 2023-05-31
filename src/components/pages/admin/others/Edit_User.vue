@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let user_name = "";
 let current_user_name = "";
@@ -13,9 +14,11 @@ document.addEventListener("keydown", (event) => {
 
     const keyName = event.key;
 
-    if (keyName === "Enter") {
-        document.getElementById("saveBtn").click();
+    try{
+        if (keyName === "Enter") {
+            document.getElementById("saveBtn").click();
     }
+    }catch{}
 
 });
 
@@ -48,7 +51,7 @@ export default {
         async createLog(msg) {
 
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -66,7 +69,7 @@ export default {
         async fillUserInfo() {
 
             await axios
-                .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub,
+                .get(mainRoute + "user/" + this.getDecodedAccessToken().sub,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -132,7 +135,7 @@ export default {
 
             //Guardamos los cambios
             await axios
-                .put("http://localhost:3000/user/" + this.getDecodedAccessToken().sub,
+                .put(mainRoute + "user/" + this.getDecodedAccessToken().sub,
                     data,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )

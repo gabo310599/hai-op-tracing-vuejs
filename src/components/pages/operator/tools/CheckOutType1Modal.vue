@@ -3,6 +3,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
+import { mainRoute } from "../../../../main";
 
 let counter = 1;
 let checkInList = [];
@@ -37,7 +38,7 @@ export default{
         //Metodo de refresh token
         async refresToken(){
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -79,7 +80,7 @@ export default{
         //Metodo que administra el log
         async createLog(msg) {
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -98,7 +99,7 @@ export default{
 
             this.checkInList = [];
             await axios
-                .get("http://localhost:3000/process/list/check-in/" + this.modalInfoType1.department.id,
+                .get(mainRoute + "process/list/check-in/" + this.modalInfoType1.department.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -118,7 +119,7 @@ export default{
             let operator_id = "";
 
             await axios
-                .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub ,
+                .get(mainRoute + "user/" + this.getDecodedAccessToken().sub ,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -131,7 +132,7 @@ export default{
 
             //Actualizamos el registro del proceso
             await axios
-                .put("http://localhost:3000/process/" + process.id,
+                .put(mainRoute + "process/" + process.id,
                     {
                         date_in: new Date(),
                         operator_id: operator_id
@@ -156,7 +157,7 @@ export default{
 
             this.checkOutList = [];
             await axios
-                .get("http://localhost:3000/process/list/check-out/" + this.modalInfoType1.department.id,
+                .get(mainRoute + "process/list/check-out/" + this.modalInfoType1.department.id,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -181,7 +182,7 @@ export default{
 
                 //Verificamos que el pedido este asociado a una orden
                 await axios
-                    .post("http://localhost:3000/production-order/get/orders-by-request",
+                    .post(mainRoute + "production-order/get/orders-by-request",
                         {
                             serial: process.request.serial,
                             characters: process.request.characters
@@ -206,7 +207,7 @@ export default{
 
             let operator_id = "";
             await axios
-                .get("http://localhost:3000/user/" + this.getDecodedAccessToken().sub ,
+                .get(mainRoute + "user/" + this.getDecodedAccessToken().sub ,
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -219,7 +220,7 @@ export default{
 
             //Actualizamos el registro del proceso
             await axios
-                .put("http://localhost:3000/process/" + process.id,
+                .put(mainRoute + "process/" + process.id,
                     {
                         date_out: new Date(),
                         operator_id: operator_id
@@ -239,7 +240,7 @@ export default{
             for(let i = 0; i < orders_ids.length; i++){
                 if(this.modalInfoType1.next_department_id){
                     await axios
-                    .post("http://localhost:3000/process",
+                    .post( mainRoute + "process",
                         {
                             request_id: process.request.id,
                             department_id: this.modalInfoType1.next_department_id,

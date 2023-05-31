@@ -110,6 +110,7 @@ import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import UserInfoModal from '../tools/UserInfoModal.vue';
 import DepartmentModal from '../tools/DepartmentModal.vue';
+import { mainRoute } from "../../../../main";
 
 let infoModal = {
     user_name: null,
@@ -156,7 +157,7 @@ export default {
         //Metodo de refresh token
         async refresToken() {
             await axios
-                .get("http://localhost:3000/auth/refresh",
+                .get(mainRoute + "auth/refresh",
                     {
                         headers: {
                             Authorization: `Bearer ${this.getUserFromCookies()}`
@@ -189,7 +190,7 @@ export default {
         async createLog(msg) {
 
             await axios
-                .post("http://localhost:3000/log",
+                .post(mainRoute + "log",
                     { user_id: this.getDecodedAccessToken().sub, log: msg },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
@@ -207,7 +208,7 @@ export default {
         async fillUserList() {
 
             await axios
-                .get("http://localhost:3000/user",
+                .get(mainRoute + "user",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -237,7 +238,7 @@ export default {
         async updateStatusUser(status, user) {
 
             await axios
-                .put("http://localhost:3000/user/" + user.id,
+                .put(mainRoute + "user/" + user.id,
                     { status: status },
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )

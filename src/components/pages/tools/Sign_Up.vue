@@ -1,6 +1,7 @@
 <script>
 
 import axios from "axios";
+import { mainRoute } from "../../../main";
 
 let name = "";
 let last_name = "";
@@ -45,7 +46,7 @@ export default{
 
             //Validamos que el nombre de usuario no exista
             await axios
-            .get("http://localhost:3000/user/exist/"+this.user_name)
+            .get(mainRoute + "user/exist/"+this.user_name)
             .then((res) => {
                 if(res.data){
                     alert("El nombre de usuario ya se encuentra registrado.");
@@ -78,7 +79,7 @@ export default{
             //Creamos el operario
             let operator_id = "";
             await axios
-            .post("http://localhost:3000/operator",{
+            .post(mainRoute + "operator",{
                 name: this.name,
                 last_name: this.last_name
             })
@@ -92,7 +93,7 @@ export default{
 
             //Creamos el usuario
             await axios
-            .post("http://localhost:3000/user",{
+            .post(mainRoute + "user",{
                 user_name: this.user_name,
                 password: this.password,
                 roles: [document.getElementById("rol").value],
