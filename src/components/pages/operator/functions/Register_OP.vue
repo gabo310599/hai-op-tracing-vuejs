@@ -196,7 +196,7 @@ export default{
                 .then((res) => {
 
                     alert("OP registrada con exito.");
-                    this.createLog("Se ha creado la OP " + this.op_number + " asociada al id de pedido: " + document.getElementById("register_op/request_input").value)
+                    //this.createLog("Se ha creado la OP " + this.op_number + " asociada al id de pedido: " + document.getElementById("register_op/request_input").value)
                     this.op_number = "";
                     this.points = "";
                     this.width = "";

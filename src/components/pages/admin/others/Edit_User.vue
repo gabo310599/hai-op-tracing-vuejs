@@ -141,7 +141,7 @@ export default {
                 )
                 .then((res) => {
                     alert("Usuario actualizado con exito.");
-                    this.createLog("Usuario actualizado.");
+                    //this.createLog("Usuario actualizado.");
                     window.location.reload();
                 })
                 .catch((error) => {

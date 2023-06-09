@@ -43,7 +43,7 @@ export default {
             this.user = data.user;
             this.token = data.accessToken;
             Cookies.set("userLoggedOperator", this.token)
-            this.createLog("Inicio de sesión operador.")
+           // this.createLog("Inicio de sesión operador.")
         },
 
         //Metodo que administra el log
@@ -76,7 +76,7 @@ export default {
 
         //Metodo que cierra sesion
         logout() {
-            this.createLog("Sesión finalizada.");
+            //this.createLog("Sesión finalizada.");
             this.removeUserLogged();
         },
 

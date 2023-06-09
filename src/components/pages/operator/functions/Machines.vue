@@ -177,7 +177,7 @@ export default{
                     alert("Error: " + error.response.data.message);
                 });
 
-                this.createLog("Se ha asociado la maquina " + machine_id + "con el proceso " + process_id);
+                //this.createLog("Se ha asociado la maquina " + machine_id + "con el proceso " + process_id);
 
                 if(document.getElementById("machine/department_input").value === "Tejeduría")
                     await this.assignPoints(process_id)

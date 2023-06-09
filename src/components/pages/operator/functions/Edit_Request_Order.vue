@@ -249,7 +249,7 @@ export default {
                         )
                         .then((res) => {
 
-                            this.createLog("Se ha modificado el pedido: " + process.request.id );
+                            //this.createLog("Se ha modificado el pedido: " + process.request.id );
                             alert("Pedido actualizado con exito")
                             window.location.reload();
 
@@ -293,7 +293,7 @@ export default {
                         )
                         .then((res) => {
 
-                            this.createLog("Se ha modificado la orden: " + process.order.id );
+                            //this.createLog("Se ha modificado la orden: " + process.order.id );
                             alert("Orden actualizada con exito")
                             window.location.reload();
 

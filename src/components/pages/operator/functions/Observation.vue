@@ -169,7 +169,7 @@ export default{
                 )
                 .then((res) => {
                     alert("Observación guardada con exito.");
-                    this.createLog("Se ha creado una observación para el proceso: " + process.id)
+                    //this.createLog("Se ha creado una observación para el proceso: " + process.id)
                     window.location.reload();
                 })
                 .catch((error) => {

@@ -114,7 +114,7 @@ export default {
 
                     this.fillDepartmentOperatorList();
 
-                    this.createLog("Se ha eliminado el acceso del usuario " + this.infoModal.user_name + " para el departamento: " + department_name )
+                    //this.createLog("Se ha eliminado el acceso del usuario " + this.infoModal.user_name + " para el departamento: " + department_name )
 
                 })
                 .catch((error) => {
@@ -193,7 +193,7 @@ export default {
 
                     this.fillDepartmentOperatorList();
 
-                    this.createLog("Se ha dado acceso al usuario " + this.infoModal.user_name + " al departamento: " + document.getElementById("add_department").value);
+                    //this.createLog("Se ha dado acceso al usuario " + this.infoModal.user_name + " al departamento: " + document.getElementById("add_department").value);
                 })
                 .catch((error) => {
                     console.log(error.message);

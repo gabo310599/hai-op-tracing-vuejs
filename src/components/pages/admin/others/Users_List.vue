@@ -249,9 +249,9 @@ export default {
                     }
 
                     if (status) {
-                        this.createLog("Se ha activado el usuario: " + user.user_name);
+                        //this.createLog("Se ha activado el usuario: " + user.user_name);
                     } else {
-                        this.createLog("Se ha desactivado el usuario: " + user.user_name);
+                        //this.createLog("Se ha desactivado el usuario: " + user.user_name);
                     }
 
                     window.location.reload();

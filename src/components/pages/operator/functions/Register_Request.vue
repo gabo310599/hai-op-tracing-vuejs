@@ -115,7 +115,7 @@ export default{
                 .then((res) => {
                     alert("Pedido registrado con exito.");
                     request_id = res.data.data.id;
-                    this.createLog("Se ha creado el pedido " + this.serial.toUpperCase() + this.character.toUpperCase() + "." )
+                    //this.createLog("Se ha creado el pedido " + this.serial.toUpperCase() + this.character.toUpperCase() + "." )
 
                     this.serial = "";
                     this.description = "";

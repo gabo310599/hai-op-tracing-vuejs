@@ -148,7 +148,7 @@ export default{
                     alert("Error: " + error.response.data.message);
                 });
 
-            this.createLog("El pedido " + process.request.serial + process.request.characters + " ha sido ingresado a " + process.department.name + ".")
+            //this.createLog("El pedido " + process.request.serial + process.request.characters + " ha sido ingresado a " + process.department.name + ".")
             this.$emit('reload');
         },
 
@@ -258,7 +258,7 @@ export default{
                 }
             }
 
-            this.createLog("El pedido " + process.request.serial + process.request.characters + " ha saldio de " + process.department.name + ".")
+            //this.createLog("El pedido " + process.request.serial + process.request.characters + " ha saldio de " + process.department.name + ".")
             this.$emit('reload');
         }
 

@@ -132,7 +132,7 @@ export default {
          this.user = data.user;
          this.token = data.accessToken;
          Cookies.set("userLogged", this.token)
-         this.createLog("Inicio de sesión admin.")
+         //this.createLog("Inicio de sesión admin.")
       },
 
       //Metodo que obtiene de cookies el usuario que inicio sesion
@@ -147,7 +147,7 @@ export default {
 
       //Metodo que cierra sesion
       logout(){
-         this.createLog("Sesión finalizada.");
+         //this.createLog("Sesión finalizada.");
          this.removeUserLogged();
       },
 
