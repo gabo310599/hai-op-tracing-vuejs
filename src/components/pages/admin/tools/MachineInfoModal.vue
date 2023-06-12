@@ -110,7 +110,7 @@ export default {
                             readonly>
                     </div>
                     <div class="form-group">
-                        <label for="process/serial_input">Total Horas Negras:</label>
+                        <label for="process/serial_input">Área:</label>
                         <input class="form-control" id="process/serial_input" :value="machineInfo.area" readonly>
                     </div>
                     <div class="form-group">

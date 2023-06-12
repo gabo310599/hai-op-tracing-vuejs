@@ -277,7 +277,7 @@ export default {
       <!--Aqui comienza la sidebar de la izquierda -->
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
          <a href="/admin/info" class="brand-link">
-            <img src="https://todainfo.com/wp-content/uploads/Textiles-Lenceria-Mercerias-Tapicerias-2.jpg" alt="AdminLTE Logo"
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAnFBMVEUALYYAOI4AOIwAN40AMooAJoQAGH4jSpZ4k78xUZkAFH8AIoJefrPw8/r////4+vu+y+FVdq9viLjf5vGGnce0wtxOa6rX3+4ACHymttQSRpbDz+M4YqTc5exRhq1zmrqhvM+GpsNplLa3ytpij7OAo8DH1uKnvtJ1mbhYpc/MbFf/MAD/PQCUO00AN5cAL5m+Zzv/ggD/ewD/lkigttq0AAABIklEQVR4AYSOBYKEMAxFk+IUwrjPlMrI/U+44a/7g8aN/oXZsD58AM5LTAVlgDnjSUFAvQqCfE0zBFygihB7yeZFzgYZBHRTxoRa1HBZ1U1rM5QYzmAwIYdhbdfLMJvbcgpp83MlvWQ5twsBy1VmCw3x85KXFYbKtbzSrze2zI1BCY7U9c1WPrKsK1vkjBXMJt91g3xl1lFLjCNzu5KfWO4PZa4FhT3Kzwz9tiHenZbPnr7zp03nixs9lasXL/QiLoriowwRIRccrXq0DS5dhz6Fm8iY0j1e/FluTiEfLnfN++CSv6nYjsm5oH94BBRMIt6mENCE+wQKUnJPhco3EQBADMAww/le+XMLgpw1K0URVEETdMEQHqZgCbbgCK7gCb4IBxJnZk5jZUwAAAAASUVORK5CYII=" alt="AdminLTE Logo"
                class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">Hai OP Tracing</span>
          </a>

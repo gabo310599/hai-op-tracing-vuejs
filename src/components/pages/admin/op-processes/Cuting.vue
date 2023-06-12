@@ -108,6 +108,7 @@ import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
 import ProcessModal from '../tools/ProcessModal.vue';
 import MachineInfoModal from '../tools/MachineInfoModal.vue';
+import { mainRoute } from "../../../../main";
 
 
 const process_type = 3;
