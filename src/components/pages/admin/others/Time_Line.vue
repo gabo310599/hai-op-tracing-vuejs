@@ -264,6 +264,22 @@ export default {
 <template>
     <h1 class="center-text font-weight-bold">Linea de Tiempo</h1>
 
+        <!--AQUI EMPIEZA LA LINEA DE TIEMPO-->
+        <br />
+        <h1 class="center-text font-weight-bold">Pedido: {{ requestName }}</h1>
+        <br />
+        <ul class="ul-time-line">
+            <li v-for="process in processTimeLine" :key="process.id" :style="process.color">
+                <div class="date">{{ process.info.department.process_turn + "." + process.info.department.name }}</div>
+                <br />
+                <div class="title">Fecha de ingreso: {{ process.info.date_in }}</div>
+                <div class="title">Fecha de salida: {{ process.info.date_out }}</div>
+                <div class="descr">
+                    Este pedido fue suepervisado por {{ process.info.operator.name + " " + process.info.operator.last_name }} durante {{ process.info.hours_in }} horas que el pedido estuvo en el departamento.
+                </div>
+            </li>
+        </ul>
+
     <h2 class="font-weight-bold">Pedidos:</h2>
 
     <!--PROCESO-->
@@ -302,21 +318,6 @@ export default {
         </div>
     </div>
 
-    <!--AQUI EMPIEZA LA LINEA DE TIEMPO-->
-    <br />
-    <h1 class="center-text font-weight-bold">Pedido: {{ requestName }}</h1>
-    <br />
-    <ul class="ul-time-line">
-        <li v-for="process in processTimeLine" :key="process.id" :style="process.color">
-            <div class="date">{{ process.info.department.process_turn + "." + process.info.department.name }}</div>
-            <br />
-            <div class="title">Fecha de ingreso: {{ process.info.date_in }}</div>
-            <div class="title">Fecha de salida: {{ process.info.date_out }}</div>
-            <div class="descr">
-                Este pedido fue suepervisado por {{ process.info.operator.name + " " + process.info.operator.last_name }} durante {{ process.info.hours_in }} horas que el pedido estuvo en el departamento.
-            </div>
-        </li>
-    </ul>
 </template>
 
 <style>
