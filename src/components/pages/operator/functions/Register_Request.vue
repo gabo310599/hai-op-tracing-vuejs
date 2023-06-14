@@ -178,20 +178,20 @@ export default{
         <h3 class="font-weight-bold title-style">Registrar Pedido</h3>
         <form>
             <div class="form-group">
-                <label for="register_request/serial_input">Serial:</label>
+                <label for="register_request/serial_input">Pedido:</label>
                 <input class="form-control" id="register_request/serial_input" v-model="serial">
-            </div>
-            <div class="form-group">
-                <label for="register_request/description_input">Descripción:</label>
-                <input class="form-control" id="register_request/description_input" v-model="description">
-            </div>
-            <div class="form-group">
-                <label for="register_request/code_input">Código:</label>
-                <input class="form-control" id="register_request/code_input" v-model="code">
             </div>
             <div class="form-group">
                 <label for="register_request/character_input">Secuencia:</label>
                 <input class="form-control" id="register_request/character_input" v-model="character">
+            </div>
+            <div class="form-group">
+                <label for="register_request/code_input">Código del producto:</label>
+                <input class="form-control" id="register_request/code_input" v-model="code">
+            </div>
+            <div class="form-group">
+                <label for="register_request/description_input">Descripción:</label>
+                <input class="form-control" id="register_request/description_input" v-model="description">
             </div>
             <div class="align-btn">
                 <button type="button" class="btn btn-primary" v-on:click="saveRequest()" >Registrar</button>
