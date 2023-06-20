@@ -88,30 +88,34 @@ export default {
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="process/serial_input">Modelo:</label>
-                        <input class="form-control" id="process/serial_input" :value="machineInfo.model" readonly>
+                        <label for="machine/model_input">Modelo:</label>
+                        <input class="form-control" id="machine/model_input" :value="machineInfo.model" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="process/serial_input">Marca:</label>
-                        <input class="form-control" id="process/serial_input" :value="machineInfo.brand" readonly>
+                        <label for="machine/brand_input">Marca:</label>
+                        <input class="form-control" id="machine/brand_input" :value="machineInfo.brand" readonly>
                     </div>
                     <div class="form-group" v-if="machineInfo.total_points > 0">
-                        <label for="process/serial_input">Total Puntos Tejidos:</label>
-                        <input class="form-control" id="process/serial_input" :value="machineInfo.total_points" readonly>
+                        <label for="machine/brand_total_points_input">Total Puntos Tejidos:</label>
+                        <input class="form-control" id="machine/brand_total_points_input" :value="machineInfo.total_points" readonly>
                     </div>
                     <div class="form-group" v-if="machineInfo.total_white_hours > 0">
-                        <label for="process/serial_input">Total Horas Blancas:</label>
-                        <input class="form-control" id="process/serial_input" :value="machineInfo.total_white_hours"
+                        <label for="machine/brand_total_white_hours_input">Total Horas Blancas:</label>
+                        <input class="form-control" id="machine/brand_total_white_hours_input" :value="machineInfo.total_white_hours"
                             readonly>
                     </div>
                     <div class="form-group" v-if="machineInfo.total_black_hours > 0">
-                        <label for="process/serial_input">Total Horas Negras:</label>
-                        <input class="form-control" id="process/serial_input" :value="machineInfo.total_black_hours"
+                        <label for="machine/brand_total_black_hours_input">Total Horas Negras:</label>
+                        <input class="form-control" id="machine/brand_total_black_hours_input" :value="machineInfo.total_black_hours"
                             readonly>
                     </div>
+                    <div class="form-group" v-if="machineInfo.warped_color != null">
+                        <label for="machine/brand_warped_color_input">Urdido:</label>
+                        <input class="form-control" id="machine/brand_warped_color_input" :value="machineInfo.warped_color" readonly>
+                    </div>
                     <div class="form-group">
-                        <label for="process/serial_input">Área:</label>
-                        <input class="form-control" id="process/serial_input" :value="machineInfo.area" readonly>
+                        <label for="machine/area_input">Área:</label>
+                        <input class="form-control" id="machine/area_input" :value="machineInfo.area" readonly>
                     </div>
                     <div class="form-group">
                         <label>Pedidos en la maquina:</label>

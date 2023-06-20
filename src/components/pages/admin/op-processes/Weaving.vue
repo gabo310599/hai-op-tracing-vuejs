@@ -120,6 +120,8 @@ let department = {
 };
 let modalInfo = {};
 let machineInfo = {};
+let blackMachinesList = [];
+let whiteMachinesList = []; 
 
 //Metodo que determina el delay de un pedido
 const delayColor = (date_in, days_time_limit) => {
@@ -147,7 +149,9 @@ export default {
       machineList,
       checkInProcesses,
       machineInfo,
-      machineModal: false
+      machineModal: false,
+      blackMachinesList,
+      whiteMachinesList
     }
   },
   methods: {
@@ -305,6 +309,17 @@ export default {
         .then((res) => {
           this.machineList = res.data.data;
           this.machineList.sort((x, y) => x.number.localeCompare(y.number));
+
+          for(let i = 0; i < this.machineList.length; i++){
+            if(this.machineList[i].warped_color === "negro")
+              this.blackMachinesList.push(this.machineList[i])
+            else
+              if(this.machineList[i].warped_color === "blanco")
+                this.whiteMachinesList.push(this.machineList[i])
+          }
+
+          this.blackMachinesList.sort((x, y) => x.number.localeCompare(y.number));
+          this.whiteMachinesList.sort((x, y) => x.number.localeCompare(y.number));
         })
         .catch((error) => {
           console.log(error.message);
@@ -360,7 +375,19 @@ export default {
   <br />
   <div class="admin-machine-container">
 
-    <div class="grid-item" v-for="machine in machineList" :key="machine.id">
+    <!-- <div class="grid-item" v-for="machine in machineList" :key="machine.id">
+      <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal" v-on:click="fillMachineInfoModal(machine)">
+        {{ " " + machine.number }}
+      </span>
+    </div> -->
+
+    <div class="black-grid-item" v-for="machine in blackMachinesList" :key="machine.id">
+      <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal" v-on:click="fillMachineInfoModal(machine)">
+        {{ " " + machine.number }}
+      </span>
+    </div>
+
+    <div class="white-grid-item" v-for="machine in whiteMachinesList" :key="machine.id">
       <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal" v-on:click="fillMachineInfoModal(machine)">
         {{ " " + machine.number }}
       </span>
@@ -488,8 +515,43 @@ export default {
   background-color: powderblue;
 }
 
+.black-grid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.2em;
+  border-radius: 35px;
+  border-color: black;
+  color: white;
+  border-width: 5px;
+  border-style: solid;
+  background-color: #272626;
+}
+
+.white-grid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.2em;
+  border-radius: 35px;
+  border-color: black;
+  border-width: 5px;
+  border-style: solid;
+  background-color: rgb(228, 221, 221);
+}
+
 .grid-item:hover {
   background-color: rgb(23, 159, 177);
+}
+
+.black-grid-item:hover {
+  background-color: black;
+}
+
+.white-grid-item:hover {
+  background-color: white;
 }
 
 .span-style {
