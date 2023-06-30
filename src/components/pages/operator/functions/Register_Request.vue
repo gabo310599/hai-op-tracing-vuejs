@@ -187,7 +187,7 @@ export default{
             </div>
             <div class="form-group">
                 <label for="register_request/code_input">Código del producto:</label>
-                <input class="form-control" id="register_request/code_input" v-model="code">
+                <input class="form-control" id="register_request/code_input" maxlength="12" minlength="12" v-model="code">
             </div>
             <div class="form-group">
                 <label for="register_request/description_input">Descripción:</label>
