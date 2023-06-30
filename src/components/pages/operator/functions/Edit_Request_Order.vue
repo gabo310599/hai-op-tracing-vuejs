@@ -183,7 +183,7 @@ export default {
         //Metodo que llena las listas de pedidos y ordenes
         async fillLists() {
             await axios
-                .get(mainRoute + "process/get/request-without-check-in",
+                .get(mainRoute + "process/get/request-before-weaving",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -197,7 +197,7 @@ export default {
                 });
 
             await axios
-                .get(mainRoute + "process/get/order-without-check-in",
+                .get(mainRoute + "process/get/order-before-weaving",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
                 )
                 .then((res) => {
@@ -329,7 +329,7 @@ export default {
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col" class="center-text">#</th>
-                                <th scope="col" class="center-text">Serial</th>
+                                <th scope="col" class="center-text">Pedido</th>
                                 <th scope="col" class="center-text">Descripción</th>
                                 <th scope="col" class="center-text">Código</th>
                                 <th scope="col" class="center-text">Secuencia</th>
@@ -374,6 +374,7 @@ export default {
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col" class="center-text">#</th>
+                                <th scope="col" class="center-text">Pedido</th>
                                 <th scope="col" class="center-text">Número OP</th>
                                 <th scope="col" class="center-text">Puntos</th>
                                 <th scope="col" class="center-text">Ancho</th>
@@ -384,6 +385,9 @@ export default {
                         <tbody>
                             <tr v-for="process in orderList" :key="process.id">
                                 <th scope="row" class="center-text">{{ incrementCounter() }}</th>
+                                <td class="center-text">
+                                    <textarea class="form-control" rows="2" :id="process.order.id + process.order.op_number" readonly>{{process.request.serial + process.request.characters}}</textarea>
+                                </td>
                                 <td class="center-text">
                                     <textarea class="form-control" rows="2" :id="process.order.id + process.order.op_number">{{process.order.op_number}}</textarea>
                                 </td>

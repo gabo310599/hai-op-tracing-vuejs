@@ -88,9 +88,13 @@ export default{
                 <input type="password" class="form-control" id="password_input" v-model="password">
             </div>
             <div class="btn-center">
-                <button type="button" class="btn btn-primary" style="margin: 5px" v-on:click="login()" id="loginBtn">Ingresar</button>
-                <button type="button" class="btn btn-success" style="margin: 5px" data-toggle="modal" data-target="#CreateUserModal">Crear usuario</button>
-                <button type="button" class="btn btn-danger" style="margin: 5px" v-on:click="exit()">Salir</button>
+                <button type="button" class="btn btn-primary btn-block" style="margin: 5px" v-on:click="login()" id="loginBtn">Ingresar</button>
+            </div>
+            <div class="btn-center">
+                <button type="button" class="btn btn-primary btn-block" style="margin: 5px" data-toggle="modal" data-target="#CreateUserModal">Crear usuario</button>
+            </div>
+            <div class="btn-center">
+                <button type="button" class="btn btn-primary btn-block" style="margin: 5px" v-on:click="exit()">Salir</button>
             </div>
         </form>
     </div>
@@ -127,7 +131,9 @@ export default{
   }
 
   .btn-center{
-    margin-left: 14%;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: 3%;
   }
 
 </style>
