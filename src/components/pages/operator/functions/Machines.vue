@@ -279,12 +279,11 @@ export default{
     width: 600px;
     border-radius: 35px;
     border-color: black;
-    border-width: 5px;
-    border-style: solid;
+    border-style: hidden;
     padding-right: 20px;
     padding-bottom: 20px;
     padding-left: 20px;
-    background-color: #eef2f3;
+    background-color: #eeeeee;
     margin-left: 1%;
 }
 

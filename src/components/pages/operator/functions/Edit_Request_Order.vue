@@ -423,14 +423,14 @@ export default {
     left: 50%;
     transform: translate(-51%, 3%);
     width: 1300px;
-    border-radius: 35px;
+    border-radius: 40px;
     border-color: black;
-    border-width: 5px;
-    border-style: solid;
+    border-style: hidden;
     padding-right: 20px;
     padding-bottom: 20px;
     padding-left: 20px;
-    background-color: #eef2f3;
+    background-color: #eeeeee;
     margin-left: 1%;
+    margin-bottom: 3%;
 }
 </style>
