@@ -113,12 +113,11 @@ export default{
 
 .login-container{
     position:relative;
-    top: 50%;
+
     left: 50%;
-    transform:  translate(-50%, 20%);
+    transform:  translate(-50%, 12%);
     width: 400px;
     border-radius: 30px;
-    padding-top: 10px;
     padding-right: 10px;
     padding-bottom: 10px;
     padding-left: 10px;

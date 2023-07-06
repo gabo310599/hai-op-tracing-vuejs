@@ -13,15 +13,15 @@ const dataTableProcessOptions = {
   columnDefs: [
     {
       className: "centered",
-      targets: [0, 1, 2, 3, 4, 5],
+      targets: [0, 1, 2, 3, 4, 5, 6],
     },
     {
       orderable: false,
-      targets: [5],
+      targets: [6],
     },
     {
       searchable: false,
-      targets: [5],
+      targets: [6],
     },
     //{ width: "50%", targets: [0], },
   ],
@@ -356,7 +356,6 @@ export default {
   <h1 class="center-text font-weight-bold">Enrollado</h1>
 
   <h2 class="font-weight-bold">Maquinas:</h2>
-  <br />
   <div class="admin-machine-container">
 
     <div class="grid-item" v-for="machine in machineList" :key="machine.id">
@@ -379,6 +378,7 @@ export default {
           <thead>
             <tr>
               <th scope="col" class="center-text">#</th>
+              <th scope="col" class="center-text">Pedido</th>
               <th scope="col" class="center-text">Número OP</th>
               <th scope="col" class="center-text">Descripción</th>
               <th scope="col" class="center-text">Fecha de Ingreso</th>
@@ -389,6 +389,7 @@ export default {
           <tbody>
             <tr v-for="process in processList" :key="process.id">
               <th scope="row" class="center-text"><span :class="process.color_badge">{{ incrementCounter() }}</span></th>
+              <td class="center-text">{{ process.request.serial + process.request.characters }}</td>
               <td class="center-text">{{ process.order.op_number }}</td>
               <td class="center-text">{{ process.request.description }}</td>
               <td class="center-text">{{ process.date_in }}</td>
@@ -417,7 +418,7 @@ export default {
           <thead>
             <tr>
               <th scope="col" class="center-text">#</th>
-              <th scope="col" class="center-text">Serial</th>
+              <th scope="col" class="center-text">Pedido</th>
               <th scope="col" class="center-text">Descripción</th>
             </tr>
           </thead>
@@ -466,7 +467,6 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, 3%);
-  width: 1000px;
   padding-right: 20px;
   padding-bottom: 20px;
   padding-left: 20px;

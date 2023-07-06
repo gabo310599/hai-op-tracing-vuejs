@@ -166,7 +166,7 @@ export default{
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" v-on:click="signUp()">Crear</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Salir</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Salir</button>
                 </div>
             </div>
         </div>

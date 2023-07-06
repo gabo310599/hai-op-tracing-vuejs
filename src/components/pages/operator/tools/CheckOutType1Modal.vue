@@ -8,13 +8,21 @@ import { mainRoute } from "../../../../main";
 let counter = 1;
 let checkInList = [];
 let checkOutList = [];
+let request_whithout_op = "";
+let op_number = "";
+let width = "";
+let points = "";
 
 export default{
     data(){
         return{
             counter,
             checkInList,
-            checkOutList
+            checkOutList,
+            request_whithout_op,
+            op_number,
+            width,
+            points
         }
     },
     async created(){
@@ -198,7 +206,9 @@ export default{
                     });
 
                 if(opArray.length <= 0){
+                    this.request_whithout_op = process.request;
                     alert("Por favor asociar una OP antes de marcar la salida del pedido.")
+                    $('#generateOPModal').modal('show');
                     return
                 }else{
                     orders_ids = opArray
@@ -258,10 +268,114 @@ export default{
                 }
             }
 
-            //this.createLog("El pedido " + process.request.serial + process.request.characters + " ha saldio de " + process.department.name + ".")
+            this.createLog("El pedido " + process.request.serial + process.request.characters + " ha saldio de " + process.department.name + ".")
             this.$emit('reload');
-        }
+        },
 
+        //Metodo que cierra el modal de registrar una op
+        closeGenerateOPModal(){
+            $('#generateOPModal').modal('hide');
+
+            $('#generateOPModal').on('hidden.bs.modal', function () {
+                $(this).find('form').trigger('reset');
+            });
+        },
+
+        //Metodo que guarda el registro de op con la asociacion al pedido
+        async saveOP(){
+            this.refresToken();
+
+            //Verificamos que los campos esten completos
+
+            //Verificamos que se rellenara el numero de op
+            if(this.op_number.length == 0){
+                alert("Por favor ingresar el número de la op.");
+                return;
+            }
+
+            //Verificamos que se rellenara el ancho de la op
+            if(this.width.length == 0){
+                alert("Por favor ingresa el ancho de la op.");
+                return;
+            }
+
+            //Verificamos que se rellenara la cantidad de puntos
+            if(this.points.length == 0){
+                alert("Por favor ingresa la cantidad de puntos.");
+                return;
+            }
+
+            //Verificamos que se seleccionara el tipo de urdido
+            if(document.getElementById("check-out/register_op/warped_input").value == "SELECCIONAR"){
+                alert("Por favor selecciona el tipo de urdido.");
+                return;
+            }
+
+            //Creamos la orden
+            let order_id = "";
+            await axios
+                .post(mainRoute + "production-order",
+                    { 
+                        op_number: this.op_number,
+                        warped: document.getElementById("check-out/register_op/warped_input").value,
+                        points: this.points,
+                        width: this.width
+                    },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
+                    if(res.data.msg === "Error"){
+                        alert(res.data.data)
+                        return
+                    }
+                    order_id = res.data.data.id;
+
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+
+
+            //Actualizamos el registro del proceso
+            await axios
+                .put(mainRoute + "process/"+ this.request_whithout_op.id,
+                    { order_id: order_id },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+
+            //Creamos la union entre orden y pedido
+            await axios
+                .put(mainRoute + "production-order/request-note/union",
+                    { 
+                        order_id: order_id,
+                        request_id: this.request_whithout_op.id
+                    },
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+
+                    alert("OP registrada con exito.");
+                    //this.createLog("Se ha creado la OP " + this.op_number + " asociada al id de pedido: " + document.getElementById("register_op/request_input").value)
+                    this.op_number = "";
+                    this.points = "";
+                    this.width = "";
+                    this.closeGenerateOPModal();
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                });
+
+        }
     }
 }
 
@@ -285,7 +399,7 @@ export default{
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col" class="center-text">#</th>
-                            <th scope="col" class="center-text">Serial</th>
+                            <th scope="col" class="center-text">Pedido</th>
                             <th scope="col" class="center-text">Descripción</th>
                             <th scope="col" class="center-text">Código</th>
                             <th scope="col" class="center-text">Marcar Entrada</th>
@@ -314,7 +428,7 @@ export default{
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col" class="center-text">#</th>
-                                <th scope="col" class="center-text">Serial</th>
+                                <th scope="col" class="center-text">Pedido</th>
                                 <th scope="col" class="center-text">Descripción</th>
                                 <th scope="col" class="center-text">Código</th>
                                 <th scope="col" class="center-text">Marcar Salida</th>
@@ -341,4 +455,48 @@ export default{
             </div>
         </div>
     </div>
+
+    <!-- Modal para ingresar una OP -->
+    <div class="modal fade" id="generateOPModal" tabindex="-1" role="dialog" aria-labelledby="generateOPModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="generateOPModalLabel">Registrar Orden de Producción</h5>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="check-out/register_op/request_input">Pedido:</label>
+                            <input class="form-control" id="check-out/register_op/request_input" :value="request_whithout_op.serial+request_whithout_op.characters" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="check-out/register_op/op_number_input">Número de OP:</label>
+                            <input class="form-control" id="check-out/register_op/op_number_input" v-model="op_number"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="check-out/register_op/width_input">Ancho:</label>
+                            <input type="number" class="form-control" id="check-out/register_op/width_input" v-model="width"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="check-out/register_op/points_input">Puntos:</label>
+                            <input type="number" class="form-control" id="check-out/register_op/points_input" v-model="points"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="check-out/register_op/warped_input">Urdido:</label>
+                            <select class="form-select" aria-label="Default select example" id="check-out/register_op/warped_input">
+                                <option value="SELECCIONAR">Seleccionar...</option>
+                                <option value="blanco">Blanco</option>
+                                <option value="negro">Negro</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" v-on:click="saveOP()">Guardar</button>
+                    <button type="button" class="btn btn-primary" v-on:click="closeGenerateOPModal()">Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </template>

@@ -161,7 +161,7 @@ export default {
 
 <template>
     <div class="edit-user-container">
-        <h1 class="center-text font-weight-bold text-border" style="color: white;">Editar Usuario</h1>
+        <h1 class="center-text font-weight-bold" style="color: white;">Editar Usuario</h1>
         <form>
             <div class="form-group">
                 <label for="edit_user/user_name_input" style="color: white;">Usuario:</label>
@@ -196,12 +196,7 @@ export default {
     padding-right: 20px;
     padding-bottom: 10px;
     padding-left: 20px;
-    background-color: #4f5962;
-}
-
-.text-border {
-    -webkit-text-stroke: 1px black;
-    color: transparent;
+    background-color: #343a40;
 }
 
 .aling-btn {

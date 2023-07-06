@@ -254,7 +254,7 @@ export default{
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col" class="center-text">#</th>
-                            <th scope="col" class="center-text">Serial</th>
+                            <th scope="col" class="center-text">Pedido</th>
                             <th scope="col" class="center-text">Descripción</th>
                             <th scope="col" class="center-text">Código</th>
                             <th scope="col" class="center-text">OP</th>
@@ -285,7 +285,7 @@ export default{
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col" class="center-text">#</th>
-                                <th scope="col" class="center-text">Serial</th>
+                                <th scope="col" class="center-text">Pedido</th>
                                 <th scope="col" class="center-text">Descripción</th>
                                 <th scope="col" class="center-text">Código</th>
                                 <th scope="col" class="center-text">OP</th>

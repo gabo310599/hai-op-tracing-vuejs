@@ -6,6 +6,7 @@ import jwt_decode from 'jwt-decode';
 import { mainRoute } from "../../../../main";
 
 let departmentOption = "";
+let opOption = "";
 let department_id = "";
 let opList = [];
 let machineList = [];
@@ -15,6 +16,7 @@ export default{
     data(){
         return{
             departmentOption,
+            opOption,
             opList,
             machineList,
             processList,
@@ -102,34 +104,85 @@ export default{
                     console.log(error.message);
                     alert("Error: " + error.response.data.message);
                 });
-            
-            //Obtenemos la lista de maquinas en el departamento
-            let machineArray = []
-            await axios
-                .get(mainRoute + "machine/get/by-department/"+ this.department_id,
-                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
-                )
-                .then((res) => {
-                    
-                    res.data.data.map(function (row){
-                        machineArray.push(row)
-                    })
 
-                    this.machineList = machineArray;
-                    this.machineList.sort((x, y) => x.number.localeCompare(y.number));
-                    
+            //Verificamos si se eligio tejeduria o no
+            if(this.departmentOption != "Tejeduría"){
+
+                
+                //Obtenemos la lista de maquinas en el departamento
+                let machineArray = []
+                await axios
+                    .get(mainRoute + "machine/get/by-department/"+ this.department_id,
+                        { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                    )
+                    .then((res) => {
+                        
+                        res.data.data.map(function (row){
+                            machineArray.push(row)
+                        })
+
+                        this.machineList = machineArray;
+                        this.machineList.sort((x, y) => x.number.localeCompare(y.number));
+                        
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                        alert("Error: " + error.response.data.message);
+                    });
+                
+                //Llenamos la lista de op
+                let opArray = [];
+                this.processList.map(function (row){
+                    opArray.push(row.order)
                 })
-                .catch((error) => {
-                    console.log(error.message);
-                    alert("Error: " + error.response.data.message);
-                });
-            
-            //Llenamos la lista de op
-            let opArray = [];
-            this.processList.map(function (row){
-                opArray.push(row.order)
+                this.opList = opArray;
+
+            }else{
+                this.machineList = [];
+                                
+                //Llenamos la lista de op                
+                let opArray = [];
+                this.processList.map(function (row){
+                    opArray.push(row.order)
+                })
+                this.opList = opArray;
+            }
+        },
+
+        //En caso de ser tejeduria el departamento, se ejecuta este metodo para llenar lista de maquinas
+        async fillWeavingMachines(){
+
+            let warpedSelection = ""
+            let opOption = this.opOption;
+
+            //Ubicamos la op elegida y obtenemos su urdido
+            this.opList.map( function(row){
+                if(row.id === opOption){
+                    warpedSelection = row.warped
+                }
             })
-            this.opList = opArray;
+
+            //Llenamos la lista de maquinas con las que correspondan a ese urdido
+            let machineArray = []
+                await axios
+                    .get(mainRoute + "machine/get/by-warped/" + warpedSelection,
+                        { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                    )
+                    .then((res) => {
+                        
+                        res.data.data.map(function (row){
+                            machineArray.push(row)
+                        })
+
+                        this.machineList = machineArray;
+                        this.machineList.sort((x, y) => x.number.localeCompare(y.number));
+                        
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                        alert("Error: " + error.response.data.message);
+                    });
+
         },
 
         //Metodo que asocia una maquina con un proceso
@@ -227,6 +280,13 @@ export default{
     watch:{
         departmentOption(){
             this.getProcessInDepartment();
+            if(this.departmentOption === "Tejeduría")
+            this.opOption = null;
+        },
+        opOption(){
+            if(this.departmentOption === "Tejeduría" && this.opOption){
+                this.fillWeavingMachines();
+            }
         }
     }
 }
@@ -250,7 +310,7 @@ export default{
             </div>
             <div class="form-group">
                 <label for="machine/order_input">OP:</label>
-                <select class="form-select" aria-label="Default select example" id="machine/order_input">
+                <select class="form-select" aria-label="Default select example" id="machine/order_input" v-model="opOption">
                     <option v-for="op in opList" :key="op.id" :value="op.id">{{op.op_number}}</option>
                 </select>
             </div>

@@ -156,6 +156,10 @@ export default{
                 )
                 .then((res) => {
 
+                    if(res.data.msg === "Error"){
+                        alert(res.data.data)
+                        return
+                    }
                     order_id = res.data.data.id;
 
                 })

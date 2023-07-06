@@ -159,7 +159,7 @@ export default {
                 <div class="">
                     <form>
                         <div class="form-group">
-                            <label for="process/serial_input">Serial:</label>
+                            <label for="process/serial_input">Pedido:</label>
                             <input class="form-control" id="process/serial_input" :value="processModalInfo.serial" readonly>
                         </div>
                         <div class="form-group">

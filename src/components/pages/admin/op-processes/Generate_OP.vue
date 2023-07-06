@@ -331,7 +331,7 @@ export default {
           <thead>
             <tr>
               <th scope="col" class="center-text">#</th>
-              <th scope="col" class="center-text">Serial del Pedido</th>
+              <th scope="col" class="center-text">Pedido</th>
               <th scope="col" class="center-text">Descripción</th>
               <th scope="col" class="center-text">Fecha de Ingreso</th>
               <th scope="col" class="center-text">Operador</th>
@@ -369,7 +369,7 @@ export default {
           <thead>
             <tr>
               <th scope="col" class="center-text">#</th>
-              <th scope="col" class="center-text">Serial</th>
+              <th scope="col" class="center-text">Pedido</th>
               <th scope="col" class="center-text">Descripción</th>
             </tr>
           </thead>
