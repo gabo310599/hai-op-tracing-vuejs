@@ -15,4 +15,4 @@ app.use(router)
 
 app.mount('#app')
 
-export const mainRoute = "http://localhost:3000/";
+export const mainRoute = import.meta.env.VITE_MAIN_ROUTE;
