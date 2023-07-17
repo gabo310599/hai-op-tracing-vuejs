@@ -492,3 +492,11 @@ export default {
       </footer>
    </div>
 </template>
+
+<style>
+
+.hr_for_sidebar{
+   border-top: 1px solid #6c757d;
+}
+
+</style>

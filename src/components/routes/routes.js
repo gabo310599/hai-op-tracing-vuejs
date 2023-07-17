@@ -207,6 +207,14 @@ const router = createRouter({
         },
       ],
     },
+
+    //Para atrapar otras rutas
+    {
+      path: '/*',
+      name: 'catchAll',
+      component: Home,
+      props: true
+    }
   ],
 });
 
