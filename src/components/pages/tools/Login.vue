@@ -37,13 +37,18 @@ export default{
     methods:{
         async login(){
 
+            const loginBtn = document.getElementById("loginBtn");
+            loginBtn.disable = true;
+
             if(!this.user_name){
                 alert("Por favor ingresa el usuario")
+                loginBtn.disable = false;
                 return
             }
 
             if(!this.password){
                 alert("Por favor ingresa la contraseña")
+                loginBtn.disable = false;
                 return
             }
 
@@ -53,6 +58,7 @@ export default{
                 password: this.password
             })
             .then((res) => {
+                loginBtn.disable = false;
                 this.data = res.data.data;
                 this.$emit('success', this.data);
             })
