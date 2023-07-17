@@ -29,7 +29,7 @@ import Edit_Request_Order from "../pages/operator/functions/Edit_Request_Order.v
 const Foo = { template: "<div>foo</div>" };
 //Creo el router
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_APP_BASE_PATH),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
