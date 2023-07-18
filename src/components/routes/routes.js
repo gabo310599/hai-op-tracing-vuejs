@@ -26,7 +26,7 @@ import Time_Line from "../pages/admin/others/Time_Line.vue";
 import History from "../pages/admin/others/History.vue";
 import Edit_Request_Order from "../pages/operator/functions/Edit_Request_Order.vue"
 
-const Foo = { template: "<div>foo</div>" };
+
 //Creo el router
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,38 +45,38 @@ const router = createRouter({
       props: true,
       children: [
         {
-          path: "/operator/check-out",
-          name: "admin.check-out",
+          path: "/check-out",
+          name: "check-out",
           component: Check_Out,
           props: true
         },
         {
-          path: "/operator/register-request",
-          name: "operator.register-request",
+          path: "/register-request",
+          name: "register-request",
           component: Register_Request,
           props: true
         },
         {
-          path: "/operator/register-op",
-          name: "operator.register-op",
+          path: "/register-op",
+          name: "register-op",
           component: Register_OP,
           props: true
         },
         {
-          path: "/operator/machines",
-          name: "operator.machines",
+          path: "/machines",
+          name: "machines",
           component: Machines,
           props: true
         },
         {
-          path: "/operator/observation",
-          name: "operator.observation",
+          path: "/observation",
+          name: "observation",
           component: Observation,
           props: true
         },
         {
-          path: "/operator/edit-request-order",
-          name: "operator.edit-request-order",
+          path: "/edit-request-order",
+          name: "edit-request-order",
           component: Edit_Request_Order,
           props: true
         },
@@ -90,118 +90,118 @@ const router = createRouter({
       props: true,
       children: [
         {
-            path: "/admin/info",
-            name: "admin.info",
+            path: "/info",
+            name: "info",
             component: Info,
             props: true
         },
         {
-          path: "/admin/edit-user",
-          name: "admin.edit-user",
+          path: "/edit-user",
+          name: "edit-user",
           component: Edit_User,
           props: true
         },
         {
-          path: "/admin/dashboard",
-          name: "/admin/dashboard",
+          path: "/dashboard",
+          name: "dashboard",
           component: Dashboard,
           props: true
         },
 
         {
-          path: "/admin/users-list",
-          name: "admin.user-list",
+          path: "/users-list",
+          name: "user-list",
           component: Users_List,
           props: true
         },
 
         {
-          path: "/admin/order-observations",
-          name: "admin.order-observations",
+          path: "/order-observations",
+          name: "order-observations",
           component: Order_Observations,
           props: true
         },
 
         {
-          path: "/admin/time-line",
-          name: "admin.time-line",
+          path: "/time-line",
+          name: "time-line",
           component: Time_Line,
           props: true
         },
 
         {
-          path: "/admin/history",
-          name: "admin.history",
+          path: "/history",
+          name: "history",
           component: History,
           props: true
         },
 
         {
-          path: "/admin/graphic-design",
-          name: "admin.graphic-design",
+          path: "/graphic-design",
+          name: "graphic-design",
           component: Graphic_Design,
           props: true
         },
 
         {
-          path: "/admin/textile-design",
-          name: "admin.textile-design",
+          path: "/textile-design",
+          name: "textile-design",
           component: Textile_Design,
           props: true
         },
 
         {
-          path: "/admin/generate-op",
-          name: "admin.generate-op",
+          path: "/generate-op",
+          name: "generate-op",
           component: Generate_OP,
           props: true
         },
 
         {
-          path: "/admin/print-op",
-          name: "admin.print-op",
+          path: "/print-op",
+          name: "print-op",
           component: Print_OP,
           props: true
         },
 
         {
-          path: "/admin/weaving",
-          name: "admin.weaving",
+          path: "/weaving",
+          name: "weaving",
           component: Weaving,
           props: true
         },
 
         {
-          path: "/admin/rolled-up",
-          name: "admin.rolled-up",
+          path: "/rolled-up",
+          name: "rolled-up",
           component: Rolled_Up,
           props: true
         },
 
         {
-          path: "/admin/cuting",
-          name: "admin.cuting",
+          path: "/cuting",
+          name: "cuting",
           component: Cuting,
           props: true
         },
 
         {
-          path: "/admin/quality",
-          name: "admin.quality",
+          path: "/quality",
+          name: "quality",
           component: Quality,
           props: true
         },
 
         {
-          path: "/admin/receipt",
-          name: "admin.receipt",
+          path: "/receipt",
+          name: "receipt",
           component: Receipt,
           props: true
         },
 
         {
-          path: "/admin/dispatch",
-          name: "admin.dispatch",
+          path: "/dispatch",
+          name: "dispatch",
           component: Dispatch,
           props: true
         },

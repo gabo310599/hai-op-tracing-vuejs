@@ -254,10 +254,10 @@ export default {
                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-               <a href="/admin/dashboard" class="nav-link">Home</a>
+               <a href="/dashboard" class="nav-link">Home</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-               <a href="/admin/info" class="nav-link" >Info</a>
+               <a href="/info" class="nav-link" >Info</a>
             </li>
          </ul>
          <ul class="navbar-nav ml-auto">
@@ -276,7 +276,7 @@ export default {
 
       <!--Aqui comienza la sidebar de la izquierda -->
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
-         <a href="/admin/info" class="brand-link">
+         <a href="/info" class="brand-link">
             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAnFBMVEUALYYAOI4AOIwAN40AMooAJoQAGH4jSpZ4k78xUZkAFH8AIoJefrPw8/r////4+vu+y+FVdq9viLjf5vGGnce0wtxOa6rX3+4ACHymttQSRpbDz+M4YqTc5exRhq1zmrqhvM+GpsNplLa3ytpij7OAo8DH1uKnvtJ1mbhYpc/MbFf/MAD/PQCUO00AN5cAL5m+Zzv/ggD/ewD/lkigttq0AAABIklEQVR4AYSOBYKEMAxFk+IUwrjPlMrI/U+44a/7g8aN/oXZsD58AM5LTAVlgDnjSUFAvQqCfE0zBFygihB7yeZFzgYZBHRTxoRa1HBZ1U1rM5QYzmAwIYdhbdfLMJvbcgpp83MlvWQ5twsBy1VmCw3x85KXFYbKtbzSrze2zI1BCY7U9c1WPrKsK1vkjBXMJt91g3xl1lFLjCNzu5KfWO4PZa4FhT3Kzwz9tiHenZbPnr7zp03nixs9lasXL/QiLoriowwRIRccrXq0DS5dhz6Fm8iY0j1e/FluTiEfLnfN++CSv6nYjsm5oH94BBRMIt6mENCE+wQKUnJPhco3EQBADMAww/le+XMLgpw1K0URVEETdMEQHqZgCbbgCK7gCb4IBxJnZk5jZUwAAAAASUVORK5CYII=" alt="AdminLTE Logo"
                class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">Hai OP Tracing</span>
@@ -288,7 +288,7 @@ export default {
                      alt="User Image">
                </div>
                <div class="info" v-if="disableOptions()">
-                  <a href="/admin/edit-user" class="d-block" >{{user.user_name}}</a>
+                  <a href="/edit-user" class="d-block" >{{user.user_name}}</a>
                </div>
             </div>
 
@@ -297,7 +297,7 @@ export default {
 
                   <!-- Tablero -->
                   <li class="nav-item">
-                     <a href="/admin/dashboard" class="nav-link" v-if="disableOptions()">
+                     <a href="/dashboard" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                            Tablero
@@ -307,7 +307,7 @@ export default {
 
                   <!-- Usuario -->
                   <li class="nav-item">
-                     <a href="/admin/users-list/" class="nav-link" v-if="disableOptions()">
+                     <a href="/users-list" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-user"></i>
                         <p>
                            Usuarios Registrados
@@ -317,7 +317,7 @@ export default {
 
                   <!-- Historial -->
                   <li class="nav-item">
-                     <a href="/admin/history/" class="nav-link" v-if="disableOptions()">
+                     <a href="/history" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-book"></i>
                         <p>
                            Historial
@@ -327,7 +327,7 @@ export default {
 
                   <!-- Linea de tiempo -->
                   <li class="nav-item">
-                     <a href="/admin/time-line/" class="nav-link" v-if="disableOptions()">
+                     <a href="/time-line" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-clock"></i>
                         <p>
                            Linea de Tiempo
@@ -337,7 +337,7 @@ export default {
 
                   <!-- Observaciones -->
                   <li class="nav-item">
-                     <a href="/admin/order-observations/" class="nav-link" v-if="disableOptions()">
+                     <a href="/order-observations" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-clipboard"></i>
                         <p>
                            Observaciones
@@ -360,7 +360,7 @@ export default {
 
                   <!-- Diseño Gráfico -->
                   <li class="nav-item">
-                     <a href="/admin/graphic-design" class="nav-link" v-if="disableOptions()">
+                     <a href="/graphic-design" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-regular fa-pen"></i>
                         <p>
                            Diseño Gráfico
@@ -371,7 +371,7 @@ export default {
 
                   <!-- Diseño Textil -->
                   <li class="nav-item">
-                     <a href="/admin/textile-design" class="nav-link" v-if="disableOptions()">
+                     <a href="/textile-design" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-ruler-vertical"></i>
                         <p>
                            Diseño Textil
@@ -382,7 +382,7 @@ export default {
 
                   <!-- Generar OP -->
                   <li class="nav-item">
-                     <a href="/admin/generate-op" class="nav-link" v-if="disableOptions()">
+                     <a href="/generate-op" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-plus"></i>
                         <p>
                            Generar OP
@@ -393,7 +393,7 @@ export default {
 
                   <!-- Imprimir OP -->
                   <li class="nav-item">
-                     <a href="/admin/print-op" class="nav-link" v-if="disableOptions()">
+                     <a href="/print-op" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-print"></i>
                         <p>
                            Imprimir OP
@@ -404,7 +404,7 @@ export default {
 
                   <!-- Tejeduría MQ-->
                   <li class="nav-item">
-                     <a href="/admin/weaving" class="nav-link" v-if="disableOptions()">
+                     <a href="/weaving" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-tag"></i>
                         <p>
                            Tejeduría
@@ -415,7 +415,7 @@ export default {
 
                   <!-- Enrollado MQ-->
                   <li class="nav-item">
-                     <a href="/admin/rolled-up" class="nav-link" v-if="disableOptions()">
+                     <a href="/rolled-up" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-spinner"></i>
                         <p>
                            Enrollado
@@ -426,7 +426,7 @@ export default {
 
                   <!-- Corte MQ-->
                   <li class="nav-item">
-                     <a href="/admin/cuting" class="nav-link" v-if="disableOptions()">
+                     <a href="/cuting" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-hand-scissors"></i>
                         <p>
                            Corte
@@ -437,7 +437,7 @@ export default {
 
                   <!-- Control de calidad -->
                   <li class="nav-item">
-                     <a href="/admin/quality" class="nav-link" v-if="disableOptions()">
+                     <a href="/quality" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-check"></i>
                         <p>
                            Control de Calidad
@@ -448,7 +448,7 @@ export default {
 
                   <!-- Facturación -->
                   <li class="nav-item">
-                     <a href="/admin/receipt" class="nav-link" v-if="disableOptions()">
+                     <a href="/receipt" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-receipt"></i>
                         <p>
                            Facturación
@@ -459,7 +459,7 @@ export default {
 
                   <!-- Despacho -->
                   <li class="nav-item">
-                     <a href="/admin/dispatch" class="nav-link" v-if="disableOptions()">
+                     <a href="/dispatch" class="nav-link" v-if="disableOptions()">
                         <i class="nav-icon fas fa-solid fa-truck"></i>
                         <p>
                            Despacho

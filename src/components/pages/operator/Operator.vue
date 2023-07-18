@@ -139,22 +139,22 @@ export default {
         <nav class="navbar navbar-expand navbar navbar-dark bg-dark">
             <ul class="navbar-nav">
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/operator/check-out" class="nav-link font-weight-bold">INICIO</a>
+                    <a href="/check-out" class="nav-link font-weight-bold">INICIO</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/operator/register-request" class="nav-link font-weight-bold">REGISTRAR PEDIDO</a>
+                    <a href="/register-request" class="nav-link font-weight-bold">REGISTRAR PEDIDO</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/operator/register-op" class="nav-link font-weight-bold">REGISTRAR OP</a>
+                    <a href="/register-op" class="nav-link font-weight-bold">REGISTRAR OP</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/operator/machines" class="nav-link font-weight-bold">MAQUINAS</a>
+                    <a href="/machines" class="nav-link font-weight-bold">MAQUINAS</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/operator/observation" class="nav-link font-weight-bold">OBSERVACIONES</a>
+                    <a href="/observation" class="nav-link font-weight-bold">OBSERVACIONES</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/operator/edit-request-order" class="nav-link font-weight-bold">EDITAR</a>
+                    <a href="/edit-request-order" class="nav-link font-weight-bold">EDITAR</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="/" class="nav-link font-weight-bold" v-on:click="logout()">SALIR</a>
