@@ -208,13 +208,6 @@ const router = createRouter({
       ],
     },
 
-    {
-      // path: "*",
-      path: "/:catchAll(.*)",
-      name: "NotFound",
-      redirect: "/",
-    }
-
   ],
 });
 
