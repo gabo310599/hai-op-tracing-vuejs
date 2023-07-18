@@ -13,16 +13,16 @@ let isNotLogged;
 let count = [];
 let delayList = [];
 let delayColors = {
-   DG: "right badge-pill badge-success",
-   DT: "right badge-pill badge-success",
-   GOP: "right badge-pill badge-success",
-   IOP: "right badge-pill badge-success",
-   T: "right badge-pill badge-success",
-   E: "right badge-pill badge-success",
-   C: "right badge-pill badge-success",
-   CC: "right badge-pill badge-success",
-   F: "right badge-pill badge-success",
-   D: "right badge-pill badge-success"
+   DG: "position-span badge-pill badge-success",
+   DT: "position-span badge-pill badge-success",
+   GOP: "position-span badge-pill badge-success",
+   IOP: "position-span badge-pill badge-success",
+   T: "position-span badge-pill badge-success",
+   E: "position-span badge-pill badge-success",
+   C: "position-span badge-pill badge-success",
+   CC: "position-span badge-pill badge-success",
+   F: "position-span badge-pill badge-success",
+   D: "position-span badge-pill badge-success"
 };
 
 //Exports
@@ -46,34 +46,34 @@ export default {
       getBadgeColor(){
          
             if(this.delayList.DG)
-               this.delayColors.DG = "right badge-pill badge-danger";
+               this.delayColors.DG = "position-span badge-pill badge-danger";
 
             if(this.delayList.DT)
-               this.delayColors.DT = "right badge-pill badge-danger";
+               this.delayColors.DT = "position-span badge-pill badge-danger";
             
             if(this.delayList.GOP)
-               this.delayColors.GOP = "right badge-pill badge-danger";
+               this.delayColors.GOP = "position-span badge-pill badge-danger";
 
             if(this.delayList.IOP)
-               this.delayColors.IOP = "right badge-pill badge-danger";
+               this.delayColors.IOP = "position-span badge-pill badge-danger";
 
             if(this.delayList.T)
-               this.delayColors.T = "right badge-pill badge-danger";
+               this.delayColors.T = "position-span badge-pill badge-danger";
 
             if(this.delayList.E)
-               this.delayColors.E = "right badge-pill badge-danger";
+               this.delayColors.E = "position-span badge-pill badge-danger";
 
             if(this.delayList.C)
-               this.delayColors.C = "right badge-pill badge-danger";
+               this.delayColors.C = "position-span badge-pill badge-danger";
 
             if(this.delayList.CC)
-               this.delayColors.CC = "right badge-pill badge-danger";
+               this.delayColors.CC = "position-span badge-pill badge-danger";
 
             if(this.delayList.F)
-               this.delayColors.F = "right badge-pill badge-danger";
+               this.delayColors.F = "position-span badge-pill badge-danger";
 
             if(this.delayList.D)
-               this.delayColors.D = "right badge-pill badge-danger";
+               this.delayColors.D = "position-span badge-pill badge-danger";
       
       },
 
@@ -448,8 +448,8 @@ export default {
                         <a class="nav-link" v-if="disableOptions()">
                            <i class="nav-icon fas fa-solid fa-spinner"></i>
                            <p>
-                              <span :class="delayColors.E">{{count.E}}</span>
                               Enrollado
+                              <span :class="delayColors.E">{{count.E}}</span>
                            </p>
                         </a>
                      </RouterLink>
@@ -538,4 +538,7 @@ export default {
    border-top: 1px solid #6c757d;
 }
 
+.position-span{
+   float: right;
+}
 </style>
