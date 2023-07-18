@@ -218,7 +218,6 @@ export default {
           this.department.name = res.data.data.name;
           this.department.days_time_limit = res.data.data.days_time_limit;
 
-          console.log(this.department)
         })
         .catch((error) => {
           console.log(error.message);

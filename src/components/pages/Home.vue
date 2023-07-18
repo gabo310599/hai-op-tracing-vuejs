@@ -56,7 +56,7 @@ export default {
           <br />
 
           <!--OPERADORES-->
-          <RouterLink to="/check-out">
+          <RouterLink to="/operator/check-out">
             <div>
               <button type="submit" class="btn btn-success btn-lg btn-block">
                 Operador
@@ -67,7 +67,7 @@ export default {
           <br />
 
           <!--ADMIN-->
-          <RouterLink to="/dashboard">
+          <RouterLink to="/admin/dashboard">
             <div>
               <button type="submit" class="btn btn-success btn-lg btn-block">
                 Administrador

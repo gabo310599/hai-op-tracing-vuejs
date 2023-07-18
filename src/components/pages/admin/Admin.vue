@@ -1,6 +1,6 @@
 <script>
 
-import { RouterView } from 'vue-router'
+import { RouterView, RouterLink } from 'vue-router'
 import Login  from '../tools/Login.vue'
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
@@ -254,10 +254,14 @@ export default {
                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-               <a href="/dashboard" class="nav-link">Home</a>
+               <RouterLink to="/admin/dashboard">
+                  <a class="nav-link">Home</a>
+               </RouterLink>
             </li>
             <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-               <a href="/info" class="nav-link" >Info</a>
+               <RouterLink to="/admin/info">
+                  <a class="nav-link" >Info</a>
+               </RouterLink>
             </li>
          </ul>
          <ul class="navbar-nav ml-auto">
@@ -276,11 +280,13 @@ export default {
 
       <!--Aqui comienza la sidebar de la izquierda -->
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
-         <a href="/info" class="brand-link">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAnFBMVEUALYYAOI4AOIwAN40AMooAJoQAGH4jSpZ4k78xUZkAFH8AIoJefrPw8/r////4+vu+y+FVdq9viLjf5vGGnce0wtxOa6rX3+4ACHymttQSRpbDz+M4YqTc5exRhq1zmrqhvM+GpsNplLa3ytpij7OAo8DH1uKnvtJ1mbhYpc/MbFf/MAD/PQCUO00AN5cAL5m+Zzv/ggD/ewD/lkigttq0AAABIklEQVR4AYSOBYKEMAxFk+IUwrjPlMrI/U+44a/7g8aN/oXZsD58AM5LTAVlgDnjSUFAvQqCfE0zBFygihB7yeZFzgYZBHRTxoRa1HBZ1U1rM5QYzmAwIYdhbdfLMJvbcgpp83MlvWQ5twsBy1VmCw3x85KXFYbKtbzSrze2zI1BCY7U9c1WPrKsK1vkjBXMJt91g3xl1lFLjCNzu5KfWO4PZa4FhT3Kzwz9tiHenZbPnr7zp03nixs9lasXL/QiLoriowwRIRccrXq0DS5dhz6Fm8iY0j1e/FluTiEfLnfN++CSv6nYjsm5oH94BBRMIt6mENCE+wQKUnJPhco3EQBADMAww/le+XMLgpw1K0URVEETdMEQHqZgCbbgCK7gCb4IBxJnZk5jZUwAAAAASUVORK5CYII=" alt="AdminLTE Logo"
-               class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">Hai OP Tracing</span>
-         </a>
+         <RouterLink to="/admin/info">
+            <a class="brand-link">
+               <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAnFBMVEUALYYAOI4AOIwAN40AMooAJoQAGH4jSpZ4k78xUZkAFH8AIoJefrPw8/r////4+vu+y+FVdq9viLjf5vGGnce0wtxOa6rX3+4ACHymttQSRpbDz+M4YqTc5exRhq1zmrqhvM+GpsNplLa3ytpij7OAo8DH1uKnvtJ1mbhYpc/MbFf/MAD/PQCUO00AN5cAL5m+Zzv/ggD/ewD/lkigttq0AAABIklEQVR4AYSOBYKEMAxFk+IUwrjPlMrI/U+44a/7g8aN/oXZsD58AM5LTAVlgDnjSUFAvQqCfE0zBFygihB7yeZFzgYZBHRTxoRa1HBZ1U1rM5QYzmAwIYdhbdfLMJvbcgpp83MlvWQ5twsBy1VmCw3x85KXFYbKtbzSrze2zI1BCY7U9c1WPrKsK1vkjBXMJt91g3xl1lFLjCNzu5KfWO4PZa4FhT3Kzwz9tiHenZbPnr7zp03nixs9lasXL/QiLoriowwRIRccrXq0DS5dhz6Fm8iY0j1e/FluTiEfLnfN++CSv6nYjsm5oH94BBRMIt6mENCE+wQKUnJPhco3EQBADMAww/le+XMLgpw1K0URVEETdMEQHqZgCbbgCK7gCb4IBxJnZk5jZUwAAAAASUVORK5CYII=" alt="AdminLTE Logo"
+                  class="brand-image img-circle elevation-3" style="opacity: .8">
+               <span class="brand-text font-weight-light">Hai OP Tracing</span>
+            </a>
+         </RouterLink>
          <div class="sidebar">
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                <div class="image">
@@ -288,7 +294,9 @@ export default {
                      alt="User Image">
                </div>
                <div class="info" v-if="disableOptions()">
-                  <a href="/edit-user" class="d-block" >{{user.user_name}}</a>
+                  <RouterLink to="/admin/edit-user">
+                     <a class="d-block" >{{user.user_name}}</a>
+                  </RouterLink>
                </div>
             </div>
 
@@ -297,175 +305,206 @@ export default {
 
                   <!-- Tablero -->
                   <li class="nav-item">
-                     <a href="/dashboard" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                           Tablero
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/dashboard">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-tachometer-alt"></i>
+                           <p>
+                              Tablero
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Usuario -->
                   <li class="nav-item">
-                     <a href="/users-list" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-user"></i>
-                        <p>
-                           Usuarios Registrados
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/users-list/">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-user"></i>
+                           <p>
+                              Usuarios Registrados
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Historial -->
                   <li class="nav-item">
-                     <a href="/history" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-book"></i>
-                        <p>
-                           Historial
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/history">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-book"></i>
+                           <p>
+                              Historial
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Linea de tiempo -->
                   <li class="nav-item">
-                     <a href="/time-line" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-clock"></i>
-                        <p>
-                           Linea de Tiempo
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/time-line">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-clock"></i>
+                           <p>
+                              Linea de Tiempo
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Observaciones -->
                   <li class="nav-item">
-                     <a href="/order-observations" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-clipboard"></i>
-                        <p>
-                           Observaciones
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/order-observations">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-clipboard"></i>
+                           <p>
+                              Observaciones
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
-
 
                   <!-- Salir -->
                   <li class="nav-item">
-                     <a href="/" class="nav-link" v-if="disableOptions()" v-on:click="logout()">
-                        <i class="nav-icon fas fa-solid fa-door-open"></i>
-                        <p>
-                           Salir
-                        </p>
-                     </a>
+                     <RouterLink to="/">
+                        <a class="nav-link" v-if="disableOptions()" v-on:click="logout()">
+                           <i class="nav-icon fas fa-solid fa-door-open"></i>
+                           <p>
+                              Salir
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <div class="hr_for_sidebar"></div>
 
                   <!-- Diseño Gráfico -->
                   <li class="nav-item">
-                     <a href="/graphic-design" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-regular fa-pen"></i>
-                        <p>
-                           Diseño Gráfico
-                           <span :class="delayColors.DG">{{count.DG}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/graphic-design">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-regular fa-pen"></i>
+                           <p>
+                              Diseño Gráfico
+                              <span :class="delayColors.DG">{{count.DG}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Diseño Textil -->
                   <li class="nav-item">
-                     <a href="/textile-design" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-ruler-vertical"></i>
-                        <p>
-                           Diseño Textil
-                           <span :class="delayColors.DT">{{count.DT}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/textile-design">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-ruler-vertical"></i>
+                           <p>
+                              Diseño Textil
+                              <span :class="delayColors.DT">{{count.DT}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Generar OP -->
                   <li class="nav-item">
-                     <a href="/generate-op" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-plus"></i>
-                        <p>
-                           Generar OP
-                           <span :class="delayColors.GOP">{{count.GOP}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/generate-op">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-plus"></i>
+                           <p>
+                              Generar OP
+                              <span :class="delayColors.GOP">{{count.GOP}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Imprimir OP -->
                   <li class="nav-item">
-                     <a href="/print-op" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-print"></i>
-                        <p>
-                           Imprimir OP
-                           <span :class="delayColors.IOP">{{count.IOP}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/print-op">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-print"></i>
+                           <p>
+                              Imprimir OP
+                              <span :class="delayColors.IOP">{{count.IOP}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Tejeduría MQ-->
                   <li class="nav-item">
-                     <a href="/weaving" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-tag"></i>
-                        <p>
-                           Tejeduría
-                           <span :class="delayColors.T">{{count.T}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/weaving">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-tag"></i>
+                           <p>
+                              Tejeduría
+                              <span :class="delayColors.T">{{count.T}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Enrollado MQ-->
                   <li class="nav-item">
-                     <a href="/rolled-up" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-spinner"></i>
-                        <p>
-                           Enrollado
-                           <span :class="delayColors.E">{{count.E}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/rolled-up">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-spinner"></i>
+                           <p>
+                              <span :class="delayColors.E">{{count.E}}</span>
+                              Enrollado
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Corte MQ-->
                   <li class="nav-item">
-                     <a href="/cuting" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-hand-scissors"></i>
-                        <p>
-                           Corte
-                           <span :class="delayColors.C">{{count.C}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/cuting">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-hand-scissors"></i>
+                           <p>
+                              Corte
+                              <span :class="delayColors.C">{{count.C}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Control de calidad -->
                   <li class="nav-item">
-                     <a href="/quality" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-check"></i>
-                        <p>
-                           Control de Calidad
-                           <span :class="delayColors.CC">{{count.CC}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/quality">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-check"></i>
+                           <p>
+                              Control de Calidad
+                              <span :class="delayColors.CC">{{count.CC}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Facturación -->
                   <li class="nav-item">
-                     <a href="/receipt" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-receipt"></i>
-                        <p>
-                           Facturación
-                           <span :class="delayColors.F">{{count.F}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/receipt">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-receipt"></i>
+                           <p>
+                              Facturación
+                              <span :class="delayColors.F">{{count.F}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
 
                   <!-- Despacho -->
                   <li class="nav-item">
-                     <a href="/dispatch" class="nav-link" v-if="disableOptions()">
-                        <i class="nav-icon fas fa-solid fa-truck"></i>
-                        <p>
-                           Despacho
-                           <span :class="delayColors.D">{{count.D}}</span>
-                        </p>
-                     </a>
+                     <RouterLink to="/admin/dispatch">
+                        <a class="nav-link" v-if="disableOptions()">
+                           <i class="nav-icon fas fa-solid fa-truck"></i>
+                           <p>
+                              Despacho
+                              <span :class="delayColors.D">{{count.D}}</span>
+                           </p>
+                        </a>
+                     </RouterLink>
                   </li>
                </ul>
             </nav>

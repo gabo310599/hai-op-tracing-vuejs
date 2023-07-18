@@ -45,38 +45,38 @@ const router = createRouter({
       props: true,
       children: [
         {
-          path: "/check-out",
-          name: "check-out",
+          path: "/operator/check-out",
+          name: "operator.check-out",
           component: Check_Out,
           props: true
         },
         {
-          path: "/register-request",
-          name: "register-request",
+          path: "/operator/register-request",
+          name: "operator.register-request",
           component: Register_Request,
           props: true
         },
         {
-          path: "/register-op",
-          name: "register-op",
+          path: "/operator/register-op",
+          name: "operator.register-op",
           component: Register_OP,
           props: true
         },
         {
-          path: "/machines",
-          name: "machines",
+          path: "/operator/machines",
+          name: "operator.machines",
           component: Machines,
           props: true
         },
         {
-          path: "/observation",
-          name: "observation",
+          path: "/operator/observation",
+          name: "operator.observation",
           component: Observation,
           props: true
         },
         {
-          path: "/edit-request-order",
-          name: "edit-request-order",
+          path: "/operator/edit-request-order",
+          name: "operator.edit-request-order",
           component: Edit_Request_Order,
           props: true
         },
@@ -90,118 +90,118 @@ const router = createRouter({
       props: true,
       children: [
         {
-            path: "/info",
-            name: "info",
+            path: "/admin/info",
+            name: "admin.info",
             component: Info,
             props: true
         },
         {
-          path: "/edit-user",
-          name: "edit-user",
+          path: "/admin/edit-user",
+          name: "admin.edit-user",
           component: Edit_User,
           props: true
         },
         {
-          path: "/dashboard",
-          name: "dashboard",
+          path: "/admin/dashboard",
+          name: "admin.dashboard",
           component: Dashboard,
           props: true
         },
 
         {
-          path: "/users-list",
-          name: "user-list",
+          path: "/admin/users-list",
+          name: "admin.user-list",
           component: Users_List,
           props: true
         },
 
         {
-          path: "/order-observations",
-          name: "order-observations",
+          path: "/admin/order-observations",
+          name: "admin.order-observations",
           component: Order_Observations,
           props: true
         },
 
         {
-          path: "/time-line",
-          name: "time-line",
+          path: "/admin/time-line",
+          name: "admin.time-line",
           component: Time_Line,
           props: true
         },
 
         {
-          path: "/history",
-          name: "history",
+          path: "/admin/history",
+          name: "admin.history",
           component: History,
           props: true
         },
 
         {
-          path: "/graphic-design",
-          name: "graphic-design",
+          path: "/admin/graphic-design",
+          name: "admin.graphic-design",
           component: Graphic_Design,
           props: true
         },
 
         {
-          path: "/textile-design",
-          name: "textile-design",
+          path: "/admin/textile-design",
+          name: "admin.textile-design",
           component: Textile_Design,
           props: true
         },
 
         {
-          path: "/generate-op",
-          name: "generate-op",
+          path: "/admin/generate-op",
+          name: "admin.generate-op",
           component: Generate_OP,
           props: true
         },
 
         {
-          path: "/print-op",
-          name: "print-op",
+          path: "/admin/print-op",
+          name: "admin.print-op",
           component: Print_OP,
           props: true
         },
 
         {
-          path: "/weaving",
-          name: "weaving",
+          path: "/admin/weaving",
+          name: "admin.weaving",
           component: Weaving,
           props: true
         },
 
         {
-          path: "/rolled-up",
-          name: "rolled-up",
+          path: "/admin/rolled-up",
+          name: "admin.rolled-up",
           component: Rolled_Up,
           props: true
         },
 
         {
-          path: "/cuting",
-          name: "cuting",
+          path: "/admin/cuting",
+          name: "admin.cuting",
           component: Cuting,
           props: true
         },
 
         {
-          path: "/quality",
-          name: "quality",
+          path: "/admin/quality",
+          name: "admin.quality",
           component: Quality,
           props: true
         },
 
         {
-          path: "/receipt",
-          name: "receipt",
+          path: "/admin/receipt",
+          name: "admin.receipt",
           component: Receipt,
           props: true
         },
 
         {
-          path: "/dispatch",
-          name: "dispatch",
+          path: "/admin/dispatch",
+          name: "admin.dispatch",
           component: Dispatch,
           props: true
         },

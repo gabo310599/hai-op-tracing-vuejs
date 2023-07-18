@@ -139,27 +139,39 @@ export default {
         <nav class="navbar navbar-expand navbar navbar-dark bg-dark">
             <ul class="navbar-nav">
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/check-out" class="nav-link font-weight-bold">INICIO</a>
+                    <RouterLink to="/operator/check-out">
+                        <a class="nav-link font-weight-bold">INICIO</a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <RouterLink to="/register-request">
+                    <RouterLink to="/operator/register-request">
                         <a class="nav-link font-weight-bold">REGISTRAR PEDIDO</a>
                     </RouterLink>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/register-op" class="nav-link font-weight-bold">REGISTRAR OP</a>
+                    <RouterLink to="/operator/register-op">
+                        <a class="nav-link font-weight-bold">REGISTRAR OP</a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/machines" class="nav-link font-weight-bold">MAQUINAS</a>
+                    <RouterLink to="/operator/machines">
+                        <a class="nav-link font-weight-bold">MAQUINAS</a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/observation" class="nav-link font-weight-bold">OBSERVACIONES</a>
+                    <RouterLink to="/operator/observation">
+                        <a class="nav-link font-weight-bold">OBSERVACIONES</a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/edit-request-order" class="nav-link font-weight-bold">EDITAR</a>
+                    <RouterLink to="/operator/edit-request-order">
+                        <a class="nav-link font-weight-bold">EDITAR</a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="/" class="nav-link font-weight-bold" v-on:click="logout()">SALIR</a>
+                    <RouterLink to="/">
+                        <a class="nav-link font-weight-bold" v-on:click="logout()">SALIR</a>
+                    </RouterLink>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
