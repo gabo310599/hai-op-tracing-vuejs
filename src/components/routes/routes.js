@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
 import Home from "../pages/Home.vue";
 import Admin from "../pages/admin/Admin.vue";
 import Dashboard from "../pages/admin/others/Dashboard.vue";
@@ -29,7 +29,7 @@ import Edit_Request_Order from "../pages/operator/functions/Edit_Request_Order.v
 
 //Creo el router
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
