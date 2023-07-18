@@ -3,7 +3,7 @@
 import Login from '../tools/Login.vue';
 import Cookies from "js-cookie";
 import jwt_decode from 'jwt-decode';
-import { RouterView } from 'vue-router'
+import { RouterView, RouterLink } from 'vue-router'
 import axios from "axios";
 import { mainRoute } from '../../../main';
 
@@ -142,7 +142,9 @@ export default {
                     <a href="/check-out" class="nav-link font-weight-bold">INICIO</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
-                    <a href="/register-request" class="nav-link font-weight-bold">REGISTRAR PEDIDO</a>
+                    <RouterLink to="/register-request">
+                        <a class="nav-link font-weight-bold">REGISTRAR PEDIDO</a>
+                    </RouterLink>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block" v-if="disableOptions()">
                     <a href="/register-op" class="nav-link font-weight-bold">REGISTRAR OP</a>
