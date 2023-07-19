@@ -350,9 +350,7 @@ export default {
         .catch((error) => {
           console.log(error.message);
           alert("Error: " + error.response.data.message);
-          if(error.error === "Unauthorized"){
-            this.$router.push('/')
-          }
+          this.$router.push('/')
         });
     }
 
