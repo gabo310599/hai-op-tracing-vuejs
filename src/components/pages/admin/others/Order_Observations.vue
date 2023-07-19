@@ -11,44 +11,44 @@ let dataTableOrder;
 let dataTableIsInitialized = false;
 
 const dataTableOrderOptions = {
-  //scrollX: "2000px",
-  lengthMenu: [5, 10, 15, 20, 25],
+    //scrollX: "2000px",
+    lengthMenu: [5, 10, 15, 20, 25],
 
-  // Centrado de datos dentro de la columna
-  columnDefs: [
-    {
-      className: "centered",
-      targets: [0, 1, 2, 3, 4],
-    },
-    {
-      orderable: false,
-      targets: [4],
-    },
-    {
-      searchable: false,
-      targets: [4],
-    },
-    //{ width: "50%", targets: [0], },
-  ],
-  // Cantidad inicial por pagina 
-  pageLength: 5,
-  destroy: true,
-  // Señalizacion en español
-  language: {
-    lengthMenu: "Mostrar _MENU_ registros por página",
-    zeroRecords: "Ningún registro encontrado",
-    info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
-    infoEmpty: "Ningún registro encontrado",
-    infoFiltered: "(filtrados desde _MAX_ registros totales)",
-    search: "Buscar: ",
-    loadingRecords: "Cargando... ",
-    paginate: {
-      first: "Primero",
-      last: "Último",
-      next: "Siguiente",
-      previous: "Anterior",
-    },
-  }
+    // Centrado de datos dentro de la columna
+    columnDefs: [
+        {
+            className: "centered",
+            targets: [0, 1, 2, 3, 4],
+        },
+        {
+            orderable: false,
+            targets: [4],
+        },
+        {
+            searchable: false,
+            targets: [4],
+        },
+        //{ width: "50%", targets: [0], },
+    ],
+    // Cantidad inicial por pagina 
+    pageLength: 5,
+    destroy: true,
+    // Señalizacion en español
+    language: {
+        lengthMenu: "Mostrar _MENU_ registros por página",
+        zeroRecords: "Ningún registro encontrado",
+        info: "Mostrando de _START_ a _END_ de un total de _TOTAL_ registros",
+        infoEmpty: "Ningún registro encontrado",
+        infoFiltered: "(filtrados desde _MAX_ registros totales)",
+        search: "Buscar: ",
+        loadingRecords: "Cargando... ",
+        paginate: {
+            first: "Primero",
+            last: "Último",
+            next: "Siguiente",
+            previous: "Anterior",
+        },
+    }
 };
 
 const initDataTable = async () => {
@@ -67,19 +67,36 @@ const initDataTable = async () => {
 let counter = 0;
 let processList = [];
 
-export default{
-    data(){
-        return{
+export default {
+    data() {
+        return {
             counter,
             processList
         }
     },
-    async created(){
+    async created() {
+        await this.verifyToken();
         await this.getProcessList();
         await initDataTable();
     },
-    methods:{
-        
+    methods: {
+
+        //Metodo que verifica si el usuario esta activo en el sistema
+        async verifyToken() {
+            await axios
+                .get(mainRoute + "user/" + this.getDecodedAccessToken().sub,
+                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+                )
+                .then((res) => {
+                    return;
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    alert("Error: " + error.response.data.message);
+                    this.$router.push('/')
+                });
+        },
+
         //Incrementamos el contador
         incrementCounter() {
             return counter++;
@@ -91,7 +108,7 @@ export default{
         },
 
         //Metodo de refresh token
-        async refresToken(){    
+        async refresToken() {
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -139,7 +156,7 @@ export default{
         },
 
         //Metodo que obtiene la lista de procesos con sus observaciones
-        async getProcessList(){
+        async getProcessList() {
             await axios
                 .get(mainRoute + "process/get/by-observation",
                     { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
@@ -159,11 +176,10 @@ export default{
 </script>
 
 <template>
-
-    <br/>
+    <br />
     <h1 class="font-weight-bold">Observaciones:</h1>
 
-    <br/>
+    <br />
     {{ resetCounter() }}
     <div class="container my-4">
         <div class="row">
@@ -180,12 +196,13 @@ export default{
                     </thead>
                     <tbody>
                         <tr v-for="process in processList" :key="process.id">
-                            <th scope="row" class="center-text">{{incrementCounter()}}</th>
-                            <td class="center-text">{{process.request.serial + process.request.characters}}</td>
-                            <td class="center-text">{{process.request.description}}</td>
-                            <td class="center-text">{{process.department.name}}</td>
+                            <th scope="row" class="center-text">{{ incrementCounter() }}</th>
+                            <td class="center-text">{{ process.request.serial + process.request.characters }}</td>
+                            <td class="center-text">{{ process.request.description }}</td>
+                            <td class="center-text">{{ process.department.name }}</td>
                             <td class="center-text">
-                                <textarea class="form-control" id="exampleFormControlTextarea3" rows="3" readonly>{{process.observation}}</textarea>
+                                <textarea class="form-control" id="exampleFormControlTextarea3" rows="3"
+                                    readonly>{{ process.observation }}</textarea>
                             </td>
                         </tr>
                     </tbody>
@@ -193,6 +210,4 @@ export default{
             </div>
         </div>
     </div>
-
-
 </template>
