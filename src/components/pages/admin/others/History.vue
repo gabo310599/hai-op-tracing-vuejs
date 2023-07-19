@@ -147,27 +147,10 @@ export default {
                     console.log(error.message);
                     alert("Error: " + error.response.data.message);
                 });
-        },
-
-        //Metodo que verifica si el usuario esta activo en el sistema
-        async verifyToken() {
-            await axios
-                .get(mainRoute + "user/" + this.getDecodedAccessToken().sub,
-                    { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
-                )
-                .then((res) => {
-                    return;
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                    alert("Error: " + error.response.data.message);
-                    this.$router.push('/')
-                });
-        },
+        }
 
     },
     async created() {
-        await this.verifyToken();
         await this.fillProcessesList();
         await initDataTable();
     }

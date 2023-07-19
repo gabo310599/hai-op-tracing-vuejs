@@ -121,7 +121,7 @@ let department = {
 let modalInfo = {};
 let machineInfo = {};
 let blackMachinesList = [];
-let whiteMachinesList = [];
+let whiteMachinesList = []; 
 
 //Metodo que determina el delay de un pedido
 const delayColor = (date_in, days_time_limit) => {
@@ -310,11 +310,11 @@ export default {
           this.machineList = res.data.data;
           this.machineList.sort((x, y) => x.number.localeCompare(y.number));
 
-          for (let i = 0; i < this.machineList.length; i++) {
-            if (this.machineList[i].warped_color === "negro")
+          for(let i = 0; i < this.machineList.length; i++){
+            if(this.machineList[i].warped_color === "negro")
               this.blackMachinesList.push(this.machineList[i])
             else
-              if (this.machineList[i].warped_color === "blanco")
+              if(this.machineList[i].warped_color === "blanco")
                 this.whiteMachinesList.push(this.machineList[i])
           }
 
@@ -346,27 +346,11 @@ export default {
     },
 
     //Metodo que llena la informacion de la maquina elegida.
-    async fillMachineInfoModal(machine) {
+    async fillMachineInfoModal(machine){
       this.refresToken();
       this.machineInfo = machine;
       this.machineModal = true;
-    },
-
-    //Metodo que verifica si el usuario esta activo en el sistema
-    async verifyToken() {
-      await axios
-        .get(mainRoute + "user/" + this.getDecodedAccessToken().sub,
-          { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
-        )
-        .then((res) => {
-          return;
-        })
-        .catch((error) => {
-          console.log(error.message);
-          alert("Error: " + error.response.data.message);
-          this.$router.push('/')
-        });
-    },
+    }
 
   },
   components: {
@@ -374,7 +358,6 @@ export default {
     MachineInfoModal
   },
   async created() {
-    await this.verifyToken();
     await this.getDepartmentInfo();
     await this.fillLists();
     await this.fillMachineList();
@@ -398,15 +381,13 @@ export default {
     </div> -->
 
     <div class="black-grid-item" v-for="machine in blackMachinesList" :key="machine.id">
-      <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal"
-        v-on:click="fillMachineInfoModal(machine)">
+      <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal" v-on:click="fillMachineInfoModal(machine)">
         {{ " " + machine.number }}
       </span>
     </div>
 
     <div class="white-grid-item" v-for="machine in whiteMachinesList" :key="machine.id">
-      <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal"
-        v-on:click="fillMachineInfoModal(machine)">
+      <span class="fa-regular fa-square-minus span-style" data-toggle="modal" data-target="#machineModal" v-on:click="fillMachineInfoModal(machine)">
         {{ " " + machine.number }}
       </span>
     </div>
@@ -488,10 +469,11 @@ export default {
   </div>
 
   <!-- Machine Modal -->
-  <div class="modal fade" id="machineModal" tabindex="-1" role="dialog" aria-labelledby="machineModalLabel"
+  <div class="modal fade" id="machineModal" tabindex="-1" role="dialog" aria-labelledby="machineModalLabel" 
     aria-hidden="true" v-if="machineModal">
     <MachineInfoModal :machineInfo="machineInfo" />
   </div>
+
 </template>
 
 <style>
