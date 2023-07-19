@@ -362,6 +362,7 @@ export default {
     MachineInfoModal
   },
   async created() {
+    await this.verifyToken();
     await this.getDepartmentInfo();
     await this.fillLists();
     await this.fillMachineList();
