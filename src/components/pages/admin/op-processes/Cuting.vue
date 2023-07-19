@@ -340,6 +340,7 @@ export default {
 
     //Metodo que verifica si el usuario esta activo en el sistema
     async verifyToken(){
+      console.log(this.getUserFromCookies())
       await axios
         .get(mainRoute + "user/" + this.getDecodedAccessToken().sub,
           { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
@@ -362,7 +363,6 @@ export default {
     MachineInfoModal
   },
   async created() {
-    console.log(this.token)
     await this.verifyToken();
     await this.getDepartmentInfo();
     await this.fillLists();
