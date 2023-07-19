@@ -45,6 +45,7 @@ export default {
       //Metodo que regresa el color del badge por departamento
       getBadgeColor(){
          
+         console.log(this.token)
             if(this.delayList.DG)
                this.delayColors.DG = "position-span badge-pill badge-danger";
 
