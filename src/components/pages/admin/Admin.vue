@@ -151,6 +151,22 @@ export default {
          this.removeUserLogged();
       },
 
+      //Metodo que verifica si el usuario esta activo en el sistema
+      async verifyToken(){
+         await axios
+         .get(mainRoute + "user/" + this.getDecodedAccessToken().sub,
+            { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
+         )
+         .then((res) => {
+            return;
+         })
+         .catch((error) => {
+            console.log(error.message);
+            alert("Error: " + error.response.data.message);
+            this.$router.push('/')
+         });
+      },
+
       //Metodo que decodifica el token
       getDecodedAccessToken(token) {
          try {
@@ -205,6 +221,8 @@ export default {
       //Verificamos si el token esta activo, y luego lo renovamos
       if(token){
 
+         await this.verifyToken();
+         
          await axios
          .get(mainRoute + "user/"+this.getDecodedAccessToken(token).sub,
             {headers: { Authorization: `Bearer ${token}` }}
