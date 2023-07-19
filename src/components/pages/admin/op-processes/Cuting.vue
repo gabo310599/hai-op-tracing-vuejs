@@ -341,7 +341,7 @@ export default {
     //Metodo que verifica si el usuario esta activo en el sistema
     async verifyToken(){
       await axios
-        .get(mainRoute + "/user/" + this.getDecodedAccessToken().sub,
+        .get(mainRoute + "user/" + this.getDecodedAccessToken().sub,
           { headers: { Authorization: `Bearer ${this.getUserFromCookies()}` } }
         )
         .then((res) => {
