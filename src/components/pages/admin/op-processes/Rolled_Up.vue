@@ -162,7 +162,7 @@ export default {
     },
 
     //Metodo de refresh token
-    async refresToken() {
+    async refreshToken() {
       await axios
         .get(mainRoute + "auth/refresh",
           {
@@ -293,7 +293,7 @@ export default {
     fillModalInfo(data) {
       this.modalInfo = data;
       this.modalProcess = true;
-      this.refresToken();
+      this.refreshToken();
     },
 
     //Metodo que obtiene todas las maquinas de un departamento
@@ -331,7 +331,7 @@ export default {
 
     //Metodo que llena la informacion de la maquina elegida.
     async fillMachineInfoModal(machine) {
-      this.refresToken();
+      this.refreshToken();
       this.machineInfo = machine;
       this.machineModal = true;
     }

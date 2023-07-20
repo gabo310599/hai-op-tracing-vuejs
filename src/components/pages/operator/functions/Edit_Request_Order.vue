@@ -133,7 +133,7 @@ export default {
         },
 
         //Metodo de refresh token
-        async refresToken() {
+        async refreshToken() {
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -214,7 +214,7 @@ export default {
         //Metodo que guarda los cambios de un pedido u orden
         async save(type, process){
 
-            this.refresToken();
+            this.refreshToken();
 
             //Revisamos si estamos guardando una orden o un pedido
             if(type === 1){

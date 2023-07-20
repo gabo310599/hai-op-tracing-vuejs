@@ -26,7 +26,7 @@ export default{
     methods:{
 
         //Metodo de refresh token
-        async refresToken(){    
+        async refreshToken(){    
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -76,7 +76,7 @@ export default{
         //Metodo que obtiene los procesos del departamento seleccionado
         async getProcessInDepartment(){
 
-            this.refresToken();
+            this.refreshToken();
 
             //Obtenemos el id del departamento seleccionado
             await axios

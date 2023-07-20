@@ -22,7 +22,7 @@ export default{
     methods:{
             
         //Metodo de refresh token
-        async refresToken(){
+        async refreshToken(){
             
             await axios
                 .get(mainRoute + "auth/refresh",
@@ -108,7 +108,7 @@ export default{
 
         //Metodo que guarda el registro de op con la asociacion al pedido
         async saveOP(){
-            this.refresToken();
+            this.refreshToken();
 
             //Verificamos que los campos esten completos
 

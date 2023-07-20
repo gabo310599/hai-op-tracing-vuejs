@@ -156,7 +156,7 @@ export default {
     },
 
     //Metodo de refresh token
-    async refresToken() {
+    async refreshToken() {
       await axios
         .get(mainRoute + "auth/refresh",
           {
@@ -287,7 +287,7 @@ export default {
     fillModalInfo(data) {
       this.modalInfo = data;
       this.modalProcess = true;
-      this.refresToken();
+      this.refreshToken();
     },
 
     //Metodo que obtiene la lista de procesos en espera para entrar a un departamento.

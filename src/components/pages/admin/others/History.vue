@@ -80,7 +80,7 @@ export default {
         },
 
         //Metodo de refresh token
-        async refresToken() {
+        async refreshToken() {
             await axios
                 .get(mainRoute + "auth/refresh",
                     {

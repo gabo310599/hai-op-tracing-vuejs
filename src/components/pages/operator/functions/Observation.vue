@@ -87,7 +87,7 @@ export default{
         },
 
         //Metodo de refresh token
-        async refresToken(){    
+        async refreshToken(){    
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -157,7 +157,7 @@ export default{
         //Metodo que guarda la observacion del proceso
         async saveObservation(process){
 
-            this.refresToken();
+            this.refreshToken();
 
             if(document.getElementById(process.id).value.length <= 0)
                 return
@@ -207,7 +207,7 @@ export default{
     watch:{
         departmentOption(){
             dataTableProcess.destroy();
-            this.refresToken();
+            this.refreshToken();
             this.fillProcessesList(this.departmentOption);
         }
     }

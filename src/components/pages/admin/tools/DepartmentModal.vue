@@ -35,7 +35,7 @@ export default {
         },
 
         //Metodo de refresh token
-        async refresToken() {
+        async refreshToken() {
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -101,7 +101,7 @@ export default {
         //Metodo que elimina un departamento de la lista
         async deleteDepartment(department_id, department_name) {
 
-            this.refresToken();
+            this.refreshToken();
             await axios
                 .post(mainRoute + "operator-department-union/delete/by-operator-and-department",
                     {
@@ -160,7 +160,7 @@ export default {
         //Metodo que agrega un departamento a un operario
         async addDepartment() {
 
-            this.refresToken();
+            this.refreshToken();
             if (document.getElementById("add_department").value == "SELECCIONAR")
                 return;
 

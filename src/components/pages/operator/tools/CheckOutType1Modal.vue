@@ -44,7 +44,7 @@ export default{
     methods:{
 
         //Metodo de refresh token
-        async refresToken(){
+        async refreshToken(){
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -122,7 +122,7 @@ export default{
         //Metodo que acepta un pedido en el departamento
         async checkIn(process){
 
-            this.refresToken();
+            this.refreshToken();
 
             let operator_id = "";
 
@@ -180,7 +180,7 @@ export default{
         //Metodo que marca la salida de un pedido en el departamento
         async checkOut(process){
 
-            this.refresToken();
+            this.refreshToken();
 
             //En el caso que sea el ultimo caso tipo 1
             let orders_ids = [{id: null}];
@@ -283,7 +283,7 @@ export default{
 
         //Metodo que guarda el registro de op con la asociacion al pedido
         async saveOP(){
-            this.refresToken();
+            this.refreshToken();
 
             //Verificamos que los campos esten completos
 

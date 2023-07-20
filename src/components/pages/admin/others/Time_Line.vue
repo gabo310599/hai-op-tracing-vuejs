@@ -92,7 +92,7 @@ export default {
         },
 
         //Metodo de refresh token
-        async refresToken() {
+        async refreshToken() {
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -200,7 +200,7 @@ export default {
         //Llenamos la linea de tiempo del pedido seleccionado
         async fillTimeLineProcess(process, requestName) {
 
-            this.refresToken();
+            this.refreshToken();
             this.processTimeLine = [];
 
             await axios

@@ -58,7 +58,7 @@ export default{
     methods:{
         
         //Metodo de refresh token
-        async refresToken(){
+        async refreshToken(){
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -137,7 +137,7 @@ export default{
         //Metodo que acepta un pedido en el departamento
         async checkIn(process){
 
-            this.refresToken();
+            this.refreshToken();
 
             //Verificamos que el proceso  este asociado a una maquina
             let machine = false;
@@ -218,7 +218,7 @@ export default{
         //Metodo de marca la salida de un pedido en el departamento.
         async checkOut(process){
 
-            this.refresToken();
+            this.refreshToken();
             
             //Obtenemos el id del operador que esta ejecutando la accion
             let operator_id = "";
@@ -354,7 +354,7 @@ export default{
         //Metodo que obtiene los procesos del departamento seleccionado
         async getProcessInDepartment(){
 
-            this.refresToken();
+            this.refreshToken();
 
             if(this.departmentOption.length <= 0)
                 return

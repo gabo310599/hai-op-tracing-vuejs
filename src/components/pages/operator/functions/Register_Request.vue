@@ -26,7 +26,7 @@ export default{
     methods:{
 
         //Metodo de refresh token
-        async refresToken(){
+        async refreshToken(){
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -78,7 +78,7 @@ export default{
         //Metodo que registra el predido en la BD
         async saveRequest(){
             
-            this.refresToken();
+            this.refreshToken();
 
             if(this.serial.length == 0){
                 alert("Por favor ingresar el serial del pedido.");

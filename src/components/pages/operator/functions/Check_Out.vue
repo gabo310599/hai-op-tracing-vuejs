@@ -93,7 +93,7 @@ export default{
     methods:{
             
         //Metodo de refresh token
-        async refresToken(){
+        async refreshToken(){
             await axios
                 .get(mainRoute + "auth/refresh",
                     {
@@ -270,7 +270,7 @@ export default{
         //Metodo que llena la informacion del modal tipo 1
         async fillModalType1(department, next_department_id){
             
-            this.refresToken();
+            this.refreshToken();
 
             this.modalInfoType1 = {
                 department:{
@@ -365,7 +365,7 @@ export default{
         //Metodo que llena la informacion del modal tipo 2
         async fillModalType2(department, next_department_id){
             
-            this.refresToken();
+            this.refreshToken();
 
             this.modalInfoType2 = {
                 department:{
@@ -387,7 +387,7 @@ export default{
         //Metodo que llena la informacion del modal tipo 3
         async fillModalType3(department, next_department_id){
             
-            this.refresToken();
+            this.refreshToken();
 
             this.modalInfoType3 = {
                 department:{
