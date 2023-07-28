@@ -366,7 +366,7 @@ export default {
                   <!-- Salir -->
                   <li class="nav-item">
                      <RouterLink to="/">
-                        <a class="nav-link" v-if="disableOptions()" v-on:click="logout()">
+                        <a class="nav-link"  v-on:click="logout()">
                            <i class="nav-icon fas fa-solid fa-door-open"></i>
                            <p>
                               Salir
