@@ -437,7 +437,9 @@ export default{
                <ul class="list-group">
                   <li class="list-group-item list-group-item-secondary">
                     <p>
-                        Total pedidos en el departamento: {{ count.DG }}
+                        Total pedidos en el departamento: {{ count.DG }} 
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.DG_In }}
                     </p>
                     <a class="card-text font-weight-bold" 
                     data-toggle="modal" data-target="#checkOutModalType1" v-on:click="fillModalType1(departmentList.DG, departmentList.DT.id)"> 
@@ -458,6 +460,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.DT }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.DT_In }}
                     </p>
                     <a class="card-text font-weight-bold" 
                     data-toggle="modal" data-target="#checkOutModalType1" v-on:click="fillModalType1(departmentList.DT, departmentList.GOP.id)">
@@ -478,6 +482,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.GOP }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.GOP_In }}
                     </p>
                     <a class="card-text font-weight-bold" 
                     data-toggle="modal" data-target="#checkOutModalType1" v-on:click="fillModalType1(departmentList.GOP, departmentList.IOP.id)">
@@ -498,6 +504,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.IOP }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.IOP_In }}
                     </p>
                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType2" v-on:click="fillModalType2(departmentList.IOP, departmentList.T.id)">
                         REVISAR
@@ -517,6 +525,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.T }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.T_In }}
                     </p>
                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType3" v-on:click="fillModalType3(departmentList.T, departmentList.E.id)">
                         REVISAR
@@ -536,6 +546,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.E }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.E_In }}
                     </p>
                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType3" v-on:click="fillModalType3(departmentList.E, departmentList.C.id)">
                         REVISAR
@@ -555,6 +567,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.C }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.C_In }}
                     </p>
                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType3" v-on:click="fillModalType3(departmentList.C, departmentList.CC.id)">
                         REVISAR
@@ -574,6 +588,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.CC }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.CC_In }}
                     </p>
                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType2" v-on:click="fillModalType2(departmentList.CC, departmentList.F.id)">
                         REVISAR
@@ -593,6 +609,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.F }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.F_In }}
                     </p>
                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType2" v-on:click="fillModalType2(departmentList.F, departmentList.D.id)">
                         REVISAR
@@ -612,6 +630,8 @@ export default{
                   <li class="list-group-item list-group-item-secondary">
                     <p>
                         Total pedidos en el departamento: {{ count.D }}
+                        <br>
+                        Total pedidos esperando entrar al departamento: {{ count.D_In }}
                     </p>
                     <a class="card-text font-weight-bold" data-toggle="modal" data-target="#checkOutModalType2" v-on:click="fillModalType2(departmentList.D, null)">
                         REVISAR
