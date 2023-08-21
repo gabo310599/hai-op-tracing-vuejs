@@ -41,7 +41,7 @@ export default {
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item dropdown">
-            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+            <a class="nav-link" data-widget="fullscreen" role="button">
               <i class="fas fa-expand-arrows-alt"></i>
             </a>
           </li>
